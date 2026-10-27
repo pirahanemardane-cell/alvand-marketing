@@ -14,6 +14,9 @@ import {
   Shield,
   LogOut,
   RefreshCw,
+  FileText,
+  Search,
+  User,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import Navbar from '@/components/Navbar';
@@ -150,10 +153,14 @@ export default function AdminPage() {
     label: string;
     icon: typeof LayoutDashboard;
     badge?: number;
+    href?: string;
   }[] = [
     { id: 'overview', label: 'خلاصه', icon: LayoutDashboard },
     { id: 'users', label: 'کاربران', icon: Users, badge: profiles.length },
     { id: 'comments', label: 'نظرات', icon: MessageSquare, badge: pendingComments.length },
+    { id: 'overview', label: 'مدیریت بلاگ', icon: FileText, href: '/admin/blog' },
+    { id: 'overview', label: 'سئو صفحات', icon: Search, href: '/admin/seo' },
+    { id: 'overview', label: 'پنل کاربری من', icon: User, href: '/dashboard' },
   ];
 
   return (
@@ -208,32 +215,44 @@ export default function AdminPage() {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-2 border-b border-border">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setTab(t.id)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-xl border border-b-0 transition-colors ${
-                tab === t.id
-                  ? 'bg-card text-foreground border-border -mb-px'
-                  : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
-              }`}
-            >
-              <t.icon className="h-4 w-4" />
-              {t.label}
-              {typeof t.badge === 'number' && (
-                <span
-                  className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    t.id === 'comments' && t.badge > 0
-                      ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {t.badge}
-                </span>
-              )}
-            </button>
-          ))}
+          {tabs.map((t) => {
+            const active = !t.href && tab === t.id;
+            const cls = `inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-xl border border-b-0 transition-colors ${
+              active
+                ? 'bg-card text-foreground border-border -mb-px'
+                : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
+            }`;
+            if (t.href) {
+              return (
+                <Link key={t.label} href={t.href} className={cls}>
+                  <t.icon className="h-4 w-4" />
+                  {t.label}
+                </Link>
+              );
+            }
+            return (
+              <button
+                key={t.id + t.label}
+                type="button"
+                onClick={() => setTab(t.id)}
+                className={cls}
+              >
+                <t.icon className="h-4 w-4" />
+                {t.label}
+                {typeof t.badge === 'number' && (
+                  <span
+                    className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      t.id === 'comments' && t.badge > 0
+                        ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                        : 'bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    {t.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         <div className="mt-6">
@@ -311,27 +330,6 @@ export default function AdminPage() {
                   )}
                 </div>
               )}
-
-              <div className="rounded-2xl border border-border bg-card p-5">
-                <h3 className="font-bold mb-3">لینک‌های سریع</h3>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/admin/blog" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
-                    مدیریت بلاگ
-                  </Link>
-                  <Link href="/admin/seo" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
-                    سئو صفحات
-                  </Link>
-                  <Link href="/بلاگ" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
-                    بلاگ
-                  </Link>
-                  <Link href="/تماس" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
-                    تماس
-                  </Link>
-                  <Link href="/dashboard" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
-                    پنل کاربری من
-                  </Link>
-                </div>
-              </div>
             </div>
           )}
 

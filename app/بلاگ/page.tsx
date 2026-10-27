@@ -26,6 +26,11 @@ export default function BlogPage() {
           <p className="text-muted-foreground leading-persian mb-12">
             نوشته‌های کوتاه و کاربردی برای تصمیم‌گیری بهتر در بازاریابی دیجیتال.
           </p>
+          {posts.length === 0 ? (
+            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center">
+              هنوز مقاله‌ای منتشر نشده است.
+            </p>
+          ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
             {posts.map((post) => (
               <Link
@@ -44,6 +49,7 @@ export default function BlogPage() {
               </Link>
             ))}
           </div>
+          )}
         </div>
       </section>
       <Footer />

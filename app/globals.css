@@ -412,3 +412,9 @@ h1.text-display,
   font-family: "IRANYekanX", system-ui, sans-serif !important;
   font-weight: 800 !important;
 }
+
+
+/* no-ios-input-zoom */
+@media screen and (max-width: 767px) {
+  input, select, textarea { font-size: 16px !important; }
+}

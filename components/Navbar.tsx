@@ -25,6 +25,7 @@ import {
 import { useTheme } from "./ThemeProvider";
 import AuthButton from "./AuthButton";
 import { services } from "@/lib/services";
+import { posts } from "@/lib/blog";
 
 const serviceIcons: Record<string, React.ReactNode> = {
   "طراحی-سایت": <Monitor className="h-4 w-4 shrink-0" />,
@@ -48,7 +49,7 @@ const navItems = [
 ];
 
 const searchInputClass =
-  "w-full rounded-xl border border-border bg-background pr-10 pl-3 py-2.5 text-sm outline-none focus:border-accent transition-colors placeholder:text-muted-foreground";
+  "w-full rounded-xl border border-border bg-background pr-10 pl-3 py-2.5 text-base outline-none focus:border-accent transition-colors placeholder:text-muted-foreground";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -81,42 +82,74 @@ export default function Navbar() {
     setMobileServicesOpen(false);
   };
 
-  const filtered = query.trim()
-    ? services.filter(
-        (s) =>
-          s.title.includes(query.trim()) ||
-          s.shortDesc.includes(query.trim())
-      )
-    : [];
+  type SearchHit = {
+    kind: "service" | "blog";
+    title: string;
+    href: string;
+    hint?: string;
+  };
 
-  function goToService(slug: string) {
+  const searchHits: SearchHit[] = (() => {
+    const q = query.trim();
+    if (!q) return [];
+    const svc = services
+      .filter((s) => s.title.includes(q) || s.shortDesc.includes(q))
+      .map((s) => ({
+        kind: "service" as const,
+        title: s.title,
+        href: `/خدمات/${s.slug}`,
+        hint: "خدمت",
+      }));
+    const blg = posts
+      .filter(
+        (p) =>
+          p.title.includes(q) ||
+          p.excerpt.includes(q) ||
+          p.category.includes(q)
+      )
+      .map((p) => ({
+        kind: "blog" as const,
+        title: p.title,
+        href: `/بلاگ/${p.slug}`,
+        hint: "بلاگ",
+      }));
+    return [...svc, ...blg].slice(0, 8);
+  })();
+
+  function goHit(href: string) {
     setQuery("");
     setMegaOpen(false);
     closeMenu();
-    router.push(`/خدمات/${slug}`);
+    router.push(href);
   }
 
   function onSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (filtered.length === 1) {
-      goToService(filtered[0].slug);
+    if (searchHits.length === 1) {
+      goHit(searchHits[0].href);
     } else if (query.trim()) {
       closeMenu();
-      router.push(`/خدمات?q=${encodeURIComponent(query.trim())}`);
+      const onlyBlog = searchHits.length > 0 && searchHits.every((h) => h.kind === "blog");
+      if (onlyBlog) {
+        router.push(`/بلاگ?q=${encodeURIComponent(query.trim())}`);
+      } else {
+        router.push(`/خدمات?q=${encodeURIComponent(query.trim())}`);
+      }
     }
   }
 
   const searchDropdown =
-    query.trim() && filtered.length > 0 ? (
+    query.trim() && searchHits.length > 0 ? (
       <div className="absolute top-full mt-2 right-0 left-0 rounded-xl border border-border bg-background shadow-lg overflow-hidden z-50">
-        {filtered.map((s) => (
+        {searchHits.map((h) => (
           <button
-            key={s.slug}
+            key={h.href}
             type="button"
-            onClick={() => goToService(s.slug)}
+            onClick={() => goHit(h.href)}
             className="w-full text-right px-4 py-2.5 text-sm hover:bg-accent/10 transition-colors border-b border-border last:border-0"
           >
-            {s.title}
+            <span className="text-muted-foreground text-xs ml-2">{h.hint}</span>
+            {h.title}
           </button>
         ))}
       </div>
@@ -258,7 +291,7 @@ export default function Navbar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="جستجو..."
-                className={searchInputClass + " py-1.5 text-xs"}
+                className={searchInputClass + " py-1.5"}
               />
               {searchDropdown}
             </form>
@@ -337,7 +370,7 @@ export default function Navbar() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="جستجو در خدمات..."
+                  placeholder="جستجو در خدمات و بلاگ..."
                   className={searchInputClass}
                 />
                 {searchDropdown}
