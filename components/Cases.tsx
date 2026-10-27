@@ -11,7 +11,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی فروشگاه اینترنتی با تجربه خرید روان، فیلتر محصول، سبد خرید و پرداخت آنلاین.",
     result: "راه‌اندازی فروش آنلاین و مسیر فروش دیجیتال مستقل از فروشگاه فیزیکی",
     duration: "طراحی سایت",
-    image: "/cases/shirt-shop.jpg",
+    image: "/cases/shirt-shop.webp",
   },
   {
     industry: "تعاونی اتوبوس رانی",
@@ -20,7 +20,7 @@ const cases = [
     work: "طراحی سایت، سئو، تولید محتوا و اجرای تبلیغات اینترنتی برای پوشش کامل مسیر جذب مسافر.",
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "سایت + سئو + محتوا + تبلیغات",
-    image: "/cases/bus-coop.jpg",
+    image: "/cases/bus-coop.webp",
   },
   {
     industry: "نسپرسو — سایت شرکتی وردپرس",
@@ -29,7 +29,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی سایت شرکتی وردپرس با ساختار صفحات، ظاهر حرفه‌ای و پنل مدیریت آسان.",
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
-    image: "/cases/coffee.jpg",
+    image: "/cases/coffee.webp",
   },
   {
     industry: "امور تجاری — سایت شرکتی وردپرس",
@@ -38,7 +38,7 @@ const cases = [
     work: "طراحی سایت وردپرس شرکتی با تمرکز بر معرفی خدمات، اعتبار برند و مسیر تماس واضح.",
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
-    image: "/cases/office.jpg",
+    image: "/cases/office.webp",
   },
 ];
 
@@ -71,6 +71,7 @@ export default function Cases() {
                   src={item.image}
                   alt={item.industry}
                   className="w-full h-52 object-cover"
+                  loading="lazy"
                 />
                 <div className="p-6 space-y-3">
                   <div className="flex flex-wrap items-center gap-2 text-caption text-muted-foreground">
