@@ -11,8 +11,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی فروشگاه اینترنتی با تجربه خرید روان، فیلتر محصول، سبد خرید و پرداخت آنلاین.",
     result: "راه‌اندازی فروش آنلاین و مسیر فروش دیجیتال مستقل از فروشگاه فیزیکی",
     duration: "طراحی سایت",
-    image:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
+    image: "/cases/shirt-shop.jpg",
   },
   {
     industry: "تعاونی اتوبوس رانی",
@@ -21,8 +20,7 @@ const cases = [
     work: "طراحی سایت، سئو، تولید محتوا و اجرای تبلیغات اینترنتی برای پوشش کامل مسیر جذب مسافر.",
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "سایت + سئو + محتوا + تبلیغات",
-    image:
-      "https://images.unsplash.com/photo-1570125909232-eb4bca3d1c3f?auto=format&fit=crop&w=1200&q=80",
+    image: "/cases/bus-coop.jpg",
   },
   {
     industry: "نسپرسو — سایت شرکتی وردپرس",
@@ -31,8 +29,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی سایت شرکتی وردپرس با ساختار صفحات، ظاهر حرفه‌ای و پنل مدیریت آسان.",
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
-    image:
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    image: "/cases/coffee.jpg",
   },
   {
     industry: "امور تجاری — سایت شرکتی وردپرس",
@@ -41,8 +38,7 @@ const cases = [
     work: "طراحی سایت وردپرس شرکتی با تمرکز بر معرفی خدمات، اعتبار برند و مسیر تماس واضح.",
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
-    image:
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+    image: "/cases/office.jpg",
   },
 ];
 
