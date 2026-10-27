@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import Navbar from '@/components/Navbar';
+import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
@@ -142,9 +143,7 @@ export default function AdminPage() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Navbar />
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <p className="text-muted-foreground">در حال بارگذاری پنل ادمین...</p>
-        </div>
+        <PageLoader label="در حال بارگذاری..." />
         <Footer />
       </main>
     );

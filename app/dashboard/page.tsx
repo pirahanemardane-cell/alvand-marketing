@@ -17,6 +17,7 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import type { User as SbUser } from '@supabase/supabase-js';
 import Navbar from '@/components/Navbar';
+import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 
@@ -134,9 +135,7 @@ export default function DashboardPage() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Navbar />
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <p className="text-muted-foreground">در حال بارگذاری...</p>
-        </div>
+        <PageLoader label="در حال بارگذاری..." />
         <Footer />
       </main>
     );

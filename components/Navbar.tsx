@@ -303,7 +303,7 @@ export default function Navbar() {
             >
               <button
                 onClick={() => setMode("morning")}
-                className={`relative rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium transition-colors duration-300 ${
+                className={`relative rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium ${
                   mode === "morning"
                     ? "text-accent-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -320,7 +320,7 @@ export default function Navbar() {
               </button>
               <button
                 onClick={() => setMode("night")}
-                className={`relative rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium transition-colors duration-300 ${
+                className={`relative rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium ${
                   mode === "night"
                     ? "text-accent-foreground"
                     : "text-muted-foreground hover:text-foreground"
