@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  CircularProgress,
+  CircularProgressIndicator,
+  CircularProgressRange,
+  CircularProgressTrack,
+} from "@/components/ui/circular-progress";
+
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -196,9 +203,14 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
 
       <div className="space-y-4">
         {loading && (
-          <p className="text-caption text-muted-foreground">
-            در حال بارگذاری نظرات...
-          </p>
+          <div className="flex justify-center py-8">
+            <CircularProgress value={null} size={40} thickness={3}>
+              <CircularProgressIndicator>
+                <CircularProgressTrack />
+                <CircularProgressRange />
+              </CircularProgressIndicator>
+            </CircularProgress>
+          </div>
         )}
         {!loading && comments.length === 0 && (
           <p className="text-caption text-muted-foreground">

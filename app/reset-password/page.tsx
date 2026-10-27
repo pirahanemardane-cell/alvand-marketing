@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient } from '@/lib/supabase/client';
@@ -74,7 +75,7 @@ export default function ResetPasswordPage() {
             <h1 className="text-3xl font-heavy mb-2 text-center">تغییر رمز عبور</h1>
             <p className="text-muted-foreground text-sm mb-8 text-center">رمز جدید خود را وارد کنید.</p>
             {!ready ? (
-              <p className="text-center text-muted-foreground text-sm">در حال بارگذاری...</p>
+              <div className="flex justify-center py-12"><PageLoader fullScreen={false} /></div>
             ) : !sessionOk ? (
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground">لینک معتبر نیست یا منقضی شده است.</p>

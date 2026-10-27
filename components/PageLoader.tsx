@@ -8,15 +8,25 @@ import {
 } from "@/components/ui/circular-progress";
 
 export default function PageLoader({
-  label = "در حال بارگذاری...",
+  label,
   size = 56,
+  fullScreen = true,
 }: {
   label?: string;
   size?: number;
+  fullScreen?: boolean;
 }) {
   return (
-    <div className="flex min-h-[50vh] w-full flex-col items-center justify-center gap-4 bg-background text-foreground">
-      <CircularProgress value={null} size={size} thickness={4} label={label}>
+    <div
+      className={
+        fullScreen
+          ? "fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background text-foreground"
+          : "flex min-h-[40vh] w-full flex-col items-center justify-center gap-4 bg-background text-foreground"
+      }
+      role="status"
+      aria-live="polite"
+    >
+      <CircularProgress value={null} size={size} thickness={4} label={label ?? "بارگذاری"}>
         <CircularProgressIndicator>
           <CircularProgressTrack />
           <CircularProgressRange />

@@ -21,6 +21,7 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
@@ -140,13 +141,7 @@ export default function AdminPage() {
   const approvedComments = comments.filter((c) => c.approved);
 
   if (loading) {
-    return (
-      <main className="min-h-screen bg-background text-foreground">
-        <Navbar />
-        <PageLoader label="در حال بارگذاری..." />
-        <Footer />
-      </main>
-    );
+    return <PageLoader />;
   }
 
   const tabs: {
