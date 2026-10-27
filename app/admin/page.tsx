@@ -153,15 +153,7 @@ export default function AdminPage() {
   }[] = [
     { id: 'overview', label: 'خلاصه', icon: LayoutDashboard },
     { id: 'users', label: 'کاربران', icon: Users, badge: profiles.length },
-    {
-      id: 'comments',
-      label: 'نظرات',
-
-            <Link href="/admin/blog" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent">مدیریت بلاگ</Link>
-            <Link href="/admin/seo" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent">سئو صفحات</Link>
-      icon: MessageSquare,
-      badge: pendingComments.length,
-    },
+    { id: 'comments', label: 'نظرات', icon: MessageSquare, badge: pendingComments.length },
   ];
 
   return (
@@ -323,6 +315,12 @@ export default function AdminPage() {
               <div className="rounded-2xl border border-border bg-card p-5">
                 <h3 className="font-bold mb-3">لینک‌های سریع</h3>
                 <div className="flex flex-wrap gap-2">
+                  <Link href="/admin/blog" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
+                    مدیریت بلاگ
+                  </Link>
+                  <Link href="/admin/seo" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
+                    سئو صفحات
+                  </Link>
                   <Link href="/بلاگ" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent transition-colors">
                     بلاگ
                   </Link>
