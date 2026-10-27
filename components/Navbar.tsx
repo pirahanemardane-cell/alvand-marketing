@@ -192,7 +192,7 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={closeMenu}
-              className="hidden sm:block shrink-0"
+              className="hidden xl:block shrink-0"
               aria-label="الوند مارکتینگ"
             >
               <img
