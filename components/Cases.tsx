@@ -11,7 +11,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی فروشگاه اینترنتی با تجربه خرید روان، فیلتر محصول، سبد خرید و پرداخت آنلاین.",
     result: "راه‌اندازی فروش آنلاین و مسیر فروش دیجیتال مستقل از فروشگاه فیزیکی",
     duration: "طراحی سایت",
-    image: "/nimble-made-kY8hmUQV9Ek-unsplash.webp",
+    image: "/images/nimble-made-kY8hmUQV9Ek-unsplash.webp",
   },
   {
     industry: "تعاونی اتوبوس رانی",
@@ -20,7 +20,7 @@ const cases = [
     work: "طراحی سایت، سئو، تولید محتوا و اجرای تبلیغات اینترنتی برای پوشش کامل مسیر جذب مسافر.",
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "سایت + سئو + محتوا + تبلیغات",
-    image: "/venti-views-1cqIcrWFQBI-unsplash.webp",
+    image: "/images/venti-views-1cqIcrWFQBI-unsplash.webp",
   },
   {
     industry: "نسپرسو — سایت شرکتی وردپرس",
@@ -29,7 +29,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی سایت شرکتی وردپرس با ساختار صفحات، ظاهر حرفه‌ای و پنل مدیریت آسان.",
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
-    image: "/brent-ninaber-UTdA-_U4DQw-unsplash.webp",
+    image: "/images/brent-ninaber-UTdA-_U4DQw-unsplash.webp",
   },
   {
     industry: "امور تجاری — سایت شرکتی وردپرس",
@@ -38,7 +38,7 @@ const cases = [
     work: "طراحی سایت وردپرس شرکتی با تمرکز بر معرفی خدمات، اعتبار برند و مسیر تماس واضح.",
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
-    image: "/ash-gerlach-6fF-Ojxov6o-unsplash.webp",
+    image: "/images/ash-gerlach-6fF-Ojxov6o-unsplash.webp",
   },
 ];
 
