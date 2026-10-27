@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
 
 const images = {
-  night: "https://hirael.com/media/templates/aurael/night.jpg",
-  morning: "https://hirael.com/media/templates/aurael/morning.jpg",
+  night: "/images/hero-night.webp",
+  morning: "/images/hero-morning.webp",
 } as const;
 
 export default function Hero() {
