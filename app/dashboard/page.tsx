@@ -43,6 +43,10 @@ export default function DashboardPage() {
   const [fullName, setFullName] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPassword2, setNewPassword2] = useState('');
+  const [pwMsg, setPwMsg] = useState('');
+  const [pwLoading, setPwLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -93,6 +97,30 @@ export default function DashboardPage() {
     } else {
       setSaveMsg('ذخیره شد.');
       setProfile((p) => (p ? { ...p, full_name: fullName.trim() || null } : p));
+    }
+  }
+
+  
+  async function handleChangePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwMsg('');
+    if (newPassword.length < 6) {
+      setPwMsg('رمز حداقل ۶ کاراکتر باشد.');
+      return;
+    }
+    if (newPassword !== newPassword2) {
+      setPwMsg('تکرار رمز یکسان نیست.');
+      return;
+    }
+    setPwLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPwLoading(false);
+    if (error) setPwMsg('تغییر رمز ناموفق بود.');
+    else {
+      setPwMsg('رمز عبور تغییر کرد.');
+      setNewPassword('');
+      setNewPassword2('');
     }
   }
 
@@ -265,6 +293,29 @@ export default function DashboardPage() {
             </ul>
           </section>
         </div>
+
+
+          <section className="mt-8 rounded-2xl border border-border bg-card p-6">
+            <h2 className="text-lg font-bold mb-5">تغییر رمز عبور</h2>
+            <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1.5">رمز جدید</label>
+                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={6}
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1.5">تکرار رمز جدید</label>
+                <input type="password" value={newPassword2} onChange={(e) => setNewPassword2(e.target.value)} minLength={6}
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
+              </div>
+              <div className="flex items-center gap-3">
+                <button type="submit" disabled={pwLoading} className="px-5 py-2.5 rounded-xl bg-accent text-accent-foreground text-sm font-bold disabled:opacity-50">
+                  {pwLoading ? '...' : 'تغییر رمز'}
+                </button>
+                {pwMsg && <span className="text-sm text-muted-foreground">{pwMsg}</span>}
+              </div>
+            </form>
+          </section>
 
         <section className="mt-8 rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center gap-2 mb-5">

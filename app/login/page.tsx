@@ -99,6 +99,11 @@ export default function LoginPage() {
                 {loading ? 'در حال ورود...' : 'ورود'}
               </button>
             </form>
+            <p className="mt-4 text-sm text-center">
+              <Link href="/forgot-password" className="text-muted-foreground hover:text-accent transition-colors">
+                فراموشی رمز عبور؟
+              </Link>
+            </p>
             <p className="mt-6 text-sm text-muted-foreground text-center">
               حساب ندارید؟{' '}
               <Link href="/register" className="text-accent font-bold hover:underline">

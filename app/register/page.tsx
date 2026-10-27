@@ -26,11 +26,13 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const supabase = createClient();
+      const origin = window.location.origin;
       const { data, error: err } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: fullName.trim() },
+          emailRedirectTo: `${origin}/dashboard`,
         },
       });
       if (err) {
@@ -56,7 +58,7 @@ export default function RegisterPage() {
         }
         router.refresh();
       } else {
-        setMessage('ثبت‌نام موفق. اکنون وارد شوید.');
+        setMessage('ثبت‌نام انجام شد. لینک تایید به ایمیل شما ارسال شد؛ بعد از تایید وارد شوید.');
         setTimeout(() => router.replace('/login'), 1500);
       }
     } catch {
