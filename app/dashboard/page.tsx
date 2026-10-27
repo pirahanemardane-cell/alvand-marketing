@@ -18,7 +18,6 @@ import { createClient } from '@/lib/supabase/client';
 import type { User as SbUser } from '@supabase/supabase-js';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
-import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 

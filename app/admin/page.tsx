@@ -21,7 +21,6 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
-import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
