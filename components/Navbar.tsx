@@ -304,13 +304,6 @@ export default function Navbar() {
               </button>
             </div>
 
-            <Link
-              href="/تماس"
-              className="hidden xl:inline-flex text-sm font-bold text-muted-foreground hover:text-foreground transition-colors duration-200 items-center gap-1 shrink-0"
-            >
-              مشاوره رایگان
-              <span className="text-xs">←</span>
-            </Link>
             <div className="hidden xl:block shrink-0">
               <AuthButton />
             </div>
