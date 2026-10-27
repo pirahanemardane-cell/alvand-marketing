@@ -458,10 +458,6 @@ export default function AdminPage() {
                         </button>
                       )}
 
-          {tab === 'blog' && <AdminBlogPanel />}
-
-          {tab === 'seo' && <AdminSeoPanel />}
-
                       <button
                         type="button"
                         onClick={() => handleDeleteComment(comment.id)}
@@ -477,6 +473,11 @@ export default function AdminPage() {
               )}
             </div>
           )}
+
+          {tab === 'blog' ? <AdminBlogPanel /> : null}
+
+          {tab === 'seo' ? <AdminSeoPanel /> : null}
+
         </div>
       </div>
 
