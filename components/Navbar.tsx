@@ -191,10 +191,15 @@ export default function Navbar() {
             </button>
             <Link
               href="/"
-              className="text-sm md:text-base font-bold transition-colors duration-500 truncate max-w-[120px] sm:max-w-[160px] lg:max-w-none"
               onClick={closeMenu}
+              className="hidden sm:block shrink-0"
+              aria-label="الوند مارکتینگ"
             >
-              الوند مارکتینگ
+              <img
+                src="/ALVAND-bg.webp"
+                alt="الوند مارکتینگ"
+                className="h-9 w-auto object-contain rounded-md"
+              />
             </Link>
           </div>
 
@@ -351,8 +356,17 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
-              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col pt-20 pb-8 px-6 overflow-y-auto overscroll-contain"
+              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col pt-4 pb-8 px-5 overflow-y-auto overscroll-contain"
             >
+              <div className="flex justify-start mb-5">
+                <Link href="/" onClick={closeMenu} aria-label="الوند مارکتینگ">
+                  <img
+                    src="/ALVAND-bg.webp"
+                    alt="الوند مارکتینگ"
+                    className="h-9 w-auto object-contain rounded-md"
+                  />
+                </Link>
+              </div>
               <form onSubmit={onSearchSubmit} className="mb-6 relative">
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <input

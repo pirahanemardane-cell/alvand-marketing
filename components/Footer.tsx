@@ -8,7 +8,13 @@ export default function Footer() {
       <div className="mx-auto w-full">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
           <div className="sm:col-span-2 lg:col-span-1">
-            <h3 className="text-lg font-bold mb-3">الوند مارکتینگ</h3>
+            <Link href="/" className="inline-block mb-4" aria-label="الوند مارکتینگ">
+              <img
+                src="/ALVAND-bg.webp"
+                alt="الوند مارکتینگ"
+                className="h-9 w-auto object-contain rounded-md"
+              />
+            </Link>
             <p className="text-caption text-muted-foreground leading-persian">
               تیم بازاریابی دیجیتال که روی نتیجه تمرکز می‌کند، نه فقط روی
               گزارش. از طراحی سایت تا تبلیغات و محتوا، کنار کسب‌وکار شما

@@ -72,8 +72,8 @@ export default function About() {
                 transition={{ delay: i * 0.08 }}
                 className="rounded-xl border border-border bg-card p-6 text-center"
               >
-                <div className="text-3xl font-semibold mb-1">{stat.value}</div>
-                <div className="text-caption text-muted-foreground">
+                <div className="text-3xl font-semibold mb-1 text-center">{stat.value}</div>
+                <div className="text-caption text-muted-foreground text-center">
                   {stat.label}
                 </div>
               </motion.div>
