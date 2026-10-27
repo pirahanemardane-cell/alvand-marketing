@@ -156,6 +156,9 @@ export default function AdminPage() {
     {
       id: 'comments',
       label: 'نظرات',
+
+            <Link href="/admin/blog" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent">مدیریت بلاگ</Link>
+            <Link href="/admin/seo" className="px-3 py-2 rounded-xl border border-border text-sm hover:border-accent">سئو صفحات</Link>
       icon: MessageSquare,
       badge: pendingComments.length,
     },
