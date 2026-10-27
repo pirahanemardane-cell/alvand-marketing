@@ -124,7 +124,7 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      <div className="w-full max-w-6xl mx-auto px-4 md:px-8 py-10">
+      <div className="w-full max-w-6xl mx-auto px-4 md:px-8 pt-28 pb-16">
         <Breadcrumb
           items={[
             { label: 'خانه', href: '/' },
