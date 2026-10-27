@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient } from '@/lib/supabase/client';
 
+const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
+
 export default function RegisterPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState('');
@@ -32,7 +34,11 @@ export default function RegisterPage() {
         },
       });
       if (err) {
-        setError(err.message.includes('already') ? 'این ایمیل قبلاً ثبت شده است.' : 'ثبت‌نام انجام نشد.');
+        setError(
+          err.message.includes('already')
+            ? 'این ایمیل قبلاً ثبت شده است.'
+            : 'ثبت‌نام انجام نشد.'
+        );
         return;
       }
       if (data.user) {
@@ -42,10 +48,16 @@ export default function RegisterPage() {
         });
       }
       if (data.session) {
-        router.push('/dashboard');
+        const userEmail = data.user?.email ?? email;
+        if (userEmail === ADMIN_EMAIL) {
+          router.replace('/admin');
+        } else {
+          router.replace('/dashboard');
+        }
         router.refresh();
       } else {
-        setMessage('ثبت‌نام موفق. اگر تایید ایمیل فعال است، لینک را چک کنید؛ در غیر این صورت وارد شوید.');
+        setMessage('ثبت‌نام موفق. اکنون وارد شوید.');
+        setTimeout(() => router.replace('/login'), 1500);
       }
     } catch {
       setError('ثبت‌نام انجام نشد. دوباره تلاش کنید.');
@@ -61,8 +73,8 @@ export default function RegisterPage() {
         <div className="max-w-md mx-auto">
           <Breadcrumb items={[{ label: 'ثبت‌نام' }]} />
           <div className="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
-            <h1 className="text-3xl font-heavy mb-2">ثبت‌نام</h1>
-            <p className="text-muted-foreground text-sm mb-8">
+            <h1 className="text-3xl font-heavy mb-2 text-center">ثبت‌نام</h1>
+            <p className="text-muted-foreground text-sm mb-8 text-center">
               با ایمیل حساب بسازید.
             </p>
             <form onSubmit={onSubmit} className="space-y-4">
@@ -74,7 +86,7 @@ export default function RegisterPage() {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors placeholder:text-muted-foreground"
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
                   placeholder="نام و نام خانوادگی"
                   autoComplete="name"
                 />
@@ -107,22 +119,24 @@ export default function RegisterPage() {
                   dir="ltr"
                   autoComplete="new-password"
                 />
-                <p className="mt-1 text-xs text-muted-foreground">حداقل ۶ کاراکتر</p>
+                <p className="mt-1 text-xs text-muted-foreground text-center">
+                  حداقل ۶ کاراکتر
+                </p>
               </div>
               {error && (
-                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2">
+                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 text-center">
                   {error}
                 </p>
               )}
               {message && (
-                <p className="text-sm text-accent bg-accent/10 rounded-lg px-3 py-2">
+                <p className="text-sm text-accent bg-accent/10 rounded-lg px-3 py-2 text-center">
                   {message}
                 </p>
               )}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity"
+                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity text-center"
               >
                 {loading ? 'در حال ثبت‌نام...' : 'ثبت‌نام'}
               </button>

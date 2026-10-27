@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient } from '@/lib/supabase/client';
 
+const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const supabase = createClient();
-      const { error: err } = await supabase.auth.signInWithPassword({
+      const { data, error: err } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -29,7 +31,12 @@ export default function LoginPage() {
         setError('ایمیل یا رمز عبور نادرست است.');
         return;
       }
-      router.push('/dashboard');
+      const userEmail = data.user?.email ?? email;
+      if (userEmail === ADMIN_EMAIL) {
+        router.replace('/admin');
+      } else {
+        router.replace('/dashboard');
+      }
       router.refresh();
     } catch {
       setError('ورود انجام نشد. دوباره تلاش کنید.');
@@ -45,8 +52,8 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto">
           <Breadcrumb items={[{ label: 'ورود' }]} />
           <div className="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
-            <h1 className="text-3xl font-heavy mb-2">ورود</h1>
-            <p className="text-muted-foreground text-sm mb-8">
+            <h1 className="text-3xl font-heavy mb-2 text-center">ورود</h1>
+            <p className="text-muted-foreground text-sm mb-8 text-center">
               با ایمیل و رمز عبور وارد شوید.
             </p>
             <form onSubmit={onSubmit} className="space-y-4">
@@ -59,7 +66,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors placeholder:text-muted-foreground"
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
                   dir="ltr"
                   autoComplete="email"
                 />
@@ -80,14 +87,14 @@ export default function LoginPage() {
                 />
               </div>
               {error && (
-                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2">
+                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 text-center">
                   {error}
                 </p>
               )}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity"
+                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity text-center"
               >
                 {loading ? 'در حال ورود...' : 'ورود'}
               </button>
