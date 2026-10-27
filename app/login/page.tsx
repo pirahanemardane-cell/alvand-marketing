@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PageBreadcrumb from "@/components/Breadcrumb";
-import { createClient } from "@/lib/supabase/client";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Breadcrumb from '@/components/Breadcrumb';
+import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,67 +26,79 @@ export default function LoginPage() {
         password,
       });
       if (err) {
-        setError("ایمیل یا رمز عبور نادرست است.");
+        setError('ایمیل یا رمز عبور نادرست است.');
         return;
       }
-      router.push("/");
+      router.push('/dashboard');
       router.refresh();
     } catch {
-      setError("ورود انجام نشد. متغیرهای سوپابیس را در Vercel بررسی کنید.");
+      setError('ورود انجام نشد. دوباره تلاش کنید.');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24">
-        <PageBreadcrumb items={[{ label: "ورود" }]} />
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-2">ورود</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            با ایمیل و رمز عبور وارد شوید.
-          </p>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1.5">ایمیل</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent"
-                dir="ltr"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5">رمز عبور</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent"
-                dir="ltr"
-              />
-            </div>
-            {error && <p className="text-sm text-red-500">{error}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60"
-            >
-              {loading ? "..." : "ورود"}
-            </button>
-          </form>
-          <p className="mt-6 text-sm text-muted-foreground">
-            حساب ندارید؟{" "}
-            <Link href="/register" className="text-accent font-bold">
-              ثبت‌نام
-            </Link>
-          </p>
+      <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16">
+        <div className="max-w-md mx-auto">
+          <Breadcrumb items={[{ label: 'ورود' }]} />
+          <div className="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
+            <h1 className="text-3xl font-heavy mb-2">ورود</h1>
+            <p className="text-muted-foreground text-sm mb-8">
+              با ایمیل و رمز عبور وارد شوید.
+            </p>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  ایمیل
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors placeholder:text-muted-foreground"
+                  dir="ltr"
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  رمز عبور
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
+                  dir="ltr"
+                  autoComplete="current-password"
+                />
+              </div>
+              {error && (
+                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2">
+                  {error}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity"
+              >
+                {loading ? 'در حال ورود...' : 'ورود'}
+              </button>
+            </form>
+            <p className="mt-6 text-sm text-muted-foreground text-center">
+              حساب ندارید؟{' '}
+              <Link href="/register" className="text-accent font-bold hover:underline">
+                ثبت‌نام
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
       <Footer />

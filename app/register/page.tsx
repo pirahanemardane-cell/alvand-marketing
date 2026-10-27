@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PageBreadcrumb from "@/components/Breadcrumb";
-import { createClient } from "@/lib/supabase/client";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Breadcrumb from '@/components/Breadcrumb';
+import { createClient } from '@/lib/supabase/client';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -28,91 +28,112 @@ export default function RegisterPage() {
         email,
         password,
         options: {
-          data: { full_name: fullName },
-          emailRedirectTo:
-            typeof window !== "undefined"
-              ? `${window.location.origin}/`
-              : undefined,
+          data: { full_name: fullName.trim() },
         },
       });
       if (err) {
-        setError(err.message);
+        setError(err.message.includes('already') ? 'این ایمیل قبلاً ثبت شده است.' : 'ثبت‌نام انجام نشد.');
         return;
+      }
+      if (data.user) {
+        await supabase.from('profiles').upsert({
+          id: data.user.id,
+          full_name: fullName.trim() || null,
+        });
       }
       if (data.session) {
-        router.push("/");
+        router.push('/dashboard');
         router.refresh();
-        return;
+      } else {
+        setMessage('ثبت‌نام موفق. اگر تایید ایمیل فعال است، لینک را چک کنید؛ در غیر این صورت وارد شوید.');
       }
-      setMessage(
-        "ثبت‌نام انجام شد. اگر تأیید ایمیل فعال باشد، لینک را از صندوق ورودی چک کنید."
-      );
     } catch {
-      setError("ثبت‌نام انجام نشد. متغیرهای سوپابیس را در Vercel بررسی کنید.");
+      setError('ثبت‌نام انجام نشد. دوباره تلاش کنید.');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24">
-        <PageBreadcrumb items={[{ label: "ثبت‌نام" }]} />
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-2">ثبت‌نام</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            با ایمیل حساب بسازید.
-          </p>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1.5">نام</label>
-              <input
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5">ایمیل</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent"
-                dir="ltr"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5">رمز عبور</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent"
-                dir="ltr"
-              />
-            </div>
-            {error && <p className="text-sm text-red-500">{error}</p>}
-            {message && <p className="text-sm text-accent">{message}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60"
-            >
-              {loading ? "..." : "ثبت‌نام"}
-            </button>
-          </form>
-          <p className="mt-6 text-sm text-muted-foreground">
-            قبلاً ثبت‌نام کرده‌اید؟{" "}
-            <Link href="/login" className="text-accent font-bold">
-              ورود
-            </Link>
-          </p>
+      <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16">
+        <div className="max-w-md mx-auto">
+          <Breadcrumb items={[{ label: 'ثبت‌نام' }]} />
+          <div className="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
+            <h1 className="text-3xl font-heavy mb-2">ثبت‌نام</h1>
+            <p className="text-muted-foreground text-sm mb-8">
+              با ایمیل حساب بسازید.
+            </p>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  نام
+                </label>
+                <input
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors placeholder:text-muted-foreground"
+                  placeholder="نام و نام خانوادگی"
+                  autoComplete="name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  ایمیل
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
+                  dir="ltr"
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">
+                  رمز عبور
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
+                  dir="ltr"
+                  autoComplete="new-password"
+                />
+                <p className="mt-1 text-xs text-muted-foreground">حداقل ۶ کاراکتر</p>
+              </div>
+              {error && (
+                <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2">
+                  {error}
+                </p>
+              )}
+              {message && (
+                <p className="text-sm text-accent bg-accent/10 rounded-lg px-3 py-2">
+                  {message}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-full bg-accent text-accent-foreground font-bold text-sm py-3.5 disabled:opacity-60 hover:opacity-90 transition-opacity"
+              >
+                {loading ? 'در حال ثبت‌نام...' : 'ثبت‌نام'}
+              </button>
+            </form>
+            <p className="mt-6 text-sm text-muted-foreground text-center">
+              قبلاً ثبت‌نام کرده‌اید؟{' '}
+              <Link href="/login" className="text-accent font-bold hover:underline">
+                ورود
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
       <Footer />
