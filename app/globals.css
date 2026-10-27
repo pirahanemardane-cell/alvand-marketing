@@ -399,3 +399,8 @@ iframe {
 .text-no-justify.text-center {
   text-align: center !important;
 }
+
+.font-heavy {
+  font-family: "IRANYekanX", system-ui, sans-serif !important;
+  font-weight: 800 !important;
+}

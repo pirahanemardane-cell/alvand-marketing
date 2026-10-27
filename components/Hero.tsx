@@ -45,7 +45,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full max-w-full px-1 text-display break-words text-center text-no-justify font-heavy"
+          className="w-full max-w-full px-1 text-display break-words text-center text-no-justify font-heavy font-heavy"
         >
           مثل کوه پشتتیم
         </motion.p>
