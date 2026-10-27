@@ -36,7 +36,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-4 text-sm sm:text-base font-bold tracking-wide text-accent text-center text-no-justify"
+          className="mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify"
         >
           الوند مارکتینگ
         </motion.p>
