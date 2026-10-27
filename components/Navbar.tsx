@@ -139,7 +139,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 shrink-0 min-w-0">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border border-border transition-colors duration-300 hover:bg-accent/10"
+              className="xl:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border border-border transition-colors duration-300 hover:bg-accent/10"
               aria-label={menuOpen ? "بستن منو" : "باز کردن منو"}
               aria-expanded={menuOpen}
             >
@@ -169,7 +169,7 @@ export default function Navbar() {
           </div>
 
           {/* منوی مرکزی — فقط دسکتاپ، بدون هم‌پوشانی */}
-          <div className="hidden lg:flex items-center justify-center min-w-0">
+          <div className="hidden xl:flex items-center justify-center min-w-0">
             <ul className="flex flex-wrap items-center justify-center gap-x-0.5 gap-y-1 list-none min-w-0">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -250,7 +250,7 @@ export default function Navbar() {
           <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 min-w-0">
             <form
               onSubmit={onSearchSubmit}
-              className="hidden lg:block relative w-[120px] xl:w-[140px] shrink-0"
+              className="hidden xl:block relative w-[120px] xl:w-[140px] shrink-0"
             >
               <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
               <input
@@ -311,7 +311,7 @@ export default function Navbar() {
               مشاوره رایگان
               <span className="text-xs">←</span>
             </Link>
-            <div className="hidden lg:block shrink-0">
+            <div className="hidden xl:block shrink-0">
               <AuthButton />
             </div>
           </div>
@@ -327,7 +327,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm xl:hidden"
               onClick={closeMenu}
             />
 
@@ -336,7 +336,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
-              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl lg:hidden flex flex-col pt-20 pb-8 px-6 overflow-y-auto overscroll-contain"
+              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col pt-20 pb-8 px-6 overflow-y-auto overscroll-contain"
             >
               <form onSubmit={onSearchSubmit} className="mb-6 relative">
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
