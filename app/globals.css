@@ -1,0 +1,393 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Font Faces ─────────────────────────────────────────────── */
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IRANYekanX";
+  src: url("/fonts/IRANYekanXFaNum-Heavy.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Theme Tokens ───────────────────────────────────────────── */
+:root,
+.dark {
+  --background: #0a0a0b;
+  --foreground: #f4f4f5;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #f59e0b;
+  --accent-foreground: #0a0a0b;
+  --card: rgba(255, 255, 255, 0.03);
+  --hero-overlay: linear-gradient(
+    to bottom,
+    rgba(10, 10, 11, 0.3) 0%,
+    rgba(10, 10, 11, 0.8) 55%,
+    #0a0a0b 100%
+  );
+}
+
+.light {
+  --background: #fafafa;
+  --foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: rgba(0, 0, 0, 0.08);
+  --accent: #d97706;
+  --accent-foreground: #ffffff;
+  --card: rgba(0, 0, 0, 0.03);
+  --hero-overlay: linear-gradient(
+    to bottom,
+    rgba(250, 250, 250, 0.15) 0%,
+    rgba(250, 250, 250, 0.7) 55%,
+    #fafafa 100%
+  );
+}
+
+/* ─── Base Reset & Persian Typography (Google / Material-aligned) ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "IRANYekanX", system-ui, -apple-system, sans-serif;
+  /* Material Design — Body Large (base) */
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5; /* MD default; فارسی کمی بازتر در .leading-persian */
+  letter-spacing: 0.015em;
+  word-spacing: 0.02em;
+  overflow-x: hidden;
+  transition: background-color 0.6s ease, color 0.6s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * Material Design 3 Type Scale (Persian-adapted)
+ * فقط H1 از وزن Heavy (800) استفاده می‌کند.
+ * بقیه: Regular 400 / Bold 700
+ * مرجع: https://m3.material.io/styles/typography
+ */
+
+/* Display / Hero — فقط وقتی روی h1 باشد Heavy */
+.text-display {
+  font-family: "IRANYekanX", system-ui, sans-serif;
+  font-size: clamp(2rem, 5vw + 1rem, 3.5625rem); /* ~32–57px Display */
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+
+h1.text-display,
+h1 .text-display {
+  font-weight: 800 !important;
+}
+
+/* Headline Large ≈ H1 — تنها جای Heavy */
+h1,
+h1.font-bold,
+h1.font-semibold,
+h1.font-medium,
+h1.font-extrabold,
+h1.font-black {
+  font-family: "IRANYekanX", system-ui, sans-serif;
+  font-size: clamp(1.75rem, 2vw + 1rem, 2rem); /* 28–32px */
+  font-weight: 800 !important;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+/* Headline Medium ≈ H2 */
+h2,
+h2.font-bold,
+h2.font-semibold {
+  font-family: "IRANYekanX", system-ui, sans-serif;
+  font-size: clamp(1.375rem, 1.5vw + 0.75rem, 1.75rem); /* 22–28px */
+  font-weight: 700 !important;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+/* Headline Small ≈ H3 */
+h3,
+h3.font-bold,
+h3.font-semibold {
+  font-family: "IRANYekanX", system-ui, sans-serif;
+  font-size: clamp(1.125rem, 1vw + 0.5rem, 1.5rem); /* 18–24px */
+  font-weight: 700 !important;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+/* Title Large ≈ H4 */
+h4,
+h4.font-bold {
+  font-family: "IRANYekanX", system-ui, sans-serif;
+  font-size: 1.375rem; /* 22px */
+  font-weight: 700 !important;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Title Medium ≈ H5 */
+h5 {
+  font-size: 1rem; /* 16px */
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* Title Small ≈ H6 */
+h6 {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* Body / paragraph — تمام‌عرض + جاستیفای */
+p {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  text-align: justify;
+  text-justify: inter-word;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* متن‌های چندخطی رایج در کامپوننت‌ها */
+article p,
+section p,
+.prose p,
+.text-body,
+.text-muted-foreground.leading-persian,
+.leading-persian {
+  text-align: justify;
+  text-justify: inter-word;
+  width: 100%;
+  max-width: 100%;
+}
+
+small,
+.text-micro {
+  font-size: 0.75rem; /* 12px — Body Small / Label */
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+}
+
+/* Label / nav / caption — Material Label Large */
+.text-caption {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: 0.01em;
+}
+
+.text-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+/* Utility line-heights for Persian */
+.leading-persian {
+  line-height: 1.75;
+}
+
+.leading-persian-tight {
+  line-height: 1.3;
+}
+
+.leading-persian-display {
+  line-height: 1.12;
+}
+
+/* Tailwind font-bold روی غیر از h1 حداکثر 700 بماند */
+.font-bold:not(h1):not(h1 *) {
+  font-weight: 700;
+}
+
+.font-semibold:not(h1):not(h1 *) {
+  font-weight: 700;
+}
+
+.font-extrabold:not(h1):not(h1 *),
+.font-black:not(h1):not(h1 *) {
+  font-weight: 700;
+}
+
+@layer base {
+  p {
+    margin-bottom: 1em;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    font-weight: inherit;
+  }
+}
+
+/* منو، دکمه، برچسب — بدون جاستیفای */
+nav a,
+button,
+label,
+h1, h2, h3, h4, h5, h6,
+.text-no-justify,
+.text-caption {
+  text-align: start;
+  text-justify: auto;
+}
+
+@layer utilities {
+
+  .text-body {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    text-align: justify;
+    text-justify: inter-word;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .text-caption {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.43;
+    letter-spacing: 0.01em;
+  }
+
+  .text-micro {
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.025em;
+  }
+
+  /* Display روی h1 = Heavy؛ در غیر این صورت Bold */
+  .text-display {
+    font-size: clamp(2rem, 5vw + 1rem, 3.5625rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  h1.text-display {
+    font-weight: 800 !important;
+  }
+
+  .leading-persian {
+    line-height: 1.75;
+  }
+
+  .leading-persian-tight {
+    line-height: 1.3;
+  }
+
+  .leading-persian-display {
+    line-height: 1.12;
+  }
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection {
+  background: rgba(245, 158, 11, 0.3);
+}
+
+/* ─── Focus visible for accessibility ────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+:root, .dark {
+  --ring: 38 92% 50%;
+}
+
+
+
+
+
+/* ─── Prevent horizontal overflow (mobile / tablet / desktop) ─── */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* reduce ambient drift overflow risk */
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: scale(1.04) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate(-0.5%, 0.5%);
+  }
+}
+
+/* اولویت وسط‌چین وقتی صریحاً خواسته شده */
+.text-center {
+  text-align: center !important;
+  text-justify: auto !important;
+}
+.text-no-justify {
+  text-align: inherit;
+  text-justify: auto !important;
+}
+.text-no-justify.text-center {
+  text-align: center !important;
+}
