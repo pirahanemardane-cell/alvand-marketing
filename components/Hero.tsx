@@ -32,14 +32,23 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 pt-24 pb-16 text-center w-full">
-        <motion.h1
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-4 text-sm sm:text-base font-bold tracking-wide text-accent text-center text-no-justify"
+        >
+          الوند مارکتینگ
+        </motion.p>
+
+        <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full max-w-full px-1 text-display break-words text-center text-no-justify"
+          className="w-full max-w-full px-1 text-display break-words text-center text-no-justify font-heavy"
         >
           مثل کوه پشتتیم
-        </motion.h1>
+        </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
