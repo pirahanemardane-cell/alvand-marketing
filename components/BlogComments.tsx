@@ -71,6 +71,29 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
     load();
   }, [load]);
 
+  // Realtime: new/updated comments for this post
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`blog-comments:${postSlug}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "blog_comments",
+          filter: `post_slug=eq.${postSlug}`,
+        },
+        () => {
+          void load();
+        },
+      )
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [postSlug, load]);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);

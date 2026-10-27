@@ -428,3 +428,10 @@ h1.text-display,
   0% { transform: rotate(-90deg); }
   100% { transform: rotate(270deg); }
 }
+
+
+/* Paint containment for long pages (no visual change) */
+main > section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}

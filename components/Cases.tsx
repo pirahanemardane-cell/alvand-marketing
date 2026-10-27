@@ -67,7 +67,7 @@ export default function Cases() {
                 transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="rounded-2xl overflow-hidden border border-border bg-card"
               >
-                <img
+                <img decoding="async"
                   src={item.image}
                   alt={item.industry}
                   className="w-full h-52 object-cover"

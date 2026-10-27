@@ -91,6 +91,31 @@ export default function AdminPage() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+  // Realtime admin data
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel("admin-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "blog_comments" },
+        () => {
+          void loadData();
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "profiles" },
+        () => {
+          void loadData();
+        },
+      )
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [loadData]);
+
 
   async function handleComment(id: string, approved: boolean) {
     setActionLoading(id);
