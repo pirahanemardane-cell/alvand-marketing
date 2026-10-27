@@ -50,7 +50,7 @@ export default function FAQ() {
       <div className="mx-auto w-full">
         <div className="grid md:grid-cols-[240px_1fr] gap-10">
           <div>
-            <SectionLabel number="۱۲" title="سؤالات" />
+            <SectionLabel number="۱۰" title="سؤالات" />
             <p className="text-caption text-muted-foreground leading-persian">
               پاسخ‌هایی که معمولاً قبل از شروع همکاری می‌پرسید.
             </p>

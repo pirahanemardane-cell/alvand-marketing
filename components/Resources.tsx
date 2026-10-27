@@ -27,7 +27,7 @@ export default function Resources() {
       <div className="mx-auto w-full">
         <div className="grid md:grid-cols-[240px_1fr] gap-10">
           <div>
-            <SectionLabel number="۱۰" title="منابع" />
+            <SectionLabel number="۰۸" title="منابع" />
             <p className="text-caption text-muted-foreground leading-persian">
               مطالب کاربردی برای کسانی که خودشان هم می‌خواهند یاد بگیرند.
             </p>

@@ -30,7 +30,7 @@ export default function Customers() {
       <div className="mx-auto w-full">
         <div className="grid md:grid-cols-[240px_1fr] gap-10">
           <div>
-            <SectionLabel number="۱۱" title="مشتریان" />
+            <SectionLabel number="۰۹" title="مشتریان" />
             <p className="text-caption text-muted-foreground leading-persian">
               حرف کسانی که با ما کار کرده‌اند.
             </p>

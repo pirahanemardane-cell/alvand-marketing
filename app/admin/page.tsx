@@ -22,6 +22,8 @@ import { createClient } from '@/lib/supabase/client';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
+import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
+import AdminSeoPanel from '@/components/admin/AdminSeoPanel';
 
 const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
 
@@ -44,7 +46,7 @@ type Comment = {
   user_id: string | null;
 };
 
-type Tab = 'overview' | 'users' | 'comments';
+type Tab = 'overview' | 'users' | 'comments' | 'blog' | 'seo';
 
 export default function AdminPage() {
   const [tab, setTab] = useState<Tab>('overview');
@@ -153,14 +155,12 @@ export default function AdminPage() {
     label: string;
     icon: typeof LayoutDashboard;
     badge?: number;
-    href?: string;
   }[] = [
     { id: 'overview', label: 'خلاصه', icon: LayoutDashboard },
     { id: 'users', label: 'کاربران', icon: Users, badge: profiles.length },
     { id: 'comments', label: 'نظرات', icon: MessageSquare, badge: pendingComments.length },
-    { id: 'overview', label: 'مدیریت بلاگ', icon: FileText, href: '/admin/blog' },
-    { id: 'overview', label: 'سئو صفحات', icon: Search, href: '/admin/seo' },
-    { id: 'overview', label: 'پنل کاربری من', icon: User, href: '/dashboard' },
+    { id: 'blog', label: 'مدیریت بلاگ', icon: FileText },
+    { id: 'seo', label: 'سئو صفحات', icon: Search },
   ];
 
   return (
@@ -215,44 +215,32 @@ export default function AdminPage() {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-2 border-b border-border">
-          {tabs.map((t) => {
-            const active = !t.href && tab === t.id;
-            const cls = `inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-xl border border-b-0 transition-colors ${
-              active
-                ? 'bg-card text-foreground border-border -mb-px'
-                : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
-            }`;
-            if (t.href) {
-              return (
-                <Link key={t.label} href={t.href} className={cls}>
-                  <t.icon className="h-4 w-4" />
-                  {t.label}
-                </Link>
-              );
-            }
-            return (
-              <button
-                key={t.id + t.label}
-                type="button"
-                onClick={() => setTab(t.id)}
-                className={cls}
-              >
-                <t.icon className="h-4 w-4" />
-                {t.label}
-                {typeof t.badge === 'number' && (
-                  <span
-                    className={`text-xs px-1.5 py-0.5 rounded-full ${
-                      t.id === 'comments' && t.badge > 0
-                        ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
-                        : 'bg-muted text-muted-foreground'
-                    }`}
-                  >
-                    {t.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-xl border border-b-0 transition-colors ${
+                tab === t.id
+                  ? 'bg-card text-foreground border-border -mb-px'
+                  : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground'
+              }`}
+            >
+              <t.icon className="h-4 w-4" />
+              {t.label}
+              {typeof t.badge === 'number' && (
+                <span
+                  className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    t.id === 'comments' && t.badge > 0
+                      ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                      : 'bg-muted text-muted-foreground'
+                  }`}
+                >
+                  {t.badge}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
 
         <div className="mt-6">
@@ -469,6 +457,11 @@ export default function AdminPage() {
                           لغو تایید
                         </button>
                       )}
+
+          {tab === 'blog' && <AdminBlogPanel />}
+
+          {tab === 'seo' && <AdminSeoPanel />}
+
                       <button
                         type="button"
                         onClick={() => handleDeleteComment(comment.id)}
