@@ -157,10 +157,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      <nav
         className={`fixed top-0 right-0 left-0 z-40 w-full max-w-[100vw] min-w-0 transition-all duration-500 ${
           scrolled || menuOpen
             ? "bg-background/90 backdrop-blur-xl border-b border-border"
@@ -310,11 +307,7 @@ export default function Navbar() {
                 }`}
               >
                 {mode === "morning" && (
-                  <motion.div
-                    layoutId="nav-toggle-bg"
-                    className="absolute inset-0 rounded-full bg-accent"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                  <span className="absolute inset-0 rounded-full bg-accent" aria-hidden />
                 )}
                 <span className="relative z-10">صبح</span>
               </button>
@@ -327,11 +320,7 @@ export default function Navbar() {
                 }`}
               >
                 {mode === "night" && (
-                  <motion.div
-                    layoutId="nav-toggle-bg"
-                    className="absolute inset-0 rounded-full bg-accent"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                  <span className="absolute inset-0 rounded-full bg-accent" aria-hidden />
                 )}
                 <span className="relative z-10">شب</span>
               </button>
@@ -342,7 +331,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* دراور موبایل */}
       <AnimatePresence>
