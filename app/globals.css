@@ -404,3 +404,11 @@ iframe {
   font-family: "IRANYekanX", system-ui, sans-serif !important;
   font-weight: 800 !important;
 }
+
+/* All H1 use IRANYekanX Heavy */
+h1,
+h1.text-display,
+.text-display.h1 {
+  font-family: "IRANYekanX", system-ui, sans-serif !important;
+  font-weight: 800 !important;
+}
