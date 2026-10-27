@@ -12,17 +12,17 @@ const cases = [
     result: "راه‌اندازی فروش آنلاین و مسیر فروش دیجیتال مستقل از فروشگاه فیزیکی",
     duration: "طراحی سایت",
     image:
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    industry: "ترمینال اتوبوس‌رانی",
+    industry: "تعاونی اتوبوس رانی",
     problem:
-      "ترمینال به حضور دیجیتال یکپارچه نیاز داشت: معرفی خدمات، جذب مسافر و دیده شدن در جستجو.",
+      "تعاونی اتوبوس‌رانی به حضور دیجیتال یکپارچه نیاز داشت: معرفی خدمات، جذب مسافر و دیده شدن در جستجو.",
     work: "طراحی سایت، سئو، تولید محتوا و اجرای تبلیغات اینترنتی برای پوشش کامل مسیر جذب مسافر.",
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "سایت + سئو + محتوا + تبلیغات",
     image:
-      "https://images.unsplash.com/photo-1544620341-11bb3f6b1c45?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1570125909232-eb4bca3d1c3f?auto=format&fit=crop&w=1200&q=80",
   },
   {
     industry: "نسپرسو — سایت شرکتی وردپرس",
@@ -32,7 +32,7 @@ const cases = [
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
     image:
-      "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
   },
   {
     industry: "امور تجاری — سایت شرکتی وردپرس",
@@ -42,7 +42,7 @@ const cases = [
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
     image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
