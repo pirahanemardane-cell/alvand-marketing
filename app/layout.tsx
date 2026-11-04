@@ -15,14 +15,8 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: {
-      index: false,
-      follow: false,
-    },
-  },
+  // Per-page robots come from seo_pages via generateMetadata (soft-launch
+  // keeps noindex until an SEO row exists for that page_key).
 };
 
 export default function RootLayout({

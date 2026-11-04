@@ -1,25 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import SectionLabel from "./SectionLabel";
+import { listPublishedPosts } from "@/lib/blog";
 
-const resources = [
-  {
-    title: "چرا تبلیغات اینستاگرام گاهی نتیجه نمی‌دهد؟",
-    desc: "سه اشتباه رایج در تنظیم مخاطب و بودجه که بیشتر کسب‌وکارها مرتکب می‌شوند.",
-  },
-  {
-    title: "چک‌لیست سئوی فنی برای سایت‌های ایرانی",
-    desc: "مواردی که قبل از هر کمپین محتوا باید در سایت درست باشد تا گوگل سایت را جدی بگیرد.",
-  },
-  {
-    title: "چطور محتوای فروشنده بنویسیم بدون اینکه تبلیغ به نظر برسد؟",
-    desc: "روشی ساده برای نوشتن متنی که هم مشکل مشتری را بگوید هم راه‌حل شما را نشان دهد.",
-  },
-];
+export default async function Resources() {
+  const posts = (await listPublishedPosts()).slice(0, 3);
 
-export default function Resources() {
+  if (posts.length === 0) {
+    return null;
+  }
+
   return (
     <section
       id="resources"
@@ -35,34 +24,25 @@ export default function Resources() {
           </div>
 
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold leading-persian-tight mb-10"
-            >
+            <h2 className="text-3xl md:text-4xl font-bold leading-persian-tight mb-10">
               چند مطلب مفید
-            </motion.h2>
+            </h2>
 
             <div className="space-y-0">
-              {resources.map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
+              {posts.map((item) => (
+                <div
+                  key={item.slug}
                   className="block py-6 border-b border-border first:border-t group"
                 >
-                  <Link href="/blog" className="block">
+                  <Link href={`/blog/${item.slug}`} className="block">
                     <h3 className="text-lg font-bold mb-1.5 group-hover:text-accent transition-colors leading-persian-tight">
                       {item.title}
                     </h3>
                     <p className="text-caption text-muted-foreground leading-persian">
-                      {item.desc}
+                      {item.excerpt || item.category}
                     </p>
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>

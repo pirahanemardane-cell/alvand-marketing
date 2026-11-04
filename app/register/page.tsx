@@ -31,7 +31,7 @@ export default function RegisterPage() {
         password,
         options: {
           data: { full_name: fullName.trim() },
-          emailRedirectTo: `${origin}/dashboard`,
+          emailRedirectTo: `${origin}/auth/callback?next=/dashboard`,
         },
       });
       if (err) {
@@ -42,11 +42,16 @@ export default function RegisterPage() {
         );
         return;
       }
-      if (data.user) {
-        await supabase.from('profiles').upsert({
+      // Profile row is also created by DB trigger; upsert only when we have a session.
+      if (data.session && data.user) {
+        const { error: profErr } = await supabase.from('profiles').upsert({
           id: data.user.id,
           full_name: fullName.trim() || null,
         });
+        if (profErr) {
+          // Non-fatal — trigger may already have created the row.
+          console.warn('profile upsert', profErr.message);
+        }
       }
       if (data.session) {
         const userEmail = data.user?.email ?? email;

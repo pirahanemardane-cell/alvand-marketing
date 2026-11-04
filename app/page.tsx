@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -14,6 +15,11 @@ const FAQ = dynamic(() => import("@/components/FAQ"), { ssr: true });
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import { metadataForPageKey } from "@/lib/seo/pages";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForPageKey("home", { path: "/" });
+}
 
 export default function Home() {
   return (

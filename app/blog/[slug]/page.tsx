@@ -28,12 +28,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPublishedPostBySlug(slug);
   if (!post) return { title: "مقاله یافت نشد" };
+  const title = post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`;
+  const description = post.meta_description || post.excerpt;
   return {
-    title: post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`,
-    description: post.meta_description || post.excerpt,
+    title,
+    description,
     robots: {
       index: post.robots_index !== false,
       follow: post.robots_follow !== false,
+    },
+    openGraph: {
+      title: post.og_title || title,
+      description: post.og_description || description,
+      ...(post.og_image_url
+        ? { images: [{ url: post.og_image_url }] }
+        : {}),
+    },
+    alternates: {
+      canonical: post.canonical_url || `/blog/${post.slug}`,
     },
   };
 }

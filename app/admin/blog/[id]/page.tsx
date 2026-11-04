@@ -22,6 +22,8 @@ export default function AdminBlogEditPage({
   const { id } = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [allowed, setAllowed] = useState(false);
+  const [found, setFound] = useState(false);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [title, setTitle] = useState('');
@@ -35,6 +37,7 @@ export default function AdminBlogEditPage({
   useEffect(() => {
     async function load() {
       if (!hasSupabaseEnv()) {
+        setAllowed(false);
         setLoading(false);
         router.replace('/login');
         return;
@@ -42,19 +45,23 @@ export default function AdminBlogEditPage({
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !isAdminEmail(user.email)) {
+        setAllowed(false);
         setLoading(false);
         router.replace('/login');
         return;
       }
+      setAllowed(true);
       try {
         const res = await fetch(`/api/admin/blog?id=${encodeURIComponent(id)}`);
         const json = await res.json();
         if (!res.ok || !json.item) {
+          setFound(false);
           setMsg('پست پیدا نشد');
           setLoading(false);
           return;
         }
         const p = json.item;
+        setFound(true);
         setTitle(p.title || '');
         setSlug(p.slug || '');
         setExcerpt(p.excerpt || '');
@@ -77,6 +84,7 @@ export default function AdminBlogEditPage({
           })
         );
       } catch {
+        setFound(false);
         setMsg('خطا در بارگذاری');
       }
       setLoading(false);
@@ -85,6 +93,7 @@ export default function AdminBlogEditPage({
   }, [id, router]);
 
   async function save() {
+    if (!found) return;
     setSaving(true);
     setMsg('');
     try {
@@ -117,12 +126,27 @@ export default function AdminBlogEditPage({
     setSaving(false);
   }
 
-  if (loading) {
+  if (loading || !allowed) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Navbar />
         <div className="flex min-h-[50vh] items-center justify-center">
           <p className="text-muted-foreground">در حال بارگذاری...</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (!found) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <div className="mx-auto w-full max-w-3xl px-4 pt-28 pb-16 md:px-8 text-center">
+          <p className="text-muted-foreground mb-4">{msg || 'پست پیدا نشد'}</p>
+          <Link href="/admin/blog" className="text-accent hover:underline text-sm font-bold">
+            بازگشت به مدیریت بلاگ
+          </Link>
         </div>
         <Footer />
       </main>

@@ -6,13 +6,11 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { services } from "@/lib/services";
+import { metadataForPageKey } from "@/lib/seo/pages";
 
-export const metadata: Metadata = {
-  title: "خدمات دیجیتال مارکتینگ | الوند مارکتینگ",
-  description:
-    "طراحی سایت، سئو، تولید محتوا، اینستاگرام، تبلیغات اینترنتی و هوش مصنوعی — خدمات دیجیتال مارکتینگ الوند.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForPageKey("services", { path: "/services" });
+}
 
 type Props = { searchParams: Promise<{ q?: string }> };
 

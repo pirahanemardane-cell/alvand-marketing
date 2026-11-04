@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
       const supabase = createClient();
       const origin = window.location.origin;
       const { error: err } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${origin}/reset-password`,
+        redirectTo: `${origin}/auth/callback?next=/reset-password`,
       });
       if (err) {
         setError('ارسال لینک انجام نشد. ایمیل را بررسی کنید.');

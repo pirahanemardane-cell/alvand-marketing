@@ -6,15 +6,13 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { listPublishedPosts } from "@/lib/blog";
+import { metadataForPageKey } from "@/lib/seo/pages";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "بلاگ | الوند مارکتینگ",
-  description:
-    "مقالات کاربردی درباره سئو، تبلیغات، طراحی سایت و بازاریابی دیجیتال.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForPageKey("blog", { path: "/blog" });
+}
 
 type Props = { searchParams: Promise<{ q?: string }> };
 

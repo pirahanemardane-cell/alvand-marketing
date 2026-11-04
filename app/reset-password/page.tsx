@@ -25,16 +25,42 @@ export default function ResetPasswordPage() {
       setReady(true);
       return;
     }
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     try {
       const supabase = createClient();
-      supabase.auth.getSession().then(({ data }) => {
-        if (data.session) setSessionOk(true);
+
+      const markReady = (ok: boolean) => {
+        if (cancelled) return;
+        setSessionOk(ok);
         setReady(true);
+      };
+
+      // Wait briefly for PKCE / hash recovery to settle before showing invalid-link.
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) {
+          markReady(true);
+          return;
+        }
+        timeoutId = setTimeout(async () => {
+          const { data: again } = await supabase.auth.getSession();
+          markReady(Boolean(again.session));
+        }, 2500);
       });
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        if (event === 'PASSWORD_RECOVERY' || session) setSessionOk(true);
+
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN' || session) {
+          if (timeoutId) clearTimeout(timeoutId);
+          markReady(true);
+        }
       });
-      return () => subscription.unsubscribe();
+      return () => {
+        cancelled = true;
+        if (timeoutId) clearTimeout(timeoutId);
+        subscription.unsubscribe();
+      };
     } catch {
       setReady(true);
     }
