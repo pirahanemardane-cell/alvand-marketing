@@ -106,10 +106,13 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
     }
   }, [postSlug, load]);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     setMessage(null);
+    const website =
+      (e.currentTarget.elements.namedItem("website") as HTMLInputElement | null)
+        ?.value ?? "";
 
     if (!user) {
       setError("برای ثبت نظر ابتدا وارد حساب کاربری شوید.");
@@ -136,7 +139,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
           authorName: name,
           authorEmail: user.email,
           body,
-          userId: user.id,
+          website,
         }),
       });
       const data = await res.json();
@@ -186,7 +189,11 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
           </div>
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 mb-10">
+        <form onSubmit={onSubmit} className="space-y-4 mb-10 relative">
+          <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+            <label htmlFor="c-website">وب‌سایت</label>
+            <input id="c-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+          </div>
           <div>
             <label htmlFor="c-name" className="block text-sm font-medium mb-1.5">
               نام نمایشی

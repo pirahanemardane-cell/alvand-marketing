@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import SentryInit from "@/components/SentryInit";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,8 +16,7 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
-  // Per-page robots come from seo_pages via generateMetadata (soft-launch
-  // keeps noindex until an SEO row exists for that page_key).
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -41,10 +41,28 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        <link
+          rel="preload"
+          href="/images/hero-night.webp"
+          as="image"
+          type="image/webp"
+        />
+        <link
+          rel="preload"
+          href="/images/hero-morning.webp"
+          as="image"
+          type="image/webp"
+        />
       </head>
 
       <body className="antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <a href="#main-content" className="skip-link">
+          پرش به محتوای اصلی
+        </a>
+        <ThemeProvider>
+          <SentryInit />
+          <div id="main-content">{children}</div>
+        </ThemeProvider>
       </body>
     </html>
   );

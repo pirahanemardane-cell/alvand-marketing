@@ -21,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${service.title} | الوند مارکتینگ`,
     description: service.shortDesc,
-    robots: { index: false, follow: false },
+    robots: { index: true, follow: true },
+    alternates: { canonical: `/services/${service.slug}` },
   };
 }
 

@@ -66,10 +66,9 @@ export async function metadataForPageKey(
   const fb = FALLBACKS[pageKey] || FALLBACKS.home;
   const title = row?.meta_title || row?.title || fb.title;
   const description = row?.meta_description || fb.description;
-  const index = row?.robots_index !== false ? true : false;
-  // Keep site soft-launched: if no SEO row yet, stay noindex like before.
-  const robotsIndex = row ? index : false;
-  const robotsFollow = row ? row.robots_follow !== false : false;
+  // Launch default: indexable. Per-page seo_pages.robots_* still override when set.
+  const robotsIndex = row ? row.robots_index !== false : true;
+  const robotsFollow = row ? row.robots_follow !== false : true;
 
   const meta: Metadata = {
     title,

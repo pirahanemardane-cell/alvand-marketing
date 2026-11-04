@@ -198,6 +198,7 @@ export default function AdminBlogPanel() {
                   <td className="p-4">
                     <div className="flex flex-wrap gap-1">
                       <Link href={`/admin/blog/${p.id}`} className="rounded-lg border border-border px-2 py-1 text-xs hover:border-accent">ویرایش / SEO</Link>
+                      <Link href={`/blog/${encodeURIComponent(p.slug)}?preview=1`} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-border px-2 py-1 text-xs hover:border-accent">پیش‌نمایش</Link>
                       {p.status !== 'published' && <button type="button" disabled={busyId === p.id} onClick={() => void setStatus(p.id, 'published')} className="rounded-lg border border-border px-2 py-1 text-xs disabled:opacity-50">انتشار</button>}
                       {p.status !== 'draft' && <button type="button" disabled={busyId === p.id} onClick={() => void setStatus(p.id, 'draft')} className="rounded-lg border border-border px-2 py-1 text-xs disabled:opacity-50">پیش‌نویس</button>}
                       {p.status !== 'archived' && <button type="button" disabled={busyId === p.id} onClick={() => void setStatus(p.id, 'archived')} className="rounded-lg border border-border px-2 py-1 text-xs disabled:opacity-50">بایگانی</button>}

@@ -23,9 +23,10 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 1. `supabase/schema.sql` — نظرات، پروفایل، RLS پایه  
 2. `supabase/blog-seo.sql` — جداول بلاگ و SEO صفحات  
 3. `supabase/hardening.sql` — سیاست‌های تکمیلی (خواندن نظرات خود کاربر، insert پروفایل)  
-4. `supabase/leads.sql` — جدول `contact_leads` برای فرم تماس
+4. `supabase/leads.sql` — جدول `contact_leads` برای فرم تماس  
+5. `supabase/admin-role.sql` — ستون `profiles.role` (+ seed ادمین؛ allowlist ایمیل هنوز fallback است)
 
-برای پروژهٔ از قبل راه‌اندازی‌شده، حداقل `hardening.sql` و `leads.sql` را اجرا کنید.
+برای پروژهٔ از قبل راه‌اندازی‌شده، حداقل `hardening.sql`، `leads.sql` و `admin-role.sql` را اجرا کنید.
 
 ## ۳. Auth
 
@@ -39,7 +40,25 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
   - `http://localhost:3000/auth/callback`
   - `http://127.0.0.1:3000/**`
 - تایید ایمیل / بازیابی رمز از مسیر `/auth/callback?next=…` رد می‌شود (نه مستقیم `/dashboard`).
-- ادمین فعلی با ایمیل hard-coded در `lib/admin.ts` شناخته می‌شود (`alvandmarketing.com@gmail.com`).
+- ادمین: `profiles.role = 'admin'` **یا** ایمیل allowlist در `lib/admin.ts` (`alvandmarketing.com@gmail.com`) به‌عنوان fallback مهاجرت.
+
+## ۶. Rate limit / ضد اسپم (کد)
+
+| مسیر | محدودیت | ضد اسپم |
+|------|---------|---------|
+| `POST /api/contact` | ۵ درخواست / ۱۵ دقیقه / IP (حافظهٔ سرور) | honeypot `website` + طول فیلد + محدودیت URL |
+| `POST /api/comments` | ۸ / ۱۵ دقیقه / IP و per-user | لاگین اجباری + honeypot + ممنوعیت لینک |
+
+این limiter در حافظه است (بدون Upstash). برای چند instance بعداً Redis بگذارید.
+
+## ۷. Observability (اختیاری)
+
+- `SENTRY_DSN` (سرور) و/یا `NEXT_PUBLIC_SENTRY_DSN` (مرورگر)
+- بدون این‌ها گزارش خطا no-op است (بدون وابستگی سنگین SDK؛ ingest سبک به Sentry).
+
+## ۸. دامنهٔ سایت برای sitemap
+
+- اختیاری: `NEXT_PUBLIC_SITE_URL=https://alvandmarketing.ir` (پیش‌فرض همین دامنه در `app/sitemap.ts` / `app/robots.ts`)
 
 ## ۴. Realtime (اختیاری)
 

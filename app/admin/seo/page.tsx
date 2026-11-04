@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
-import { isAdminEmail } from '@/lib/admin';
+import { resolveIsAdmin } from '@/lib/admin';
 import SeoAnalysisPanel, {
   emptySeoValue,
   type SeoPanelValue,
@@ -42,9 +42,9 @@ export default function AdminSeoPage() {
       try {
         const supabase = createClient();
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user || !isAdminEmail(user.email)) {
+        if (!user || !(await resolveIsAdmin(supabase, user))) {
           setAllowed(false);
-          router.replace('/login');
+          router.replace(user ? '/dashboard' : '/login');
           return;
         }
         setAllowed(true);

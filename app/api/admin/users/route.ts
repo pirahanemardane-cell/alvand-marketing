@@ -4,7 +4,7 @@ import {
   hasServiceEnv,
   requireAdminUser,
 } from "@/lib/supabase/admin";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminAccount } from "@/lib/admin";
 
 export async function GET() {
   const user = await requireAdminUser();
@@ -20,10 +20,32 @@ export async function GET() {
 
   try {
     const service = createServiceClientOrThrow();
-    const { data: profiles, error } = await service
-      .from("profiles")
-      .select("id, full_name, created_at")
-      .order("created_at", { ascending: false });
+    // role column is additive — fall back if migration not applied yet
+    let profiles: {
+      id: string;
+      full_name: string | null;
+      created_at: string;
+      role?: string | null;
+    }[] | null = null;
+    let error: { message: string } | null = null;
+
+    {
+      const res = await service
+        .from("profiles")
+        .select("id, full_name, created_at, role")
+        .order("created_at", { ascending: false });
+      if (res.error && /role/i.test(res.error.message)) {
+        const fallback = await service
+          .from("profiles")
+          .select("id, full_name, created_at")
+          .order("created_at", { ascending: false });
+        profiles = fallback.data;
+        error = fallback.error;
+      } else {
+        profiles = res.data;
+        error = res.error;
+      }
+    }
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -47,10 +69,11 @@ export async function GET() {
 
     const users = (profiles ?? []).map((p) => {
       const email = emailById.get(p.id) ?? null;
+      const role = isAdminAccount({ email, role: p.role }) ? "admin" : "user";
       return {
         ...p,
         email,
-        role: isAdminEmail(email) ? "admin" : "user",
+        role,
       };
     });
 

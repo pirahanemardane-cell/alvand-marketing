@@ -1,6 +1,6 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { isAdminEmail } from "@/lib/admin";
+import { resolveIsAdmin } from "@/lib/admin";
 import type { User } from "@supabase/supabase-js";
 
 export function hasServiceEnv(): boolean {
@@ -25,8 +25,9 @@ export async function requireAdminUser(): Promise<User | null> {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user || !isAdminEmail(user.email)) return null;
-    return user;
+    if (!user) return null;
+    const ok = await resolveIsAdmin(supabase, user);
+    return ok ? user : null;
   } catch {
     return null;
   }

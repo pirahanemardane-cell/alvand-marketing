@@ -19,7 +19,7 @@ import {
   User,
 } from 'lucide-react';
 import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
-import { isAdminEmail } from '@/lib/admin';
+import { isAdminAccount, resolveIsAdmin } from '@/lib/admin';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
@@ -69,10 +69,10 @@ export default function AdminPage() {
     try {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user || !isAdminEmail(user.email)) {
+      if (!user || !(await resolveIsAdmin(supabase, user))) {
         setAllowed(false);
         setLoading(false);
-        router.replace('/login');
+        router.replace(user ? '/dashboard' : '/login');
         return;
       }
       setAllowed(true);
@@ -406,8 +406,10 @@ export default function AdminPage() {
                     </tr>
                   ) : (
                     profiles.map((profile) => {
-                      const isAdmin =
-                        isAdminEmail(profile.email) || profile.role === 'admin';
+                      const isAdmin = isAdminAccount({
+                        email: profile.email,
+                        role: profile.role,
+                      });
                       return (
                         <tr
                           key={profile.id}

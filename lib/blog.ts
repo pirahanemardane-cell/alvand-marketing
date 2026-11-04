@@ -194,6 +194,28 @@ export async function getPublishedPostBySlug(
   return undefined;
 }
 
+/** Admin draft/archive preview — service role, any status. */
+export async function getPostBySlugAnyStatus(
+  slug: string
+): Promise<BlogPost | undefined> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return undefined;
+
+  const { createClient } = await import("@supabase/supabase-js");
+  const sb = createClient(url, key);
+  const decoded = decodeURIComponent(slug);
+  for (const candidate of Array.from(new Set([decoded, slug]))) {
+    const { data, error } = await sb
+      .from("blog_posts")
+      .select(SELECT)
+      .eq("slug", candidate)
+      .maybeSingle();
+    if (!error && data) return mapRow(data as unknown as DbPost);
+  }
+  return undefined;
+}
+
 export async function listPublishedSlugs(): Promise<string[]> {
   const posts = await listPublishedPosts();
   return posts.map((p) => p.slug);

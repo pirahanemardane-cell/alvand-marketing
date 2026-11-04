@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, LogOut, User, LayoutDashboard } from "lucide-react";
 import { createClient, hasSupabaseEnv } from "@/lib/supabase/client";
-import { isAdminEmail } from "@/lib/admin";
+import { resolveIsAdmin } from "@/lib/admin";
 import type { User as SbUser } from "@supabase/supabase-js";
 
 export default function AuthButton({
@@ -16,6 +16,7 @@ export default function AuthButton({
   onNavigate?: () => void;
 }) {
   const [user, setUser] = useState<SbUser | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [ready, setReady] = useState(false);
   const router = useRouter();
 
@@ -26,14 +27,22 @@ export default function AuthButton({
     }
     try {
       const supabase = createClient();
-      supabase.auth.getUser().then(({ data }) => {
-        setUser(data.user);
+      const refreshAdmin = async (u: SbUser | null) => {
+        setUser(u);
+        if (!u) {
+          setIsAdmin(false);
+          return;
+        }
+        setIsAdmin(await resolveIsAdmin(supabase, u));
+      };
+      supabase.auth.getUser().then(async ({ data }) => {
+        await refreshAdmin(data.user);
         setReady(true);
       });
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((_e, session) => {
-        setUser(session?.user ?? null);
+        void refreshAdmin(session?.user ?? null);
       });
       return () => subscription.unsubscribe();
     } catch {
@@ -62,7 +71,6 @@ export default function AuthButton({
   }
 
   if (user) {
-    const isAdmin = isAdminEmail(user.email);
     if (compact) {
       return (
         <div className="space-y-1">
