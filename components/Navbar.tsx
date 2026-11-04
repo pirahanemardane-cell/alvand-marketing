@@ -25,7 +25,6 @@ import {
 import { useTheme } from "./ThemeProvider";
 import AuthButton from "./AuthButton";
 import { services } from "@/lib/services";
-import { posts } from "@/lib/blog";
 
 const serviceIcons: Record<string, React.ReactNode> = {
   "طراحی-سایت": <Monitor className="h-4 w-4 shrink-0" />,
@@ -51,12 +50,20 @@ const navItems = [
 const searchInputClass =
   "w-full rounded-xl border border-border bg-background pr-10 pl-3 py-2.5 text-base outline-none focus:border-accent transition-colors placeholder:text-muted-foreground";
 
+type BlogSearchItem = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+};
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogSearchItem[]>([]);
   const { mode, setMode, theme } = useTheme();
   const router = useRouter();
 
@@ -76,6 +83,23 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/blog")
+      .then((r) => r.json())
+      .then((json) => {
+        if (!cancelled && Array.isArray(json.posts)) {
+          setBlogPosts(json.posts);
+        }
+      })
+      .catch(() => {
+        /* ignore — search still works for services */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -100,7 +124,7 @@ export default function Navbar() {
         href: `/services/${s.slug}`,
         hint: "خدمت",
       }));
-    const blg = posts
+    const blg = blogPosts
       .filter(
         (p) =>
           p.title.includes(q) ||

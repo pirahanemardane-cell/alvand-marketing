@@ -5,15 +5,23 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
-import { posts } from "@/lib/blog";
+import { listPublishedPosts } from "@/lib/blog";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "بلاگ | الوند مارکتینگ",
-  description: "مقالات کاربردی درباره سئو، تبلیغات، طراحی سایت و بازاریابی دیجیتال.",
+  description:
+    "مقالات کاربردی درباره سئو، تبلیغات، طراحی سایت و بازاریابی دیجیتال.",
   robots: { index: false, follow: false },
 };
 
-export default function BlogPage() {
+type Props = { searchParams: Promise<{ q?: string }> };
+
+export default async function BlogPage({ searchParams }: Props) {
+  const { q } = await searchParams;
+  const posts = await listPublishedPosts(q);
+
   return (
     <main className="w-full">
       <Navbar />
@@ -23,32 +31,42 @@ export default function BlogPage() {
           <h1 className="text-3xl md:text-5xl font-bold leading-persian-tight mb-4">
             بلاگ
           </h1>
-          <p className="text-muted-foreground leading-persian mb-12">
+          <p className="text-muted-foreground leading-persian mb-4">
             نوشته‌های کوتاه و کاربردی برای تصمیم‌گیری بهتر در بازاریابی دیجیتال.
           </p>
+          {q?.trim() && (
+            <p className="text-sm text-muted-foreground mb-8">
+              نتایج جستجو برای «{q.trim()}» — {posts.length} مورد
+            </p>
+          )}
+          {!q?.trim() && <div className="mb-12" />}
           {posts.length === 0 ? (
             <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center">
-              هنوز مقاله‌ای منتشر نشده است.
+              {q?.trim()
+                ? "مقاله‌ای با این عبارت پیدا نشد."
+                : "هنوز مقاله‌ای منتشر نشده است."}
             </p>
           ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-            {posts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors"
-              >
-                <span className="text-xs text-accent font-medium">{post.category}</span>
-                <h2 className="text-lg font-bold mt-2 mb-2 group-hover:text-accent transition-colors leading-persian-tight">
-                  {post.title}
-                </h2>
-                <p className="text-caption text-muted-foreground leading-persian mb-4">
-                  {post.excerpt}
-                </p>
-                <span className="text-xs text-muted-foreground">{post.date}</span>
-              </Link>
-            ))}
-          </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+              {posts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors"
+                >
+                  <span className="text-xs text-accent font-medium">
+                    {post.category}
+                  </span>
+                  <h2 className="text-lg font-bold mt-2 mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+                    {post.title}
+                  </h2>
+                  <p className="text-caption text-muted-foreground leading-persian mb-4">
+                    {post.excerpt}
+                  </p>
+                  <span className="text-xs text-muted-foreground">{post.date}</span>
+                </Link>
+              ))}
+            </div>
           )}
         </div>
       </section>

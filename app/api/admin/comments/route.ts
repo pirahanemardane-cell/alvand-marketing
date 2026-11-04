@@ -1,57 +1,102 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from "next/server";
+import {
+  createServiceClientOrThrow,
+  hasServiceEnv,
+  requireAdminUser,
+} from "@/lib/supabase/admin";
 
-function getAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+export async function GET() {
+  const user = await requireAdminUser();
+  if (!user) {
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
+  if (!hasServiceEnv()) {
+    return NextResponse.json(
+      { error: "supabase_not_configured" },
+      { status: 503 }
+    );
+  }
 
-async function isAdmin(req: NextRequest) {
-  const authHeader = req.headers.get('authorization');
-  // fallback: check via cookie session is complex; we trust client for now
-  // and use service role only after simple gate in page
-  return true;
+  try {
+    const supabase = createServiceClientOrThrow();
+    const { data, error } = await supabase
+      .from("blog_comments")
+      .select(
+        "id, post_slug, author_name, author_email, body, approved, created_at, user_id"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ comments: data ?? [] });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "error";
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
 
 export async function PATCH(req: NextRequest) {
+  const user = await requireAdminUser();
+  if (!user) {
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
+  if (!hasServiceEnv()) {
+    return NextResponse.json(
+      { error: "supabase_not_configured" },
+      { status: 503 }
+    );
+  }
+
   try {
     const { id, approved } = await req.json();
-    if (!id || typeof approved !== 'boolean') {
-      return NextResponse.json({ error: 'invalid' }, { status: 400 });
+    if (!id || typeof approved !== "boolean") {
+      return NextResponse.json({ error: "invalid" }, { status: 400 });
     }
 
-    const supabase = getAdminClient();
+    const supabase = createServiceClientOrThrow();
     const { error } = await supabase
-      .from('blog_comments')
+      .from("blog_comments")
       .update({ approved })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
     return NextResponse.json({ ok: true });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "error";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
 export async function DELETE(req: NextRequest) {
+  const user = await requireAdminUser();
+  if (!user) {
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  }
+  if (!hasServiceEnv()) {
+    return NextResponse.json(
+      { error: "supabase_not_configured" },
+      { status: 503 }
+    );
+  }
+
   try {
     const { id } = await req.json();
     if (!id) {
-      return NextResponse.json({ error: 'invalid' }, { status: 400 });
+      return NextResponse.json({ error: "invalid" }, { status: 400 });
     }
 
-    const supabase = getAdminClient();
-    const { error } = await supabase.from('blog_comments').delete().eq('id', id);
+    const supabase = createServiceClientOrThrow();
+    const { error } = await supabase.from("blog_comments").delete().eq("id", id);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
     return NextResponse.json({ ok: true });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "error";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

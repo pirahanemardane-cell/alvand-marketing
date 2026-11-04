@@ -18,15 +18,14 @@ import {
   Search,
   User,
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
+import { isAdminEmail } from '@/lib/admin';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
 import AdminSeoPanel from '@/components/admin/AdminSeoPanel';
-
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
 
 type Profile = {
   id: string;
@@ -56,63 +55,95 @@ export default function AdminPage() {
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const router = useRouter();
 
   const loadData = useCallback(async () => {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.email !== ADMIN_EMAIL) {
-      router.push('/login');
+    if (!hasSupabaseEnv()) {
+      setLoading(false);
+      router.replace('/login');
       return;
     }
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !isAdminEmail(user.email)) {
+        setLoading(false);
+        router.replace('/login');
+        return;
+      }
 
-    const { data: profilesData } = await supabase
-      .from('profiles')
-      .select('*')
-      .order('created_at', { ascending: false });
+      // Service-role APIs: client RLS cannot list all profiles or pending comments.
+      const [usersRes, commentsRes] = await Promise.all([
+        fetch('/api/admin/users'),
+        fetch('/api/admin/comments'),
+      ]);
 
-    const { data: commentsData } = await supabase
-      .from('blog_comments')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    const counts: Record<string, number> = {};
-    commentsData?.forEach((c) => {
-      if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
-    });
-
-    setProfiles(profilesData || []);
-    setComments(commentsData || []);
-    setCommentCounts(counts);
+      if (!usersRes.ok || !commentsRes.ok) {
+        const status = !usersRes.ok ? usersRes.status : commentsRes.status;
+        setLoadError(
+          status === 503
+            ? 'سوپابیس پیکربندی نشده است (env).'
+            : status === 403
+              ? 'دسترسی ادمین تأیید نشد.'
+              : 'خطا در بارگذاری داده‌های ادمین.'
+        );
+        setProfiles([]);
+        setComments([]);
+        setCommentCounts({});
+      } else {
+        setLoadError(null);
+        const usersJson = await usersRes.json();
+        const commentsJson = await commentsRes.json();
+        const commentsData: Comment[] = commentsJson.comments || [];
+        const counts: Record<string, number> = {};
+        commentsData.forEach((c) => {
+          if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
+        });
+        setProfiles(usersJson.users || []);
+        setComments(commentsData);
+        setCommentCounts(counts);
+      }
+    } catch {
+      setLoadError('خطا در ارتباط با سرور');
+      setProfiles([]);
+      setComments([]);
+    }
     setLoading(false);
   }, [router]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
   // Realtime admin data
   useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel("admin-live")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "blog_comments" },
-        () => {
-          void loadData();
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "profiles" },
-        () => {
-          void loadData();
-        },
-      )
-      .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    if (!hasSupabaseEnv()) return;
+    try {
+      const supabase = createClient();
+      const channel = supabase
+        .channel('admin-live')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'blog_comments' },
+          () => {
+            void loadData();
+          },
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'profiles' },
+          () => {
+            void loadData();
+          },
+        )
+        .subscribe();
+      return () => {
+        void supabase.removeChannel(channel);
+      };
+    } catch {
+      return;
+    }
   }, [loadData]);
 
 
@@ -231,6 +262,12 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        {loadError && (
+          <p className="mt-6 text-sm text-red-500 bg-red-500/10 rounded-xl px-4 py-3">
+            {loadError}
+          </p>
+        )}
 
         <div className="mt-8 flex flex-wrap gap-2 border-b border-border">
           {tabs.map((t) => (
@@ -361,7 +398,7 @@ export default function AdminPage() {
                   ) : (
                     profiles.map((profile) => {
                       const isAdmin =
-                        profile.email === ADMIN_EMAIL || profile.role === 'admin';
+                        isAdminEmail(profile.email) || profile.role === 'admin';
                       return (
                         <tr
                           key={profile.id}

@@ -8,37 +8,45 @@ import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import BlogComments from "@/components/BlogComments";
 import {
-  getPostBySlug,
-  getAllPostSlugs,
-  posts,
+  getPublishedPostBySlug,
+  listPublishedPosts,
+  listPublishedSlugs,
   getReadingTimeMinutes,
   toPersianDigits,
 } from "@/lib/blog";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getAllPostSlugs().map((slug) => ({ slug }));
+  const slugs = await listPublishedSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) return { title: "مقاله یافت نشد" };
   return {
-    title: `${post.title} | بلاگ الوند مارکتینگ`,
-    description: post.excerpt,
-    robots: { index: false, follow: false },
+    title: post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`,
+    description: post.meta_description || post.excerpt,
+    robots: {
+      index: post.robots_index !== false,
+      follow: post.robots_follow !== false,
+    },
   };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) notFound();
 
-  const others = posts.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const all = await listPublishedPosts();
+  const others = all.filter((p) => p.slug !== post.slug).slice(0, 2);
   const minutes = getReadingTimeMinutes(post);
+  const hasToc = post.sections.length > 1;
 
   return (
     <main className="w-full">
@@ -58,51 +66,62 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
 
-          {/* تاریخ + مدت مطالعه */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-caption text-muted-foreground mb-8">
-            <time>{post.date}</time>
+            {post.date && <time>{post.date}</time>}
             <span className="text-border" aria-hidden>
               |
             </span>
             <span>{toPersianDigits(minutes)} دقیقه مطالعه</span>
           </div>
 
-          {/* فهرست مطالب */}
-          <nav
-            aria-label="فهرست مطالب"
-            className="mb-12 rounded-2xl border border-border bg-card p-5 sm:p-6"
-          >
-            <h2 className="text-base font-bold mb-3 text-foreground">
-              فهرست مطالب
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-              {post.sections.map((section) => (
-                <li key={section.id}>
-                  <a
-                    href={`#${section.id}`}
-                    className="hover:text-accent transition-colors text-justify"
-                  >
-                    {section.title}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          {hasToc && (
+            <nav
+              aria-label="فهرست مطالب"
+              className="mb-12 rounded-2xl border border-border bg-card p-5 sm:p-6"
+            >
+              <h2 className="text-base font-bold mb-3 text-foreground">
+                فهرست مطالب
+              </h2>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                {post.sections.map((section) => (
+                  <li key={section.id}>
+                    <a
+                      href={`#${section.id}`}
+                      className="hover:text-accent transition-colors text-justify"
+                    >
+                      {section.title}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
 
-          {/* بدنه مقاله */}
           <div className="space-y-10">
-            {post.sections.map((section) => (
-              <section key={section.id} id={section.id} className="scroll-mt-28">
-                <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-4">
-                  {section.title}
-                </h2>
-                <div className="space-y-4 text-muted-foreground leading-persian text-justify">
-                  {section.paragraphs.map((para) => (
-                    <p key={para.slice(0, 32)}>{para}</p>
-                  ))}
-                </div>
-              </section>
-            ))}
+            {post.sections.length > 0 ? (
+              post.sections.map((section) => (
+                <section
+                  key={section.id}
+                  id={section.id}
+                  className="scroll-mt-28"
+                >
+                  {hasToc && (
+                    <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-4">
+                      {section.title}
+                    </h2>
+                  )}
+                  <div className="space-y-4 text-muted-foreground leading-persian text-justify">
+                    {section.paragraphs.map((para, i) => (
+                      <p key={`${section.id}-${i}`}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              ))
+            ) : (
+              <p className="text-muted-foreground leading-persian">
+                محتوای این مقاله هنوز تکمیل نشده است.
+              </p>
+            )}
           </div>
 
           <BlogComments postSlug={post.slug} />

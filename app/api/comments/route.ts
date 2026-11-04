@@ -30,6 +30,17 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      !process.env.SUPABASE_SERVICE_ROLE_KEY
+    ) {
+      return NextResponse.json(
+        { error: "supabase_not_configured" },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const postSlug = String(body.postSlug ?? "").trim();
     const authorName = String(body.authorName ?? "").trim();
@@ -55,12 +66,20 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabaseUser.auth.getUser();
 
+    // Require login — matches UI and prevents anonymous spam via service role.
+    if (!user) {
+      return NextResponse.json(
+        { error: "برای ثبت نظر وارد حساب کاربری شوید." },
+        { status: 401 }
+      );
+    }
+
     const service = createServiceClient();
     const { error } = await service.from("blog_comments").insert({
       post_slug: postSlug,
       author_name: authorName.slice(0, 80),
-      author_email: authorEmail.slice(0, 120) || null,
-      user_id: user?.id ?? null,
+      author_email: (authorEmail || user.email || "").slice(0, 120) || null,
+      user_id: user.id,
       body: text,
       approved: false,
     });

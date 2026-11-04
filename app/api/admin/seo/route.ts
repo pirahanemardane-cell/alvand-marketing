@@ -1,32 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+import {
+  createServiceClientOrThrow,
+  hasServiceEnv,
+  requireAdminUser,
+} from "@/lib/supabase/admin";
 
-const ADMIN_EMAIL = "alvandmarketing.com@gmail.com";
-
-function service() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+function serviceUnavailable() {
+  return NextResponse.json(
+    { error: "supabase_not_configured" },
+    { status: 503 }
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function GET(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
   const key = req.nextUrl.searchParams.get("key");
-  const sb = service();
+  const sb = createServiceClientOrThrow();
 
   if (key) {
-    const { data, error } = await sb.from("seo_pages").select("*").eq("page_key", key).maybeSingle();
+    const { data, error } = await sb
+      .from("seo_pages")
+      .select("*")
+      .eq("page_key", key)
+      .maybeSingle();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ row: data });
   }
@@ -37,8 +36,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
   const body = await req.json();
   const page_key = String(body.page_key || "").trim();
@@ -50,7 +50,9 @@ export async function PATCH(req: NextRequest) {
     body_preview: body.body_preview ?? null,
     meta_title: body.meta_title ?? null,
     meta_description: body.meta_description ?? null,
-    focus_keyphrases: Array.isArray(body.focus_keyphrases) ? body.focus_keyphrases : [],
+    focus_keyphrases: Array.isArray(body.focus_keyphrases)
+      ? body.focus_keyphrases
+      : [],
     og_title: body.og_title ?? null,
     og_description: body.og_description ?? null,
     og_image_url: body.og_image_url ?? null,
@@ -60,7 +62,7 @@ export async function PATCH(req: NextRequest) {
     updated_at: new Date().toISOString(),
   };
 
-  const sb = service();
+  const sb = createServiceClientOrThrow();
   const { error } = await sb.from("seo_pages").upsert(row, { onConflict: "page_key" });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

@@ -14,14 +14,13 @@ import {
   Clock,
   CheckCircle2,
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
+import { isAdminEmail } from '@/lib/admin';
 import type { User as SbUser } from '@supabase/supabase-js';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
-
-const ADMIN_EMAILS = ['alvandmarketing.com@gmail.com'];
 
 type Profile = {
   id: string;
@@ -53,30 +52,43 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function load() {
-      const supabase = createClient();
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth.user) {
+      if (!hasSupabaseEnv()) {
+        setLoading(false);
         router.replace('/login');
         return;
       }
-      setUser(auth.user);
+      try {
+        const supabase = createClient();
+        const { data: auth } = await supabase.auth.getUser();
+        if (!auth.user) {
+          setLoading(false);
+          router.replace('/login');
+          return;
+        }
+        setUser(auth.user);
 
-      const { data: prof } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', auth.user.id)
-        .maybeSingle();
-      if (prof) {
-        setProfile(prof);
-        setFullName(prof.full_name || '');
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', auth.user.id)
+          .maybeSingle();
+        if (prof) {
+          setProfile(prof);
+          setFullName(prof.full_name || '');
+        }
+
+        // Requires RLS policy "Users read own comments" (see supabase/hardening.sql)
+        const { data: myComments } = await supabase
+          .from('blog_comments')
+          .select('id, post_slug, body, approved, created_at')
+          .eq('user_id', auth.user.id)
+          .order('created_at', { ascending: false });
+        setComments(myComments || []);
+      } catch {
+        setLoading(false);
+        router.replace('/login');
+        return;
       }
-
-      const { data: myComments } = await supabase
-        .from('blog_comments')
-        .select('id, post_slug, body, approved, created_at')
-        .eq('user_id', auth.user.id)
-        .order('created_at', { ascending: false });
-      setComments(myComments || []);
       setLoading(false);
     }
     load();
@@ -88,16 +100,21 @@ export default function DashboardPage() {
     setSaving(true);
     setSaveMsg('');
     const supabase = createClient();
-    const { error } = await supabase
+    const payload = {
+      id: user.id,
+      full_name: fullName.trim() || null,
+    };
+    const { data, error } = await supabase
       .from('profiles')
-      .update({ full_name: fullName.trim() || null })
-      .eq('id', user.id);
+      .upsert(payload, { onConflict: 'id' })
+      .select('id, full_name, created_at')
+      .maybeSingle();
     setSaving(false);
-    if (error) {
+    if (error || !data) {
       setSaveMsg('خطا در ذخیره. دوباره تلاش کنید.');
     } else {
       setSaveMsg('ذخیره شد.');
-      setProfile((p) => (p ? { ...p, full_name: fullName.trim() || null } : p));
+      setProfile(data);
     }
   }
 
@@ -137,7 +154,7 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  const isAdmin = ADMIN_EMAILS.includes(user.email ?? '');
+  const isAdmin = isAdminEmail(user.email);
   const pendingCount = comments.filter((c) => !c.approved).length;
   const approvedCount = comments.filter((c) => c.approved).length;
 
@@ -226,10 +243,12 @@ export default function DashboardPage() {
             </div>
             <form onSubmit={handleSaveProfile} className="space-y-4">
               <div>
-                <label className="block text-sm text-muted-foreground mb-1.5">
+                <label htmlFor="dash-email" className="block text-sm text-muted-foreground mb-1.5">
                   ایمیل
                 </label>
                 <input
+                  id="dash-email"
+                  name="email"
                   type="email"
                   value={user.email || ''}
                   disabled
@@ -238,10 +257,12 @@ export default function DashboardPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-muted-foreground mb-1.5">
+                <label htmlFor="dash-fullname" className="block text-sm text-muted-foreground mb-1.5">
                   نام نمایشی
                 </label>
                 <input
+                  id="dash-fullname"
+                  name="fullName"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -292,13 +313,13 @@ export default function DashboardPage() {
             <h2 className="text-lg font-bold mb-5">تغییر رمز عبور</h2>
             <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
               <div>
-                <label className="block text-sm text-muted-foreground mb-1.5">رمز جدید</label>
-                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={6}
+                <label htmlFor="dash-pw" className="block text-sm text-muted-foreground mb-1.5">رمز جدید</label>
+                <input id="dash-pw" name="password" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={6}
                   className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
               </div>
               <div>
-                <label className="block text-sm text-muted-foreground mb-1.5">تکرار رمز جدید</label>
-                <input type="password" value={newPassword2} onChange={(e) => setNewPassword2(e.target.value)} minLength={6}
+                <label htmlFor="dash-pw2" className="block text-sm text-muted-foreground mb-1.5">تکرار رمز جدید</label>
+                <input id="dash-pw2" name="password2" type="password" value={newPassword2} onChange={(e) => setNewPassword2(e.target.value)} minLength={6}
                   className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
               </div>
               <div className="flex items-center gap-3">

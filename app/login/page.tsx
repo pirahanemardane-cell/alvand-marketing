@@ -7,8 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient } from '@/lib/supabase/client';
-
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
+import { isAdminEmail } from '@/lib/admin';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,7 +31,7 @@ export default function LoginPage() {
         return;
       }
       const userEmail = data.user?.email ?? email;
-      if (userEmail === ADMIN_EMAIL) {
+      if (isAdminEmail(userEmail)) {
         router.replace('/admin');
       } else {
         router.replace('/dashboard');

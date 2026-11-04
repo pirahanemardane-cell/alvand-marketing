@@ -6,14 +6,13 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
+import { isAdminEmail } from '@/lib/admin';
 import SeoAnalysisPanel, {
   emptySeoValue,
   type SeoPanelValue,
 } from '@/components/admin/SeoAnalysisPanel';
 import { toSlug } from '@/lib/slug';
-
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
 
 export default function AdminBlogEditPage({
   params,
@@ -35,9 +34,15 @@ export default function AdminBlogEditPage({
 
   useEffect(() => {
     async function load() {
+      if (!hasSupabaseEnv()) {
+        setLoading(false);
+        router.replace('/login');
+        return;
+      }
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user || user.email !== ADMIN_EMAIL) {
+      if (!user || !isAdminEmail(user.email)) {
+        setLoading(false);
         router.replace('/login');
         return;
       }
