@@ -12,12 +12,13 @@
 ## اجرا
 
 ```bash
-cd alvand-next
 npm install
 npm run dev
 ```
 
 سپس به آدرس `http://localhost:3000` برو.
+
+برای Auth و نظرات، فایل `.env.local` را طبق `SUPABASE.md` بسازید.
 
 ## ساخت نسخه پروداکشن
 
@@ -26,24 +27,28 @@ npm run build
 npm start
 ```
 
+## مسیرهای اصلی
+
+| مسیر | توضیح |
+|------|--------|
+| `/` | صفحه اصلی |
+| `/services` | خدمات (بازنویسی از `/خدمات`) |
+| `/blog` | بلاگ (بازنویسی از `/بلاگ`) |
+| `/contact` | تماس (بازنویسی از `/تماس`) |
+| `/login` `/register` | ورود و ثبت‌نام |
+
 ## ساختار
 
 ```
 app/
-  layout.tsx      # فونت فارسی + metadata
-  page.tsx        # صفحه اصلی
-  globals.css     # تم و متغیرها
+  layout.tsx
+  page.tsx
+  services/ contact/ blog/
+  login/ register/ dashboard/ admin/
 components/
-  Navbar.tsx
-  Hero.tsx        # Morning/Night toggle + ambient background
-  Services.tsx
-  Cases.tsx
-  About.tsx
-  Careers.tsx
-  Resources.tsx
-  Customers.tsx
-  Footer.tsx
-  SectionLabel.tsx
+  Navbar.tsx Hero.tsx Services.tsx ...
+lib/supabase/   # کلاینت سوپابیس
+middleware.ts    # بازنویسی URLهای فارسی قدیمی
 ```
 
 ## دامنه

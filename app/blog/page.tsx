@@ -35,7 +35,7 @@ export default function BlogPage() {
             {posts.map((post) => (
               <Link
                 key={post.slug}
-                href={`/بلاگ/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors"
               >
                 <span className="text-xs text-accent font-medium">{post.category}</span>

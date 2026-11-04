@@ -68,7 +68,7 @@ export default function Hero() {
           className="mt-10 flex flex-col sm:flex-row items-center gap-3"
         >
           <a
-            href="/تماس"
+            href="/contact"
             className="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3 text-sm font-bold text-accent-foreground transition-opacity hover:opacity-90"
           >
             مشاوره رایگان

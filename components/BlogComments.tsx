@@ -9,7 +9,7 @@ import {
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, hasSupabaseEnv } from "@/lib/supabase/client";
 import { containsLink } from "@/lib/comments";
 import type { User } from "@supabase/supabase-js";
 
@@ -32,24 +32,31 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
   const [body, setBody] = useState("");
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-      if (data.user) {
-        const metaName =
-          data.user.user_metadata?.full_name ||
-          data.user.email?.split("@")[0] ||
-          "";
-        setName(metaName);
-      }
+    if (!hasSupabaseEnv()) {
       setAuthReady(true);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
+      return;
+    }
+    let subscription: { unsubscribe: () => void } | undefined;
+    try {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => {
+        setUser(data.user);
+        if (data.user) {
+          const metaName =
+            data.user.user_metadata?.full_name ||
+            data.user.email?.split("@")[0] ||
+            "";
+          setName(metaName);
+        }
+        setAuthReady(true);
+      });
+      subscription = supabase.auth.onAuthStateChange((_e, session) => {
+        setUser(session?.user ?? null);
+      }).data.subscription;
+    } catch {
+      setAuthReady(true);
+    }
+    return () => subscription?.unsubscribe();
   }, []);
 
   const load = useCallback(async () => {
@@ -73,25 +80,30 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
 
   // Realtime: new/updated comments for this post
   useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel(`blog-comments:${postSlug}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "blog_comments",
-          filter: `post_slug=eq.${postSlug}`,
-        },
-        () => {
-          void load();
-        },
-      )
-      .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    if (!hasSupabaseEnv()) return;
+    try {
+      const supabase = createClient();
+      const channel = supabase
+        .channel(`blog-comments:${postSlug}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "blog_comments",
+            filter: `post_slug=eq.${postSlug}`,
+          },
+          () => {
+            void load();
+          },
+        )
+        .subscribe();
+      return () => {
+        void supabase.removeChannel(channel);
+      };
+    } catch {
+      return;
+    }
   }, [postSlug, load]);
 
   async function onSubmit(e: React.FormEvent) {

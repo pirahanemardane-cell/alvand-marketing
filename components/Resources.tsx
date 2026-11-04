@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import SectionLabel from "./SectionLabel";
 
@@ -45,22 +46,23 @@ export default function Resources() {
 
             <div className="space-y-0">
               {resources.map((item, i) => (
-                <motion.a
+                <motion.div
                   key={i}
-                  href="#"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
                   className="block py-6 border-b border-border first:border-t group"
                 >
-                  <h3 className="text-lg font-bold mb-1.5 group-hover:text-accent transition-colors leading-persian-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-caption text-muted-foreground leading-persian">
-                    {item.desc}
-                  </p>
-                </motion.a>
+                  <Link href="/blog" className="block">
+                    <h3 className="text-lg font-bold mb-1.5 group-hover:text-accent transition-colors leading-persian-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-caption text-muted-foreground leading-persian">
+                      {item.desc}
+                    </p>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>

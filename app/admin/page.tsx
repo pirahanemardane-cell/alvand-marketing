@@ -431,7 +431,7 @@ export default function AdminPage() {
                         <p className="text-xs text-muted-foreground mt-1">
                           مقاله:{' '}
                           <Link
-                            href={`/بلاگ/${comment.post_slug}`}
+                            href={`/blog/${comment.post_slug}`}
                             className="text-accent hover:underline"
                           >
                             {comment.post_slug}

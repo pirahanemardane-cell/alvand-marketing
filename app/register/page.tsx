@@ -81,10 +81,12 @@ export default function RegisterPage() {
             </p>
             <form onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">
+                <label htmlFor="register-name" className="block text-sm font-medium text-foreground mb-1.5">
                   نام
                 </label>
                 <input
+                  id="register-name"
+                  name="fullName"
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -94,10 +96,12 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">
+                <label htmlFor="register-email" className="block text-sm font-medium text-foreground mb-1.5">
                   ایمیل
                 </label>
                 <input
+                  id="register-email"
+                  name="email"
                   type="email"
                   required
                   value={email}
@@ -108,10 +112,12 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">
+                <label htmlFor="register-password" className="block text-sm font-medium text-foreground mb-1.5">
                   رمز عبور
                 </label>
                 <input
+                  id="register-password"
+                  name="password"
                   type="password"
                   required
                   minLength={6}

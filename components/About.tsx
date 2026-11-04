@@ -54,7 +54,7 @@ export default function About() {
               viewport={{ once: true }}
             >
               <Link
-                href="/تماس"
+                href="/contact"
                 className="inline-block px-6 py-2.5 rounded-full border border-border text-sm hover:bg-white/5 transition-colors"
               >
                 صحبت کنیم

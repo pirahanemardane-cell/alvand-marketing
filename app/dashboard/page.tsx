@@ -269,9 +269,9 @@ export default function DashboardPage() {
             <h2 className="text-lg font-bold mb-5">دسترسی سریع</h2>
             <ul className="space-y-2">
               {[
-                { href: '/بلاگ', label: 'مشاهده و کامنت در مقالات', icon: FileText },
-                { href: '/تماس', label: 'درخواست مشاوره رایگان', icon: Phone },
-                { href: '/خدمات', label: 'مشاهده خدمات', icon: FileText },
+                { href: '/blog', label: 'مشاهده و کامنت در مقالات', icon: FileText },
+                { href: '/contact', label: 'درخواست مشاوره رایگان', icon: Phone },
+                { href: '/services', label: 'مشاهده خدمات', icon: FileText },
               ].map((item) => (
                 <li key={item.href}>
                   <Link
@@ -318,7 +318,7 @@ export default function DashboardPage() {
           {comments.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               هنوز نظری ثبت نکرده‌اید.{' '}
-              <Link href="/بلاگ" className="text-accent hover:underline">
+              <Link href="/blog" className="text-accent hover:underline">
                 به بلاگ بروید
               </Link>
             </p>
@@ -331,7 +331,7 @@ export default function DashboardPage() {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                     <Link
-                      href={`/بلاگ/${c.post_slug}`}
+                      href={`/blog/${c.post_slug}`}
                       className="text-sm text-accent hover:underline"
                     >
                       {c.post_slug}
