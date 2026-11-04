@@ -1,40 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+import {
+  createServiceClientOrThrow,
+  hasServiceEnv,
+  requireAdminUser,
+} from "@/lib/supabase/admin";
 import { toSlug } from "@/lib/slug";
 
-const ADMIN_EMAIL = "alvandmarketing.com@gmail.com";
-
-function service() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+function serviceUnavailable() {
+  return NextResponse.json(
+    { error: "supabase_not_configured" },
+    { status: 503 }
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function GET(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
-  const sb = service();
+  const sb = createServiceClientOrThrow();
   const id = req.nextUrl.searchParams.get("id");
 
   if (id) {
-    const { data, error } = await sb.from("blog_posts").select("*").eq("id", id).maybeSingle();
+    const { data, error } = await sb
+      .from("blog_posts")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ item: data });
   }
 
   const { data, error } = await sb
     .from("blog_posts")
-    .select("id, title, slug, status, published_at, created_at, excerpt, meta_title, category_id")
+    .select(
+      "id, title, slug, status, published_at, created_at, excerpt, meta_title, category_id"
+    )
     .order("created_at", { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -42,8 +43,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
   const body = await req.json();
   const title = String(body.title || "").trim();
@@ -52,7 +54,7 @@ export async function POST(req: NextRequest) {
   const slug = String(body.slug || toSlug(title)).trim() || toSlug(title);
   const status = body.status === "published" ? "published" : "draft";
 
-  const sb = service();
+  const sb = createServiceClientOrThrow();
   const { data, error } = await sb
     .from("blog_posts")
     .insert({
@@ -80,8 +82,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
   const body = await req.json();
   const id = body.id as string;
@@ -89,33 +92,56 @@ export async function PATCH(req: NextRequest) {
 
   const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
   const fields = [
-    "title", "slug", "excerpt", "body", "cover_url", "status",
-    "meta_title", "meta_description", "focus_keyphrase",
-    "og_title", "og_description", "og_image_url", "category_id",
-    "robots_index", "robots_follow", "canonical_url",
+    "title",
+    "slug",
+    "excerpt",
+    "body",
+    "cover_url",
+    "status",
+    "meta_title",
+    "meta_description",
+    "focus_keyphrase",
+    "og_title",
+    "og_description",
+    "og_image_url",
+    "category_id",
+    "robots_index",
+    "robots_follow",
+    "canonical_url",
   ];
   for (const f of fields) {
     if (body[f] !== undefined) patch[f] = body[f];
   }
+
+  const sb = createServiceClientOrThrow();
+
+  // Only stamp published_at on first publish; do not reset on later edits.
   if (body.status === "published") {
-    patch.published_at = new Date().toISOString();
+    const { data: cur } = await sb
+      .from("blog_posts")
+      .select("published_at")
+      .eq("id", id)
+      .maybeSingle();
+    if (!cur?.published_at) {
+      patch.published_at = new Date().toISOString();
+    }
   }
 
-  const sb = service();
   const { error } = await sb.from("blog_posts").update(patch).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(req: NextRequest) {
-  const user = await requireAdmin();
+  const user = await requireAdminUser();
   if (!user) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (!hasServiceEnv()) return serviceUnavailable();
 
   const body = await req.json();
   const id = body.id as string;
   if (!id) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
-  const sb = service();
+  const sb = createServiceClientOrThrow();
   const { error } = await sb.from("blog_posts").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

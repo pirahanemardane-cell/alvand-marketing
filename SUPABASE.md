@@ -14,19 +14,32 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 در Vercel: Project → Settings → Environment Variables همان سه متغیر را اضافه کنید.
 
-## ۲. SQL
+**بدون این سه مقدار:** صفحات عمومی کار می‌کنند؛ پنل کاربری/ادمین و APIهای نوشته به سوپابیس پاسخ `401/403/503` می‌دهند و کلاینت به‌جای crash به `/login` هدایت می‌شود.
 
-در سوپابیس: **SQL Editor → New query** و محتوای فایل `supabase/schema.sql` را اجرا کنید.
+## ۲. SQL (به ترتیب)
+
+در سوپابیس: **SQL Editor → New query** و به‌ترتیب اجرا کنید:
+
+1. `supabase/schema.sql` — نظرات، پروفایل، RLS پایه  
+2. `supabase/blog-seo.sql` — جداول بلاگ و SEO صفحات  
+3. `supabase/hardening.sql` — سیاست‌های تکمیلی (خواندن نظرات خود کاربر، insert پروفایل)
+
+برای پروژهٔ از قبل راه‌اندازی‌شده، حداقل `hardening.sql` را دوباره اجرا کنید.
 
 ## ۳. Auth
 
 - Authentication → Providers → **Email** را روشن کنید.
-- اگر می‌خواهید بدون تأیید ایمیل وارد شوند: Authentication → Providers → Email → **Confirm email** را خاموش کنید (برای تست).
-- Site URL را روی دامنه سایت بگذارید (مثلاً `https://alvandmarketing.ir`).
+- برای تست محلی می‌توانید **Confirm email** را خاموش کنید.
+- Site URL: دامنهٔ سایت (مثلاً `https://alvandmarketing.ir`).
 - Redirect URLs: `https://alvandmarketing.ir/**` و `http://localhost:3000/**`
+- ادمین فعلی با ایمیل hard-coded در `lib/admin.ts` شناخته می‌شود (`alvandmarketing.com@gmail.com`).
 
-## ۴. تأیید نظرات ادمین
+## ۴. Realtime (اختیاری)
 
-Table Editor → `blog_comments` → ردیف‌های با `approved = false` را ببینید و برای انتشار `approved` را `true` کنید.
+برای به‌روزرسانی زندهٔ پنل ادمین: Database → Publications → `supabase_realtime` و جداول `blog_comments` / `profiles` را اضافه کنید (دستورهای کامنت‌شده در `hardening.sql`).
 
-لینک در متن نظر در API رد می‌شود.
+## ۵. تأیید نظرات
+
+از **پنل ادمین → نظرات** (API امن با نشست ادمین) یا Table Editor ستون `approved` را `true` کنید.
+
+لینک در متن نظر در API رد می‌شود. ثبت نظر فقط برای کاربر لاگین‌شده مجاز است.

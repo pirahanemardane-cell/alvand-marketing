@@ -8,8 +8,7 @@ import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
-
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
+import { isAdminEmail } from '@/lib/admin';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -64,7 +63,7 @@ export default function ResetPasswordPage() {
       setMessage('رمز عبور با موفقیت تغییر کرد.');
       const email = data.user?.email ?? '';
       setTimeout(() => {
-        router.replace(email === ADMIN_EMAIL ? '/admin' : '/dashboard');
+        router.replace(isAdminEmail(email) ? '/admin' : '/dashboard');
       }, 1200);
     } catch {
       setError('خطا رخ داد. دوباره تلاش کنید.');

@@ -6,20 +6,19 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
+import { isAdminEmail } from '@/lib/admin';
 import SeoAnalysisPanel, {
   emptySeoValue,
   type SeoPanelValue,
 } from '@/components/admin/SeoAnalysisPanel';
 import { Search } from 'lucide-react';
 
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
-
 const TABS: { key: string; label: string; slug: string }[] = [
   { key: 'home', label: 'صفحه اصلی', slug: '' },
-  { key: 'services', label: 'خدمات', slug: 'خدمات' },
-  { key: 'blog', label: 'لیست بلاگ', slug: 'بلاگ' },
-  { key: 'contact', label: 'تماس', slug: 'تماس' },
+  { key: 'services', label: 'خدمات', slug: 'services' },
+  { key: 'blog', label: 'لیست بلاگ', slug: 'blog' },
+  { key: 'contact', label: 'تماس', slug: 'contact' },
 ];
 
 export default function AdminSeoPage() {
@@ -34,11 +33,18 @@ export default function AdminSeoPage() {
 
   useEffect(() => {
     async function init() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user || user.email !== ADMIN_EMAIL) {
+      if (!hasSupabaseEnv()) {
         router.replace('/login');
         return;
+      }
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || !isAdminEmail(user.email)) {
+          router.replace('/login');
+        }
+      } catch {
+        router.replace('/login');
       }
     }
     void init();

@@ -1,4 +1,5 @@
--- اجرا در SQL Editor سوپابیس
+-- اجرا در SQL Editor سوپابیس (پایه: نظرات + پروفایل)
+-- سپس فایل blog-seo.sql و در صورت نیاز hardening.sql را اجرا کنید.
 
 -- نظرات بلاگ (فقط بعد از تایید ادمین نمایش داده می‌شوند)
 create table if not exists public.blog_comments (
@@ -18,6 +19,9 @@ create index if not exists blog_comments_post_slug_idx
 create index if not exists blog_comments_approved_idx
   on public.blog_comments (approved);
 
+create index if not exists blog_comments_user_id_idx
+  on public.blog_comments (user_id);
+
 alter table public.blog_comments enable row level security;
 
 -- خواندن عمومی: فقط تاییدشده‌ها
@@ -27,6 +31,14 @@ create policy "Public read approved comments"
   for select
   to anon, authenticated
   using (approved = true);
+
+-- کاربر لاگین‌شده نظرات خودش را می‌بیند (تاییدشده و در انتظار)
+drop policy if exists "Users read own comments" on public.blog_comments;
+create policy "Users read own comments"
+  on public.blog_comments
+  for select
+  to authenticated
+  using (auth.uid() = user_id);
 
 -- درج توسط کاربر لاگین‌شده (همیشه approved=false)
 drop policy if exists "Authenticated insert pending comments" on public.blog_comments;
@@ -39,10 +51,7 @@ create policy "Authenticated insert pending comments"
     and auth.uid() = user_id
   );
 
--- درج مهمان از API با service role انجام می‌شود (RLS دور زده می‌شود)
--- ادمین: در Table Editor ستون approved را true کنید
-
--- پروفایل ساده (اختیاری)
+-- پروفایل ساده
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   full_name text,
@@ -56,10 +65,16 @@ create policy "Users read own profile"
   on public.profiles for select to authenticated
   using (auth.uid() = id);
 
+drop policy if exists "Users insert own profile" on public.profiles;
+create policy "Users insert own profile"
+  on public.profiles for insert to authenticated
+  with check (auth.uid() = id);
+
 drop policy if exists "Users update own profile" on public.profiles;
 create policy "Users update own profile"
   on public.profiles for update to authenticated
-  using (auth.uid() = id);
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
 
 -- ساخت پروفایل بعد از ثبت‌نام
 create or replace function public.handle_new_user()
@@ -72,7 +87,8 @@ begin
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1))
-  );
+  )
+  on conflict (id) do nothing;
   return new;
 end;
 $$;

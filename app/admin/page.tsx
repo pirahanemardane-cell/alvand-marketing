@@ -18,15 +18,14 @@ import {
   Search,
   User,
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
+import { isAdminEmail } from '@/lib/admin';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import AdminBlogPanel from '@/components/admin/AdminBlogPanel';
 import AdminSeoPanel from '@/components/admin/AdminSeoPanel';
-
-const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
 
 type Profile = {
   id: string;
@@ -59,60 +58,79 @@ export default function AdminPage() {
   const router = useRouter();
 
   const loadData = useCallback(async () => {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.email !== ADMIN_EMAIL) {
-      router.push('/login');
+    if (!hasSupabaseEnv()) {
+      setLoading(false);
+      router.replace('/login');
       return;
     }
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !isAdminEmail(user.email)) {
+        setLoading(false);
+        router.replace('/login');
+        return;
+      }
 
-    const { data: profilesData } = await supabase
-      .from('profiles')
-      .select('*')
-      .order('created_at', { ascending: false });
+      // Service-role APIs: client RLS cannot list all profiles or pending comments.
+      const [usersRes, commentsRes] = await Promise.all([
+        fetch('/api/admin/users'),
+        fetch('/api/admin/comments'),
+      ]);
 
-    const { data: commentsData } = await supabase
-      .from('blog_comments')
-      .select('*')
-      .order('created_at', { ascending: false });
+      const usersJson = usersRes.ok ? await usersRes.json() : { users: [] };
+      const commentsJson = commentsRes.ok
+        ? await commentsRes.json()
+        : { comments: [] };
 
-    const counts: Record<string, number> = {};
-    commentsData?.forEach((c) => {
-      if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
-    });
+      const commentsData: Comment[] = commentsJson.comments || [];
+      const counts: Record<string, number> = {};
+      commentsData.forEach((c) => {
+        if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
+      });
 
-    setProfiles(profilesData || []);
-    setComments(commentsData || []);
-    setCommentCounts(counts);
+      setProfiles(usersJson.users || []);
+      setComments(commentsData);
+      setCommentCounts(counts);
+    } catch {
+      setProfiles([]);
+      setComments([]);
+    }
     setLoading(false);
   }, [router]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
   // Realtime admin data
   useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel("admin-live")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "blog_comments" },
-        () => {
-          void loadData();
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "profiles" },
-        () => {
-          void loadData();
-        },
-      )
-      .subscribe();
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    if (!hasSupabaseEnv()) return;
+    try {
+      const supabase = createClient();
+      const channel = supabase
+        .channel('admin-live')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'blog_comments' },
+          () => {
+            void loadData();
+          },
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'profiles' },
+          () => {
+            void loadData();
+          },
+        )
+        .subscribe();
+      return () => {
+        void supabase.removeChannel(channel);
+      };
+    } catch {
+      return;
+    }
   }, [loadData]);
 
 
@@ -361,7 +379,7 @@ export default function AdminPage() {
                   ) : (
                     profiles.map((profile) => {
                       const isAdmin =
-                        profile.email === ADMIN_EMAIL || profile.role === 'admin';
+                        isAdminEmail(profile.email) || profile.role === 'admin';
                       return (
                         <tr
                           key={profile.id}

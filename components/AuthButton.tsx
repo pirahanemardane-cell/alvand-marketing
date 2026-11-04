@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, LogOut, User, LayoutDashboard } from "lucide-react";
 import { createClient, hasSupabaseEnv } from "@/lib/supabase/client";
+import { isAdminEmail } from "@/lib/admin";
 import type { User as SbUser } from "@supabase/supabase-js";
-
-const ADMIN_EMAILS = ["alvandmarketing.com@gmail.com"];
 
 export default function AuthButton({
   compact = false,
@@ -63,7 +62,7 @@ export default function AuthButton({
   }
 
   if (user) {
-    const isAdmin = ADMIN_EMAILS.includes(user.email ?? "");
+    const isAdmin = isAdminEmail(user.email);
     if (compact) {
       return (
         <div className="space-y-1">
