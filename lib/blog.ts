@@ -148,6 +148,22 @@ function mapRow(row: DbPost): BlogPost {
 const SELECT =
   "id, slug, title, excerpt, body, published_at, created_at, meta_title, meta_description, robots_index, robots_follow, og_title, og_description, og_image_url, canonical_url, blog_categories(name)";
 
+/**
+ * Public listings must never surface automated smoke / e2e debris
+ * (slug/title/excerpt markers like smoke-post-e2e, SMOKE_POST_*, SMOKE_TEST_*).
+ */
+export function isSmokeMarkerPost(post: {
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+}): boolean {
+  const blob = `${post.slug}\n${post.title}\n${post.excerpt || ""}`.toLowerCase();
+  return (
+    blob.includes("smoke") ||
+    /smoke[_-]?post|smoke[_-]?test|smoke_test_fake/.test(blob)
+  );
+}
+
 export async function listPublishedPosts(query?: string): Promise<BlogPost[]> {
   const sb = createAnonClient();
   if (!sb) return [];
@@ -161,7 +177,9 @@ export async function listPublishedPosts(query?: string): Promise<BlogPost[]> {
   const { data, error } = await q;
   if (error || !data) return [];
 
-  let rows = (data as unknown as DbPost[]).map(mapRow);
+  let rows = (data as unknown as DbPost[])
+    .map(mapRow)
+    .filter((p) => !isSmokeMarkerPost(p));
   const s = query?.trim();
   if (s) {
     rows = rows.filter(
@@ -189,7 +207,11 @@ export async function getPublishedPostBySlug(
       .eq("status", "published")
       .eq("slug", candidate)
       .maybeSingle();
-    if (!error && data) return mapRow(data as unknown as DbPost);
+    if (!error && data) {
+      const post = mapRow(data as unknown as DbPost);
+      if (isSmokeMarkerPost(post)) return undefined;
+      return post;
+    }
   }
   return undefined;
 }

@@ -55,8 +55,19 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 - `SENTRY_DSN` (سرور) و/یا `NEXT_PUBLIC_SENTRY_DSN` (مرورگر)
 - بدون این‌ها گزارش خطا no-op است (بدون وابستگی سنگین SDK؛ ingest سبک به Sentry).
+- Wiring: `instrumentation.ts` → `initServerSentry`; `components/SentryInit` → `initClientSentry`; `captureException` در APIها (مثلاً `/api/contact`).
 
-## ۸. دامنهٔ سایت برای sitemap
+## ۸. اعلان ایمیل فرم تماس (اختیاری)
+
+اگر هر دو مقدار زیر ست شود، بعد از insert موفق در `contact_leads` یک ایمیل از طریق Resend فرستاده می‌شود؛ در غیر این صورت no-op (فرم همچنان ۲۰۰ برمی‌گرداند):
+
+- `RESEND_API_KEY`
+- `CONTACT_NOTIFY_EMAIL` (گیرنده)
+- اختیاری: `CONTACT_NOTIFY_FROM` (پیش‌فرض `Alvand Contact <onboarding@resend.dev>` — برای دامنهٔ تأییدشده در Resend عوض کنید)
+
+کد: `lib/contact-notify.ts` از `app/api/contact/route.ts`.
+
+## ۹. دامنهٔ سایت برای sitemap
 
 - اختیاری: `NEXT_PUBLIC_SITE_URL=https://alvandmarketing.ir` (پیش‌فرض همین دامنه در `app/sitemap.ts` / `app/robots.ts`)
 
