@@ -17,6 +17,9 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
+/** Keep home Resources/blog slice fresh after CMS edits (smoke cleanup, new posts). */
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   return metadataForPageKey("home", { path: "/" });
 }

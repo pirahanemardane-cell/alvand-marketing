@@ -6,6 +6,7 @@ import {
   rateLimit,
 } from "@/lib/rate-limit";
 import { captureException } from "@/lib/observability";
+import { notifyContactLead } from "@/lib/contact-notify";
 
 function countUrls(text: string): number {
   return (text.match(/https?:\/\/|www\./gi) || []).length;
@@ -94,6 +95,18 @@ export async function POST(request: Request) {
         },
         { status: 500 }
       );
+    }
+
+    // Optional Resend notify — never fail the lead insert if email is unset/down.
+    const notify = await notifyContactLead({
+      name,
+      phone,
+      message: message || "",
+    });
+    if (notify === "failed") {
+      void captureException(new Error("contact_notify_failed"), {
+        route: "/api/contact",
+      });
     }
 
     return NextResponse.json({
