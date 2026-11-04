@@ -32,7 +32,13 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 - Authentication → Providers → **Email** را روشن کنید.
 - برای تست محلی می‌توانید **Confirm email** را خاموش کنید.
 - Site URL: دامنهٔ سایت (مثلاً `https://alvandmarketing.ir`).
-- Redirect URLs: `https://alvandmarketing.ir/**` و `http://localhost:3000/**`
+- Redirect URLs (حتماً شامل callback):
+  - `https://alvandmarketing.ir/**`
+  - `https://alvandmarketing.ir/auth/callback`
+  - `http://localhost:3000/**`
+  - `http://localhost:3000/auth/callback`
+  - `http://127.0.0.1:3000/**`
+- تایید ایمیل / بازیابی رمز از مسیر `/auth/callback?next=…` رد می‌شود (نه مستقیم `/dashboard`).
 - ادمین فعلی با ایمیل hard-coded در `lib/admin.ts` شناخته می‌شود (`alvandmarketing.com@gmail.com`).
 
 ## ۴. Realtime (اختیاری)

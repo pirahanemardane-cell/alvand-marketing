@@ -19,6 +19,10 @@ export type BlogPost = {
   meta_description?: string | null;
   robots_index?: boolean;
   robots_follow?: boolean;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image_url?: string | null;
+  canonical_url?: string | null;
 };
 
 type DbPost = {
@@ -33,6 +37,10 @@ type DbPost = {
   meta_description: string | null;
   robots_index: boolean | null;
   robots_follow: boolean | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image_url?: string | null;
+  canonical_url?: string | null;
   blog_categories?: { name: string } | { name: string }[] | null;
 };
 
@@ -130,11 +138,15 @@ function mapRow(row: DbPost): BlogPost {
     meta_description: row.meta_description,
     robots_index: row.robots_index ?? true,
     robots_follow: row.robots_follow ?? true,
+    og_title: row.og_title,
+    og_description: row.og_description,
+    og_image_url: row.og_image_url,
+    canonical_url: row.canonical_url,
   };
 }
 
 const SELECT =
-  "id, slug, title, excerpt, body, published_at, created_at, meta_title, meta_description, robots_index, robots_follow, blog_categories(name)";
+  "id, slug, title, excerpt, body, published_at, created_at, meta_title, meta_description, robots_index, robots_follow, og_title, og_description, og_image_url, canonical_url, blog_categories(name)";
 
 export async function listPublishedPosts(query?: string): Promise<BlogPost[]> {
   const sb = createAnonClient();

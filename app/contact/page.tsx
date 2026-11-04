@@ -5,12 +5,11 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import ContactForm from "@/components/ContactForm";
+import { metadataForPageKey } from "@/lib/seo/pages";
 
-export const metadata: Metadata = {
-  title: "تماس با ما | الوند مارکتینگ",
-  description: "برای مشاوره رایگان با الوند مارکتینگ تماس بگیرید. واتساپ، تلفن و فرم آنلاین.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return metadataForPageKey("contact", { path: "/contact" });
+}
 
 export default function ContactPage() {
   return (

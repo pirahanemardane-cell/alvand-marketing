@@ -75,6 +75,19 @@ export async function POST(request: Request) {
     }
 
     const service = createServiceClient();
+    const { data: postRow } = await service
+      .from("blog_posts")
+      .select("id")
+      .eq("slug", postSlug)
+      .eq("status", "published")
+      .maybeSingle();
+    if (!postRow) {
+      return NextResponse.json(
+        { error: "مقاله یافت نشد." },
+        { status: 404 }
+      );
+    }
+
     const { error } = await service.from("blog_comments").insert({
       post_slug: postSlug,
       author_name: authorName.slice(0, 80),

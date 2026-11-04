@@ -29,15 +29,17 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Enrich with Auth emails (service role). Fail soft if listUsers unavailable.
+    // Enrich with Auth emails (service role). Paginate; fail soft if unavailable.
     const emailById = new Map<string, string>();
     try {
-      const { data: listed, error: listErr } =
-        await service.auth.admin.listUsers({ page: 1, perPage: 200 });
-      if (!listErr && listed?.users) {
+      for (let page = 1; page <= 20; page++) {
+        const { data: listed, error: listErr } =
+          await service.auth.admin.listUsers({ page, perPage: 200 });
+        if (listErr || !listed?.users?.length) break;
         for (const u of listed.users) {
           if (u.email) emailById.set(u.id, u.email);
         }
+        if (listed.users.length < 200) break;
       }
     } catch {
       // ignore enrichment failure

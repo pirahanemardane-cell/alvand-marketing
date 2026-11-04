@@ -58,6 +58,18 @@ export async function middleware(request: NextRequest) {
   const path = rewritten.nextUrl.pathname;
   const gate = panelGate(path);
 
+  // Never drop Supabase ?code= on gated (or any) routes — exchange via callback.
+  if (path !== "/auth/callback" && rewritten.nextUrl.searchParams.get("code")) {
+    const cb = rewritten.nextUrl.clone();
+    cb.pathname = "/auth/callback";
+    if (!cb.searchParams.get("next")) {
+      const intended =
+        path === "/login" || path === "/" ? "/dashboard" : path;
+      cb.searchParams.set("next", intended);
+    }
+    return NextResponse.redirect(cb);
+  }
+
   let response = isRewrite
     ? NextResponse.rewrite(rewritten.nextUrl)
     : NextResponse.next({ request: { headers: request.headers } });

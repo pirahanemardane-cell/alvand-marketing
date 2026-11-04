@@ -172,7 +172,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
-              href="/login"
+              href={`/login?next=${encodeURIComponent(`/blog/${postSlug}`)}`}
               className="rounded-full bg-accent text-accent-foreground font-bold text-sm px-6 py-2.5"
             >
               ورود
