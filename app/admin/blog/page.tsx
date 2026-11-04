@@ -24,6 +24,7 @@ export default function AdminBlogPage() {
   const router = useRouter();
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [allowed, setAllowed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'published' | 'archived'>('all');
@@ -35,6 +36,7 @@ export default function AdminBlogPage() {
     setLoading(true);
     setError(null);
     if (!hasSupabaseEnv()) {
+      setAllowed(false);
       setLoading(false);
       router.replace('/login');
       return;
@@ -42,10 +44,12 @@ export default function AdminBlogPage() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !isAdminEmail(user.email)) {
+      setAllowed(false);
       setLoading(false);
       router.replace('/login');
       return;
     }
+    setAllowed(true);
     try {
       const res = await fetch('/api/admin/blog');
       const json = await res.json();
@@ -145,6 +149,18 @@ export default function AdminBlogPage() {
       setError('خطا');
     }
     setBusyId(null);
+  }
+
+  if (loading || !allowed) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <p className="text-muted-foreground">در حال بارگذاری...</p>
+        </div>
+        <Footer />
+      </main>
+    );
   }
 
   return (

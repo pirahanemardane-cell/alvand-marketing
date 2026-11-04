@@ -54,12 +54,14 @@ export default function AdminPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
+  const [allowed, setAllowed] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const router = useRouter();
 
   const loadData = useCallback(async () => {
     if (!hasSupabaseEnv()) {
+      setAllowed(false);
       setLoading(false);
       router.replace('/login');
       return;
@@ -68,10 +70,12 @@ export default function AdminPage() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !isAdminEmail(user.email)) {
+        setAllowed(false);
         setLoading(false);
         router.replace('/login');
         return;
       }
+      setAllowed(true);
 
       // Service-role APIs: client RLS cannot list all profiles or pending comments.
       const [usersRes, commentsRes] = await Promise.all([
@@ -105,6 +109,7 @@ export default function AdminPage() {
         setCommentCounts(counts);
       }
     } catch {
+      setAllowed(false);
       setLoadError('خطا در ارتباط با سرور');
       setProfiles([]);
       setComments([]);
@@ -196,6 +201,10 @@ export default function AdminPage() {
   const approvedComments = comments.filter((c) => c.approved);
 
   if (loading) {
+    return <PageLoader />;
+  }
+
+  if (!allowed) {
     return <PageLoader />;
   }
 

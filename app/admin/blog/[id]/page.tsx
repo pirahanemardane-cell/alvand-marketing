@@ -22,6 +22,7 @@ export default function AdminBlogEditPage({
   const { id } = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [allowed, setAllowed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [title, setTitle] = useState('');
@@ -35,6 +36,7 @@ export default function AdminBlogEditPage({
   useEffect(() => {
     async function load() {
       if (!hasSupabaseEnv()) {
+        setAllowed(false);
         setLoading(false);
         router.replace('/login');
         return;
@@ -42,10 +44,12 @@ export default function AdminBlogEditPage({
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !isAdminEmail(user.email)) {
+        setAllowed(false);
         setLoading(false);
         router.replace('/login');
         return;
       }
+      setAllowed(true);
       try {
         const res = await fetch(`/api/admin/blog?id=${encodeURIComponent(id)}`);
         const json = await res.json();
@@ -117,7 +121,7 @@ export default function AdminBlogEditPage({
     setSaving(false);
   }
 
-  if (loading) {
+  if (loading || !allowed) {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <Navbar />

@@ -25,6 +25,7 @@ export default function AdminSeoPage() {
   const router = useRouter();
   const [tab, setTab] = useState('home');
   const [loading, setLoading] = useState(true);
+  const [allowed, setAllowed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
   const [title, setTitle] = useState('');
@@ -34,6 +35,7 @@ export default function AdminSeoPage() {
   useEffect(() => {
     async function init() {
       if (!hasSupabaseEnv()) {
+        setAllowed(false);
         router.replace('/login');
         return;
       }
@@ -41,9 +43,13 @@ export default function AdminSeoPage() {
         const supabase = createClient();
         const { data: { user } } = await supabase.auth.getUser();
         if (!user || !isAdminEmail(user.email)) {
+          setAllowed(false);
           router.replace('/login');
+          return;
         }
+        setAllowed(true);
       } catch {
+        setAllowed(false);
         router.replace('/login');
       }
     }
@@ -51,6 +57,7 @@ export default function AdminSeoPage() {
   }, [router]);
 
   useEffect(() => {
+    if (!allowed) return;
     setLoading(true);
     setMsg('');
     void (async () => {
@@ -87,7 +94,7 @@ export default function AdminSeoPage() {
       }
       setLoading(false);
     })();
-  }, [tab]);
+  }, [tab, allowed]);
 
   async function save() {
     setBusy(true);
@@ -119,6 +126,18 @@ export default function AdminSeoPage() {
   }
 
   const slug = TABS.find((t) => t.key === tab)?.slug || '';
+
+  if (!allowed) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <p className="text-muted-foreground">در حال بارگذاری...</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background text-foreground">

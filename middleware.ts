@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { isAdminEmail } from "@/lib/admin";
 
 /**
  * Legacy Persian pathnames (and their percent-encoded forms) rewrite to
@@ -7,7 +8,8 @@ import { createServerClient } from "@supabase/ssr";
  * against route definitions inconsistently for non-ASCII segments
  * (see https://github.com/vercel/next.js/issues/10084).
  *
- * Also refreshes the Supabase auth session when env is configured.
+ * Also refreshes the Supabase auth session when env is configured,
+ * and gates /dashboard + /admin on the server (not only client).
  */
 const PERSIAN_ROOT: Record<string, string> = {
   خدمات: "services",
@@ -42,9 +44,19 @@ function applyPersianRewrite(request: NextRequest): NextRequest {
   return new NextRequest(url, request);
 }
 
+function panelGate(pathname: string): "dashboard" | "admin" | null {
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) return "admin";
+  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+    return "dashboard";
+  }
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
   const rewritten = applyPersianRewrite(request);
   const isRewrite = rewritten.nextUrl.pathname !== request.nextUrl.pathname;
+  const path = rewritten.nextUrl.pathname;
+  const gate = panelGate(path);
 
   let response = isRewrite
     ? NextResponse.rewrite(rewritten.nextUrl)
@@ -53,6 +65,13 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anon) {
+    // Without Supabase env, panels cannot authenticate — send to login.
+    if (gate) {
+      const login = request.nextUrl.clone();
+      login.pathname = "/login";
+      login.searchParams.set("next", path);
+      return NextResponse.redirect(login);
+    }
     return response;
   }
 
@@ -81,9 +100,39 @@ export async function middleware(request: NextRequest) {
         },
       },
     });
-    await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (gate) {
+      if (!user) {
+        const login = rewritten.nextUrl.clone();
+        login.pathname = "/login";
+        login.searchParams.set("next", path);
+        const redirect = NextResponse.redirect(login);
+        response.cookies.getAll().forEach((c) => {
+          redirect.cookies.set(c.name, c.value);
+        });
+        return redirect;
+      }
+      if (gate === "admin" && !isAdminEmail(user.email)) {
+        const dash = rewritten.nextUrl.clone();
+        dash.pathname = "/dashboard";
+        const redirect = NextResponse.redirect(dash);
+        response.cookies.getAll().forEach((c) => {
+          redirect.cookies.set(c.name, c.value);
+        });
+        return redirect;
+      }
+    }
   } catch {
-    // ignore auth refresh failures in middleware
+    // ignore auth refresh failures in middleware; still block panels
+    if (gate) {
+      const login = rewritten.nextUrl.clone();
+      login.pathname = "/login";
+      login.searchParams.set("next", path);
+      return NextResponse.redirect(login);
+    }
   }
 
   return response;
