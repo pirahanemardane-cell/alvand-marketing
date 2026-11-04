@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { isAdminEmail } from "@/lib/admin";
+import { resolveIsAdmin } from "@/lib/admin";
 
 /**
  * Legacy Persian pathnames (and their percent-encoded forms) rewrite to
@@ -127,14 +127,17 @@ export async function middleware(request: NextRequest) {
         });
         return redirect;
       }
-      if (gate === "admin" && !isAdminEmail(user.email)) {
-        const dash = rewritten.nextUrl.clone();
-        dash.pathname = "/dashboard";
-        const redirect = NextResponse.redirect(dash);
-        response.cookies.getAll().forEach((c) => {
-          redirect.cookies.set(c.name, c.value);
-        });
-        return redirect;
+      if (gate === "admin") {
+        const adminOk = await resolveIsAdmin(supabase, user);
+        if (!adminOk) {
+          const dash = rewritten.nextUrl.clone();
+          dash.pathname = "/dashboard";
+          const redirect = NextResponse.redirect(dash);
+          response.cookies.getAll().forEach((c) => {
+            redirect.cookies.set(c.name, c.value);
+          });
+          return redirect;
+        }
       }
     }
   } catch {

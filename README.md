@@ -20,6 +20,13 @@ npm run dev
 
 برای Auth و نظرات، فایل `.env.local` را طبق `SUPABASE.md` بسازید.
 
+Envهای مهم:
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`
+- اختیاری: `NEXT_PUBLIC_SITE_URL`، `SENTRY_DSN`، `NEXT_PUBLIC_SENTRY_DSN`
+
+SEO: `robots.txt` و `sitemap.xml` پویا؛ صفحات عمومی به‌صورت پیش‌فرض indexable هستند.
+پیش‌نمایش پیش‌نویس بلاگ برای ادمین: `/blog/<slug>?preview=1`
+
 ## ساخت نسخه پروداکشن
 
 ```bash

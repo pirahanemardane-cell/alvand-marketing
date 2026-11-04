@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient } from '@/lib/supabase/client';
-import { isAdminEmail } from '@/lib/admin';
+import { resolveIsAdmin } from '@/lib/admin';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -53,13 +53,10 @@ export default function RegisterPage() {
           console.warn('profile upsert', profErr.message);
         }
       }
-      if (data.session) {
-        const userEmail = data.user?.email ?? email;
-        if (isAdminEmail(userEmail)) {
-          router.replace('/admin');
-        } else {
-          router.replace('/dashboard');
-        }
+      if (data.session && data.user) {
+        router.replace(
+          (await resolveIsAdmin(supabase, data.user)) ? '/admin' : '/dashboard'
+        );
         router.refresh();
       } else {
         setMessage('ثبت‌نام انجام شد. لینک تایید به ایمیل شما ارسال شد؛ بعد از تایید وارد شوید.');

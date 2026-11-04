@@ -15,7 +15,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
-import { isAdminEmail } from '@/lib/admin';
+import { isAdminAccount } from '@/lib/admin';
 import type { User as SbUser } from '@supabase/supabase-js';
 import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
@@ -26,6 +26,7 @@ type Profile = {
   id: string;
   full_name: string | null;
   created_at: string;
+  role?: string | null;
 };
 
 type Comment = {
@@ -154,7 +155,10 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  const isAdmin = isAdminEmail(user.email);
+  const isAdmin = isAdminAccount({
+    email: user.email,
+    role: profile?.role,
+  });
   const pendingCount = comments.filter((c) => !c.approved).length;
   const approvedCount = comments.filter((c) => c.approved).length;
 

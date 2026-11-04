@@ -21,6 +21,7 @@ export default function ContactForm() {
           name: data.get("name"),
           phone: data.get("phone"),
           message: data.get("message"),
+          website: data.get("website"),
         }),
       });
       const json = await res.json().catch(() => ({}));
@@ -53,7 +54,18 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="relative space-y-4">
+      {/* Honeypot — hidden from users, filled by simple bots */}
+      <div className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">وب‌سایت</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div>
         <label htmlFor="name" className="block text-sm font-medium mb-1.5">
           نام
@@ -62,6 +74,8 @@ export default function ContactForm() {
           id="name"
           name="name"
           required
+          minLength={2}
+          maxLength={80}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
           placeholder="نام شما"
         />
@@ -75,6 +89,8 @@ export default function ContactForm() {
           name="phone"
           type="tel"
           required
+          minLength={8}
+          maxLength={40}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent transition-colors"
           placeholder="۰۹۱۲..."
           dir="ltr"
@@ -88,6 +104,7 @@ export default function ContactForm() {
           id="message"
           name="message"
           rows={4}
+          maxLength={2000}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent transition-colors resize-none"
           placeholder="چه کمکی از ما می‌خواهید؟"
         />

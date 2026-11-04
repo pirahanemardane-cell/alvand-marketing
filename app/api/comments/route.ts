@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { containsLink, sanitizeCommentBody } from "@/lib/comments";
+import {
+  COMMENT_LIMIT,
+  clientIp,
+  rateLimit,
+} from "@/lib/rate-limit";
+import { captureException } from "@/lib/observability";
 
 export async function GET(request: Request) {
   try {
@@ -30,6 +36,22 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const ip = clientIp(request);
+    const limited = rateLimit(
+      `comments:${ip}`,
+      COMMENT_LIMIT.limit,
+      COMMENT_LIMIT.windowMs
+    );
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "تعداد نظرات زیاد است. کمی بعد دوباره تلاش کنید." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(limited.retryAfterSec) },
+        }
+      );
+    }
+
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
@@ -46,6 +68,15 @@ export async function POST(request: Request) {
     const authorName = String(body.authorName ?? "").trim();
     const authorEmail = String(body.authorEmail ?? "").trim();
     const text = sanitizeCommentBody(String(body.body ?? ""));
+
+    // Honeypot
+    const honey = String(body.website ?? "").trim();
+    if (honey) {
+      return NextResponse.json({
+        ok: true,
+        message: "نظر شما ثبت شد و پس از تأیید نمایش داده می‌شود.",
+      });
+    }
 
     if (!postSlug || authorName.length < 2 || text.length < 3) {
       return NextResponse.json(
@@ -66,11 +97,25 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabaseUser.auth.getUser();
 
-    // Require login — matches UI and prevents anonymous spam via service role.
     if (!user) {
       return NextResponse.json(
         { error: "برای ثبت نظر وارد حساب کاربری شوید." },
         { status: 401 }
+      );
+    }
+
+    const userLimited = rateLimit(
+      `comments:user:${user.id}`,
+      COMMENT_LIMIT.limit,
+      COMMENT_LIMIT.windowMs
+    );
+    if (!userLimited.ok) {
+      return NextResponse.json(
+        { error: "تعداد نظرات زیاد است. کمی بعد دوباره تلاش کنید." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(userLimited.retryAfterSec) },
+        }
       );
     }
 
@@ -106,6 +151,7 @@ export async function POST(request: Request) {
       message: "نظر شما ثبت شد و پس از تأیید نمایش داده می‌شود.",
     });
   } catch (e) {
+    void captureException(e, { route: "/api/comments" });
     const msg = e instanceof Error ? e.message : "خطا در ثبت نظر";
     return NextResponse.json({ error: msg }, { status: 500 });
   }

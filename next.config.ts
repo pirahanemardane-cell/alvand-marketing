@@ -8,6 +8,13 @@ function enc(segment: string): string {
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
+  // Avoid noisy webpack PackFileCacheStrategy warnings on large assets during CI/prod builds.
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.cache = false;
+    }
+    return config;
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,

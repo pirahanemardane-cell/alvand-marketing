@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { isAdminEmail } from "@/lib/admin";
+import { resolveIsAdmin } from "@/lib/admin";
 
 function safeNext(raw: string | null): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
@@ -32,11 +32,9 @@ export async function GET(request: Request) {
 
     // Prefer explicit next; otherwise route admin to /admin.
     let dest = next;
-    if (
-      (dest === "/dashboard" || dest === "/") &&
-      isAdminEmail(data.session.user.email)
-    ) {
-      dest = "/admin";
+    if (dest === "/dashboard" || dest === "/") {
+      const admin = await resolveIsAdmin(supabase, data.session.user);
+      if (admin) dest = "/admin";
     }
     return NextResponse.redirect(`${origin}${dest}`);
   } catch {

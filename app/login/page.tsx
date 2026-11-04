@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
-import { isAdminEmail } from '@/lib/admin';
+import { resolveIsAdmin } from '@/lib/admin';
 
 function safeNextPath(raw: string | null): string | null {
   if (!raw || !raw.startsWith('/') || raw.startsWith('//')) return null;
@@ -40,12 +40,11 @@ function LoginForm() {
         setError('ایمیل یا رمز عبور نادرست است.');
         return;
       }
-      const userEmail = data.user?.email ?? email;
       const next = safeNextPath(searchParams.get('next'));
       if (next) {
         // Prefer intended destination; middleware still enforces admin vs user.
         router.replace(next);
-      } else if (isAdminEmail(userEmail)) {
+      } else if (data.user && (await resolveIsAdmin(supabase, data.user))) {
         router.replace('/admin');
       } else {
         router.replace('/dashboard');

@@ -9,33 +9,60 @@ import PageBreadcrumb from "@/components/Breadcrumb";
 import BlogComments from "@/components/BlogComments";
 import {
   getPublishedPostBySlug,
+  getPostBySlugAnyStatus,
   listPublishedPosts,
   listPublishedSlugs,
   getReadingTimeMinutes,
   toPersianDigits,
+  type BlogPost,
 } from "@/lib/blog";
+import { requireAdminUser } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
+};
 
 export async function generateStaticParams() {
   const slugs = await listPublishedSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function resolvePost(
+  slug: string,
+  preview?: string
+): Promise<{ post: BlogPost; isPreview: boolean } | null> {
+  const published = await getPublishedPostBySlug(slug);
+  if (published) return { post: published, isPreview: false };
+
+  if (preview === "1") {
+    const admin = await requireAdminUser();
+    if (!admin) return null;
+    const draft = await getPostBySlugAnyStatus(slug);
+    if (draft) return { post: draft, isPreview: true };
+  }
+  return null;
+}
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPublishedPostBySlug(slug);
-  if (!post) return { title: "مقاله یافت نشد" };
+  const { preview } = await searchParams;
+  const resolved = await resolvePost(slug, preview);
+  if (!resolved) return { title: "مقاله یافت نشد", robots: { index: false } };
+  const { post, isPreview } = resolved;
   const title = post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`;
   const description = post.meta_description || post.excerpt;
   return {
-    title,
+    title: isPreview ? `[پیش‌نمایش] ${title}` : title,
     description,
     robots: {
-      index: post.robots_index !== false,
-      follow: post.robots_follow !== false,
+      index: isPreview ? false : post.robots_index !== false,
+      follow: isPreview ? false : post.robots_follow !== false,
     },
     openGraph: {
       title: post.og_title || title,
@@ -50,10 +77,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const post = await getPublishedPostBySlug(slug);
-  if (!post) notFound();
+  const { preview } = await searchParams;
+  const resolved = await resolvePost(slug, preview);
+  if (!resolved) notFound();
+  const { post, isPreview } = resolved;
 
   const all = await listPublishedPosts();
   const others = all.filter((p) => p.slug !== post.slug).slice(0, 2);
@@ -65,6 +94,19 @@ export default async function BlogPostPage({ params }: Props) {
       <Navbar />
       <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
+          {isPreview && (
+            <div
+              role="status"
+              className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm"
+            >
+              پیش‌نمایش ادمین — این مطلب هنوز منتشر نشده و برای موتورهای جستجو
+              noindex است.{" "}
+              <Link href={`/admin/blog`} className="font-bold text-accent underline">
+                بازگشت به پنل بلاگ
+              </Link>
+            </div>
+          )}
+
           <PageBreadcrumb
             items={[
               { label: "بلاگ", href: "/blog" },
@@ -136,7 +178,7 @@ export default async function BlogPostPage({ params }: Props) {
             )}
           </div>
 
-          <BlogComments postSlug={post.slug} />
+          {!isPreview && <BlogComments postSlug={post.slug} />}
 
           <div className="mt-12 pt-8 border-t border-border">
             <Link
