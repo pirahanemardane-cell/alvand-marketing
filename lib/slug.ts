@@ -3,7 +3,7 @@ export function toSlug(input: string): string {
   return input
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, "-")
+    .replace(/[_\s]+/g, "-")
     .replace(/[^\u0600-\u06FFa-z0-9-]/g, "")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")

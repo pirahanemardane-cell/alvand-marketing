@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -22,6 +22,7 @@ type Post = {
 
 export default function AdminBlogPage() {
   const router = useRouter();
+  const titleRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
@@ -31,6 +32,13 @@ export default function AdminBlogPage() {
   const [title, setTitle] = useState('');
   const [creating, setCreating] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!allowed || typeof window === 'undefined') return;
+    if (new URLSearchParams(window.location.search).get('create') === '1') {
+      titleRef.current?.focus();
+    }
+  }, [allowed]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -81,7 +89,11 @@ export default function AdminBlogPage() {
 
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      setError('عنوان پست را وارد کنید.');
+      titleRef.current?.focus();
+      return;
+    }
     setCreating(true);
     setError(null);
     try {
@@ -92,7 +104,15 @@ export default function AdminBlogPage() {
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error === 'title_required' ? 'عنوان لازم است' : 'ایجاد ناموفق');
+        setError(
+          res.status === 403
+            ? 'دسترسی ادمین تأیید نشد.'
+            : json.error === 'title_required'
+              ? 'عنوان لازم است'
+              : typeof json.error === 'string' && json.error.length < 120
+                ? `ایجاد ناموفق: ${json.error}`
+                : 'ایجاد ناموفق'
+        );
       } else {
         setTitle('');
         if (json.item?.id) router.push(`/admin/blog/${json.item.id}`);
@@ -214,9 +234,13 @@ export default function AdminBlogPage() {
           className="mt-8 flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-4"
         >
           <input
+            ref={titleRef}
+            id="admin-blog-new-title"
+            name="newPostTitle"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="عنوان پست جدید (پیش‌نویس)"
+            autoComplete="off"
             className="min-w-[200px] flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
             required
           />

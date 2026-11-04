@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Plus, RefreshCw } from 'lucide-react';
 
@@ -15,6 +15,7 @@ type Post = {
 };
 
 export default function AdminBlogPanel() {
+  const titleRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +24,13 @@ export default function AdminBlogPanel() {
   const [title, setTitle] = useState('');
   const [creating, setCreating] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (new URLSearchParams(window.location.search).get('create') === '1') {
+      titleRef.current?.focus();
+    }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -56,7 +64,11 @@ export default function AdminBlogPanel() {
 
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      setError('عنوان پست را وارد کنید.');
+      titleRef.current?.focus();
+      return;
+    }
     setCreating(true);
     setError(null);
     try {
@@ -67,7 +79,15 @@ export default function AdminBlogPanel() {
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error === 'title_required' ? 'عنوان لازم است' : 'ایجاد ناموفق');
+        setError(
+          res.status === 403
+            ? 'دسترسی ادمین تأیید نشد.'
+            : json.error === 'title_required'
+              ? 'عنوان لازم است'
+              : typeof json.error === 'string' && json.error.length < 120
+                ? `ایجاد ناموفق: ${json.error}`
+                : 'ایجاد ناموفق'
+        );
       } else {
         setTitle('');
         if (json.item?.id) window.location.href = `/admin/blog/${json.item.id}`;
@@ -122,9 +142,17 @@ export default function AdminBlogPanel() {
   return (
     <div className="space-y-4">
       <form onSubmit={onCreate} className="flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-4">
-        <input value={title} onChange={(e) => setTitle(e.target.value)}
+        <input
+          ref={titleRef}
+          id="admin-blog-new-title"
+          name="newPostTitle"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="عنوان پست جدید (پیش‌نویس)"
-          className="min-w-[200px] flex-1 rounded-xl border border-border bg-background px-3 py-2 text-base outline-none focus:border-accent" required />
+          autoComplete="off"
+          className="min-w-[200px] flex-1 rounded-xl border border-border bg-background px-3 py-2 text-base outline-none focus:border-accent"
+          required
+        />
         <button type="submit" disabled={creating}
           className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-bold text-accent-foreground disabled:opacity-50">
           <Plus className="h-4 w-4" />{creating ? '…' : 'افزودن پیش‌نویس'}
