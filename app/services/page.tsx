@@ -35,7 +35,7 @@ export default function ServicesPage() {
             {services.map((item) => (
               <Link
                 key={item.slug}
-                href={`/خدمات/${item.slug}`}
+                href={`/services/${item.slug}`}
                 className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
               >
                 <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
@@ -59,7 +59,7 @@ export default function ServicesPage() {
               پیشنهاد می‌دهیم.
             </p>
             <Link
-              href="/تماس"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-bold text-sm px-7 py-3.5"
             >
               مشاوره رایگان

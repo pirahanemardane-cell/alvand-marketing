@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogIn, LogOut, User, LayoutDashboard } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, hasSupabaseEnv } from "@/lib/supabase/client";
 import type { User as SbUser } from "@supabase/supabase-js";
 
 const ADMIN_EMAILS = ["alvandmarketing.com@gmail.com"];
@@ -21,22 +21,36 @@ export default function AuthButton({
   const router = useRouter();
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+    if (!hasSupabaseEnv()) {
       setReady(true);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
+      return;
+    }
+    try {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => {
+        setUser(data.user);
+        setReady(true);
+      });
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_e, session) => {
+        setUser(session?.user ?? null);
+      });
+      return () => subscription.unsubscribe();
+    } catch {
+      setReady(true);
+    }
   }, []);
 
   async function signOut() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    if (hasSupabaseEnv()) {
+      try {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+      } catch {
+        // ignore when auth is unavailable
+      }
+    }
     onNavigate?.();
     router.refresh();
     router.push("/");

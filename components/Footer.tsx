@@ -26,32 +26,32 @@ export default function Footer() {
             <h4 className="text-sm font-bold mb-4">خدمات دیجیتال مارکتینگ</h4>
             <ul className="space-y-2.5 text-caption text-muted-foreground">
               <li>
-                <Link href="/خدمات/طراحی-سایت" className="hover:text-foreground transition-colors">
+                <Link href="/services/طراحی-سایت" className="hover:text-foreground transition-colors">
                   طراحی سایت
                 </Link>
               </li>
               <li>
-                <Link href="/خدمات/تولید-محتوا" className="hover:text-foreground transition-colors">
+                <Link href="/services/تولید-محتوا" className="hover:text-foreground transition-colors">
                   تولید محتوا
                 </Link>
               </li>
               <li>
-                <Link href="/خدمات/سئو" className="hover:text-foreground transition-colors">
+                <Link href="/services/سئو" className="hover:text-foreground transition-colors">
                   سئو
                 </Link>
               </li>
               <li>
-                <Link href="/خدمات/اینستاگرام" className="hover:text-foreground transition-colors">
+                <Link href="/services/اینستاگرام" className="hover:text-foreground transition-colors">
                   اینستاگرام
                 </Link>
               </li>
               <li>
-                <Link href="/خدمات/تبلیغات-اینترنتی" className="hover:text-foreground transition-colors">
+                <Link href="/services/تبلیغات-اینترنتی" className="hover:text-foreground transition-colors">
                   تبلیغات اینترنتی
                 </Link>
               </li>
               <li>
-                <Link href="/خدمات/هوش-مصنوعی" className="hover:text-foreground transition-colors">
+                <Link href="/services/هوش-مصنوعی" className="hover:text-foreground transition-colors">
                   هوش مصنوعی
                 </Link>
               </li>
@@ -62,7 +62,7 @@ export default function Footer() {
             <h4 className="text-sm font-bold mb-4">سایت</h4>
             <ul className="space-y-2.5 text-caption text-muted-foreground">
               <li>
-                <Link href="/خدمات" className="hover:text-foreground transition-colors">
+                <Link href="/services" className="hover:text-foreground transition-colors">
                   همه خدمات
                 </Link>
               </li>
@@ -82,12 +82,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/بلاگ" className="hover:text-foreground transition-colors">
+                <Link href="/blog" className="hover:text-foreground transition-colors">
                   بلاگ
                 </Link>
               </li>
               <li>
-                <Link href="/تماس" className="hover:text-foreground transition-colors">
+                <Link href="/contact" className="hover:text-foreground transition-colors">
                   مشاوره رایگان
                 </Link>
               </li>

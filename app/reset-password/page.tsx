@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import PageLoader from '@/components/PageLoader';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, hasSupabaseEnv } from '@/lib/supabase/client';
 
 const ADMIN_EMAIL = 'alvandmarketing.com@gmail.com';
 
@@ -22,15 +22,23 @@ export default function ResetPasswordPage() {
   const [sessionOk, setSessionOk] = useState(false);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setSessionOk(true);
+    if (!hasSupabaseEnv()) {
       setReady(true);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY' || session) setSessionOk(true);
-    });
-    return () => subscription.unsubscribe();
+      return;
+    }
+    try {
+      const supabase = createClient();
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setSessionOk(true);
+        setReady(true);
+      });
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'PASSWORD_RECOVERY' || session) setSessionOk(true);
+      });
+      return () => subscription.unsubscribe();
+    } catch {
+      setReady(true);
+    }
   }, []);
 
   async function onSubmit(e: React.FormEvent) {
@@ -86,13 +94,13 @@ export default function ResetPasswordPage() {
             ) : (
               <form onSubmit={onSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">رمز جدید</label>
-                  <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
+                  <label htmlFor="reset-password" className="block text-sm font-medium mb-1.5">رمز جدید</label>
+                  <input id="reset-password" name="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">تکرار رمز جدید</label>
-                  <input type="password" required minLength={6} value={password2} onChange={(e) => setPassword2(e.target.value)}
+                  <label htmlFor="reset-password2" className="block text-sm font-medium mb-1.5">تکرار رمز جدید</label>
+                  <input id="reset-password2" name="password2" type="password" required minLength={6} value={password2} onChange={(e) => setPassword2(e.target.value)}
                     className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 text-sm outline-none focus:border-accent" dir="ltr" autoComplete="new-password" />
                 </div>
                 {error && <p className="text-sm text-red-500 bg-red-500/10 rounded-lg px-3 py-2 text-center">{error}</p>}

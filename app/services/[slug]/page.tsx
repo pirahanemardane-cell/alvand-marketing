@@ -39,7 +39,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="w-full">
           <PageBreadcrumb
             items={[
-              { label: "خدمات دیجیتال مارکتینگ", href: "/خدمات" },
+              { label: "خدمات دیجیتال مارکتینگ", href: "/services" },
               { label: service.title },
             ]}
           />
@@ -117,7 +117,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               جلسه اول رایگان است. وضعیت شما را می‌شنویم و مسیر پیشنهادی را می‌گوییم.
             </p>
             <Link
-              href="/تماس"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-bold text-sm px-7 py-3.5"
             >
               درخواست مشاوره
@@ -132,7 +132,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 {others.map((s) => (
                   <Link
                     key={s.slug}
-                    href={`/خدمات/${s.slug}`}
+                    href={`/services/${s.slug}`}
                     className="rounded-xl border border-border p-4 hover:border-accent/50 transition-colors"
                   >
                     <p className="font-bold">{s.title}</p>

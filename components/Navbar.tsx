@@ -38,14 +38,14 @@ const serviceIcons: Record<string, React.ReactNode> = {
 
 const navItems = [
   { href: "/", label: "خانه", icon: Home },
-  { href: "/خدمات", label: "خدمات", icon: LayoutGrid, mega: true },
+  { href: "/services", label: "خدمات", icon: LayoutGrid, mega: true },
   { href: "/#process", label: "فرآیند", icon: ListOrdered },
   { href: "/#cases", label: "پروژه‌ها", icon: FolderKanban },
   { href: "/#pricing", label: "هزینه", icon: Wallet },
   { href: "/#about", label: "درباره ما", icon: Info },
-  { href: "/بلاگ", label: "بلاگ", icon: Newspaper },
+  { href: "/blog", label: "بلاگ", icon: Newspaper },
   { href: "/#faq", label: "سؤالات", icon: HelpCircle },
-  { href: "/تماس", label: "تماس", icon: Phone },
+  { href: "/contact", label: "تماس", icon: Phone },
 ];
 
 const searchInputClass =
@@ -97,7 +97,7 @@ export default function Navbar() {
       .map((s) => ({
         kind: "service" as const,
         title: s.title,
-        href: `/خدمات/${s.slug}`,
+        href: `/services/${s.slug}`,
         hint: "خدمت",
       }));
     const blg = posts
@@ -110,7 +110,7 @@ export default function Navbar() {
       .map((p) => ({
         kind: "blog" as const,
         title: p.title,
-        href: `/بلاگ/${p.slug}`,
+        href: `/blog/${p.slug}`,
         hint: "بلاگ",
       }));
     return [...svc, ...blg].slice(0, 8);
@@ -131,9 +131,9 @@ export default function Navbar() {
       closeMenu();
       const onlyBlog = searchHits.length > 0 && searchHits.every((h) => h.kind === "blog");
       if (onlyBlog) {
-        router.push(`/بلاگ?q=${encodeURIComponent(query.trim())}`);
+        router.push(`/blog?q=${encodeURIComponent(query.trim())}`);
       } else {
-        router.push(`/خدمات?q=${encodeURIComponent(query.trim())}`);
+        router.push(`/services?q=${encodeURIComponent(query.trim())}`);
       }
     }
   }
@@ -239,7 +239,7 @@ export default function Navbar() {
                           >
                             <div className="w-72 rounded-2xl border border-border bg-background shadow-2xl p-2 ring-1 ring-border/50">
                               <Link
-                                href="/خدمات"
+                                href="/services"
                                 className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold hover:bg-accent/10 transition-colors"
                                 onClick={() => setMegaOpen(false)}
                               >
@@ -250,7 +250,7 @@ export default function Navbar() {
                               {services.map((s) => (
                                 <Link
                                   key={s.slug}
-                                  href={`/خدمات/${s.slug}`}
+                                  href={`/services/${s.slug}`}
                                   onClick={() => setMegaOpen(false)}
                                   className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors"
                                 >
@@ -392,7 +392,7 @@ export default function Navbar() {
                       >
                         <div className="flex items-center">
                           <Link
-                            href="/خدمات"
+                            href="/services"
                             onClick={closeMenu}
                             className="flex-1 flex items-center gap-3 text-lg font-medium py-3 px-3 rounded-xl text-foreground hover:bg-accent/10 hover:text-accent transition-colors"
                           >
@@ -425,7 +425,7 @@ export default function Navbar() {
                               {services.map((s) => (
                                 <li key={s.slug}>
                                   <Link
-                                    href={`/خدمات/${s.slug}`}
+                                    href={`/services/${s.slug}`}
                                     onClick={closeMenu}
                                     className="flex items-center gap-2 py-2 px-3 text-sm text-muted-foreground hover:text-accent transition-colors"
                                   >
@@ -463,7 +463,7 @@ export default function Navbar() {
               <div className="mt-auto pt-6 border-t border-border space-y-3">
                 <AuthButton compact onNavigate={closeMenu} />
                 <Link
-                  href="/تماس"
+                  href="/contact"
                   onClick={closeMenu}
                   className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-accent text-accent-foreground font-bold text-sm"
                 >

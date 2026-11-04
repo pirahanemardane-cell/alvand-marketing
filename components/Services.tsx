@@ -19,7 +19,7 @@ export default function Services() {
               شش خدمت اصلی که هر کدام برای حل یک مشکل مشخص طراحی شده‌اند.
             </p>
             <Link
-              href="/خدمات"
+              href="/services"
               className="inline-flex items-center gap-1 mt-4 text-sm font-bold text-accent hover:opacity-80 transition-opacity"
             >
               همه خدمات
@@ -49,7 +49,7 @@ export default function Services() {
                   className="grid grid-cols-[1fr] gap-2 py-6 border-b border-border first:border-t"
                 >
                   <div>
-                    <Link href={`/خدمات/${item.slug}`}>
+                    <Link href={`/services/${item.slug}`}>
                       <h3 className="text-lg font-bold mb-2 leading-persian-tight hover:text-accent transition-colors">
                         {item.title}
                       </h3>
@@ -58,7 +58,7 @@ export default function Services() {
                       {item.shortDesc}
                     </p>
                     <Link
-                      href={`/خدمات/${item.slug}`}
+                      href={`/services/${item.slug}`}
                       className="text-sm font-medium text-accent hover:opacity-80"
                     >
                       جزئیات ←

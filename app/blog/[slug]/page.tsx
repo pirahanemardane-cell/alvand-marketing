@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="w-full">
           <PageBreadcrumb
             items={[
-              { label: "بلاگ", href: "/بلاگ" },
+              { label: "بلاگ", href: "/blog" },
               { label: post.title },
             ]}
           />
@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <div className="mt-12 pt-8 border-t border-border">
             <Link
-              href="/تماس"
+              href="/contact"
               className="text-accent font-bold text-sm hover:opacity-80"
             >
               برای مشاوره رایگان تماس بگیرید ←
@@ -123,7 +123,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {others.map((p) => (
                   <Link
                     key={p.slug}
-                    href={`/بلاگ/${p.slug}`}
+                    href={`/blog/${p.slug}`}
                     className="rounded-xl border border-border p-4 hover:border-accent/50 transition-colors"
                   >
                     <p className="font-bold text-sm">{p.title}</p>

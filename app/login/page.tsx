@@ -58,10 +58,12 @@ export default function LoginPage() {
             </p>
             <form onSubmit={onSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">
+                <label htmlFor="login-email" className="block text-sm font-medium text-foreground mb-1.5">
                   ایمیل
                 </label>
                 <input
+                  id="login-email"
+                  name="email"
                   type="email"
                   required
                   value={email}
@@ -72,10 +74,12 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1.5">
+                <label htmlFor="login-password" className="block text-sm font-medium text-foreground mb-1.5">
                   رمز عبور
                 </label>
                 <input
+                  id="login-password"
+                  name="password"
                   type="password"
                   required
                   minLength={6}
