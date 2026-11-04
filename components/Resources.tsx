@@ -2,12 +2,36 @@ import Link from "next/link";
 import SectionLabel from "./SectionLabel";
 import { listPublishedPosts } from "@/lib/blog";
 
-export default async function Resources() {
-  const posts = (await listPublishedPosts()).slice(0, 3);
+/** Static teaser items — shown when no real published posts exist. */
+const FALLBACK_RESOURCES = [
+  {
+    slug: null as string | null,
+    title: "چرا تبلیغات اینستاگرام گاهی نتیجه نمی‌دهد؟",
+    desc: "سه اشتباه رایج در تنظیم مخاطب و بودجه که بیشتر کسب‌وکارها مرتکب می‌شوند.",
+  },
+  {
+    slug: null as string | null,
+    title: "چک‌لیست سئوی فنی برای سایت‌های ایرانی",
+    desc: "مواردی که قبل از هر کمپین محتوا باید در سایت درست باشد تا گوگل سایت را جدی بگیرد.",
+  },
+  {
+    slug: null as string | null,
+    title: "چطور محتوای فروشنده بنویسیم بدون اینکه تبلیغ به نظر برسد؟",
+    desc: "روشی ساده برای نوشتن متنی که هم مشکل مشتری را بگوید هم راه‌حل شما را نشان دهد.",
+  },
+];
 
-  if (posts.length === 0) {
-    return null;
-  }
+export default async function Resources() {
+  // Public list already excludes smoke markers; never hide this section when empty.
+  const published = (await listPublishedPosts()).slice(0, 3);
+  const items =
+    published.length > 0
+      ? published.map((p) => ({
+          slug: p.slug,
+          title: p.title,
+          desc: p.excerpt || p.category,
+        }))
+      : FALLBACK_RESOURCES;
 
   return (
     <section
@@ -29,17 +53,20 @@ export default async function Resources() {
             </h2>
 
             <div className="space-y-0">
-              {posts.map((item) => (
+              {items.map((item) => (
                 <div
-                  key={item.slug}
+                  key={item.slug || item.title}
                   className="block py-6 border-b border-border first:border-t group"
                 >
-                  <Link href={`/blog/${item.slug}`} className="block">
+                  <Link
+                    href={item.slug ? `/blog/${item.slug}` : "/blog"}
+                    className="block"
+                  >
                     <h3 className="text-lg font-bold mb-1.5 group-hover:text-accent transition-colors leading-persian-tight">
                       {item.title}
                     </h3>
                     <p className="text-caption text-muted-foreground leading-persian">
-                      {item.excerpt || item.category}
+                      {item.desc}
                     </p>
                   </Link>
                 </div>
