@@ -55,6 +55,7 @@ export default function AdminPage() {
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const router = useRouter();
 
   const loadData = useCallback(async () => {
@@ -78,21 +79,33 @@ export default function AdminPage() {
         fetch('/api/admin/comments'),
       ]);
 
-      const usersJson = usersRes.ok ? await usersRes.json() : { users: [] };
-      const commentsJson = commentsRes.ok
-        ? await commentsRes.json()
-        : { comments: [] };
-
-      const commentsData: Comment[] = commentsJson.comments || [];
-      const counts: Record<string, number> = {};
-      commentsData.forEach((c) => {
-        if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
-      });
-
-      setProfiles(usersJson.users || []);
-      setComments(commentsData);
-      setCommentCounts(counts);
+      if (!usersRes.ok || !commentsRes.ok) {
+        const status = !usersRes.ok ? usersRes.status : commentsRes.status;
+        setLoadError(
+          status === 503
+            ? 'سوپابیس پیکربندی نشده است (env).'
+            : status === 403
+              ? 'دسترسی ادمین تأیید نشد.'
+              : 'خطا در بارگذاری داده‌های ادمین.'
+        );
+        setProfiles([]);
+        setComments([]);
+        setCommentCounts({});
+      } else {
+        setLoadError(null);
+        const usersJson = await usersRes.json();
+        const commentsJson = await commentsRes.json();
+        const commentsData: Comment[] = commentsJson.comments || [];
+        const counts: Record<string, number> = {};
+        commentsData.forEach((c) => {
+          if (c.user_id) counts[c.user_id] = (counts[c.user_id] || 0) + 1;
+        });
+        setProfiles(usersJson.users || []);
+        setComments(commentsData);
+        setCommentCounts(counts);
+      }
     } catch {
+      setLoadError('خطا در ارتباط با سرور');
       setProfiles([]);
       setComments([]);
     }
@@ -249,6 +262,12 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        {loadError && (
+          <p className="mt-6 text-sm text-red-500 bg-red-500/10 rounded-xl px-4 py-3">
+            {loadError}
+          </p>
+        )}
 
         <div className="mt-8 flex flex-wrap gap-2 border-b border-border">
           {tabs.map((t) => (

@@ -100,16 +100,21 @@ export default function DashboardPage() {
     setSaving(true);
     setSaveMsg('');
     const supabase = createClient();
-    const { error } = await supabase
+    const payload = {
+      id: user.id,
+      full_name: fullName.trim() || null,
+    };
+    const { data, error } = await supabase
       .from('profiles')
-      .update({ full_name: fullName.trim() || null })
-      .eq('id', user.id);
+      .upsert(payload, { onConflict: 'id' })
+      .select('id, full_name, created_at')
+      .maybeSingle();
     setSaving(false);
-    if (error) {
+    if (error || !data) {
       setSaveMsg('خطا در ذخیره. دوباره تلاش کنید.');
     } else {
       setSaveMsg('ذخیره شد.');
-      setProfile((p) => (p ? { ...p, full_name: fullName.trim() || null } : p));
+      setProfile(data);
     }
   }
 

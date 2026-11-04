@@ -127,8 +127,14 @@ export async function PATCH(req: NextRequest) {
     }
   }
 
-  const { error } = await sb.from("blog_posts").update(patch).eq("id", id);
+  const { data, error } = await sb
+    .from("blog_posts")
+    .update(patch)
+    .eq("id", id)
+    .select("id")
+    .maybeSingle();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!data) return NextResponse.json({ error: "not_found" }, { status: 404 });
   return NextResponse.json({ ok: true });
 }
 

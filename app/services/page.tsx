@@ -9,11 +9,25 @@ import { services } from "@/lib/services";
 
 export const metadata: Metadata = {
   title: "خدمات دیجیتال مارکتینگ | الوند مارکتینگ",
-  description: "طراحی سایت، سئو، تولید محتوا، اینستاگرام، تبلیغات اینترنتی و هوش مصنوعی — خدمات دیجیتال مارکتینگ الوند.",
+  description:
+    "طراحی سایت، سئو، تولید محتوا، اینستاگرام، تبلیغات اینترنتی و هوش مصنوعی — خدمات دیجیتال مارکتینگ الوند.",
   robots: { index: false, follow: false },
 };
 
-export default function ServicesPage() {
+type Props = { searchParams: Promise<{ q?: string }> };
+
+export default async function ServicesPage({ searchParams }: Props) {
+  const { q } = await searchParams;
+  const query = q?.trim() || "";
+  const filtered = query
+    ? services.filter(
+        (s) =>
+          s.title.includes(query) ||
+          s.shortDesc.includes(query) ||
+          s.fullDesc.includes(query)
+      )
+    : services;
+
   return (
     <main>
       <Navbar />
@@ -29,28 +43,39 @@ export default function ServicesPage() {
               شش خدمت اصلی. هر کدام برای یک نیاز مشخص. روی هر خدمت کلیک کنید تا
               جزئیات، فرآیند و مخاطب هدف را ببینید.
             </p>
+            {query && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                نتایج جستجو برای «{query}» — {filtered.length} مورد
+              </p>
+            )}
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-            {services.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/services/${item.slug}`}
-                className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
-              >
-                <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
-                  {item.title}
-                </h2>
-                <p className="text-caption text-muted-foreground leading-persian mb-4">
-                  {item.shortDesc}
-                </p>
-                <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
-                  جزئیات خدمت
-                  <span className="text-xs">←</span>
-                </span>
-              </Link>
-            ))}
-          </div>
+          {filtered.length === 0 ? (
+            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center">
+              خدمتی با این عبارت پیدا نشد.
+            </p>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+              {filtered.map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/services/${item.slug}`}
+                  className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
+                >
+                  <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+                    {item.title}
+                  </h2>
+                  <p className="text-caption text-muted-foreground leading-persian mb-4">
+                    {item.shortDesc}
+                  </p>
+                  <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
+                    جزئیات خدمت
+                    <span className="text-xs">←</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="mt-16 rounded-2xl border border-border bg-card p-8 text-center w-full">
             <h2 className="text-xl font-bold mb-2">نمی‌دانید از کجا شروع کنید؟</h2>

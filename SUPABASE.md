@@ -22,9 +22,10 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 1. `supabase/schema.sql` — نظرات، پروفایل، RLS پایه  
 2. `supabase/blog-seo.sql` — جداول بلاگ و SEO صفحات  
-3. `supabase/hardening.sql` — سیاست‌های تکمیلی (خواندن نظرات خود کاربر، insert پروفایل)
+3. `supabase/hardening.sql` — سیاست‌های تکمیلی (خواندن نظرات خود کاربر، insert پروفایل)  
+4. `supabase/leads.sql` — جدول `contact_leads` برای فرم تماس
 
-برای پروژهٔ از قبل راه‌اندازی‌شده، حداقل `hardening.sql` را دوباره اجرا کنید.
+برای پروژهٔ از قبل راه‌اندازی‌شده، حداقل `hardening.sql` و `leads.sql` را اجرا کنید.
 
 ## ۳. Auth
 
