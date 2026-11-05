@@ -27,7 +27,7 @@ const navItems = [
   { href: "/services", label: "خدمات", icon: LayoutGrid, mega: true },
   { href: "/#process", label: "فرآیند", icon: ListOrdered },
   { href: "/#cases", label: "پروژه‌ها", icon: FolderKanban },
-  { href: "/#pricing", label: "هزینه", icon: Wallet },
+  { href: "/#pricing", label: "برآورد", icon: Wallet },
   { href: "/#about", label: "درباره ما", icon: Info },
   { href: "/blog", label: "بلاگ", icon: Newspaper },
   { href: "/#faq", label: "سؤالات", icon: HelpCircle },

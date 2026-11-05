@@ -88,9 +88,9 @@ export default function Pricing() {
       <div className="mx-auto w-full">
         <div className="grid md:grid-cols-[240px_1fr] gap-10">
           <div>
-            <SectionLabel number="۰۴" title="هزینه" />
+            <SectionLabel number="۰۴" title="برآورد" />
             <p className="text-caption text-muted-foreground leading-persian">
-              هر خدمت پکیج جدا دارد. جزئیات و برآورد بعد از شناخت کسب‌وکار شماست.
+              عدد ثابتی اعلام نمی‌کنیم. هر خدمت پکیج جدا دارد؛ برآورد بعد از شناخت کسب‌وکار شما در مشاوره رایگان مشخص می‌شود.
             </p>
           </div>
 
@@ -99,10 +99,21 @@ export default function Pricing() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold leading-persian-tight mb-12"
+              className="text-3xl md:text-4xl font-bold leading-persian-tight mb-4"
             >
-              حدود هزینه همکاری
+              پکیج‌ها؛ برآورد با مشاوره
             </motion.h2>
+            <p className="text-caption text-muted-foreground leading-persian mb-12 max-w-2xl">
+              برای دریافت برآورد اختصاصی از{" "}
+              <Link href="/contact" className="font-bold text-accent hover:opacity-80 transition-opacity">
+                فرم تماس
+              </Link>{" "}
+              یا{" "}
+              <a href="tel:+982186095954" className="font-bold text-accent hover:opacity-80 transition-opacity" dir="ltr">
+                تماس تلفنی
+              </a>{" "}
+              پیام بدهید.
+            </p>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {packages.map((pkg, i) => (
@@ -129,13 +140,22 @@ export default function Pricing() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    href={pkg.href}
-                    className="text-sm font-bold text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1"
-                  >
-                    جزئیات خدمت
-                    <span className="text-xs">←</span>
-                  </Link>
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href="/contact"
+                      className="text-sm font-bold text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1"
+                    >
+                      مشاوره و برآورد
+                      <span className="text-xs">←</span>
+                    </Link>
+                    <Link
+                      href={pkg.href}
+                      className="text-caption text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                    >
+                      جزئیات خدمت
+                      <span className="text-xs">←</span>
+                    </Link>
+                  </div>
                 </motion.div>
               ))}
             </div>
