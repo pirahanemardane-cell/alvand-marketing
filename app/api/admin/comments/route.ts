@@ -4,6 +4,7 @@ import {
   hasServiceEnv,
   requireAdminUser,
 } from "@/lib/supabase/admin";
+import { captureException } from "@/lib/observability";
 
 export async function GET() {
   const user = await requireAdminUser();
@@ -31,6 +32,7 @@ export async function GET() {
     }
     return NextResponse.json({ comments: data ?? [] });
   } catch (e) {
+    void captureException(e, { route: "/api/admin/comments", method: "GET" });
     const msg = e instanceof Error ? e.message : "error";
     return NextResponse.json({ error: msg }, { status: 500 });
   }
@@ -65,6 +67,7 @@ export async function PATCH(req: NextRequest) {
     }
     return NextResponse.json({ ok: true });
   } catch (e) {
+    void captureException(e, { route: "/api/admin/comments", method: "PATCH" });
     const msg = e instanceof Error ? e.message : "error";
     return NextResponse.json({ error: msg }, { status: 500 });
   }
@@ -96,6 +99,7 @@ export async function DELETE(req: NextRequest) {
     }
     return NextResponse.json({ ok: true });
   } catch (e) {
+    void captureException(e, { route: "/api/admin/comments", method: "DELETE" });
     const msg = e instanceof Error ? e.message : "error";
     return NextResponse.json({ error: msg }, { status: 500 });
   }

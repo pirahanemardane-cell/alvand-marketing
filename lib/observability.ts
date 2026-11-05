@@ -3,7 +3,7 @@
  * No-ops when SENTRY_DSN / NEXT_PUBLIC_SENTRY_DSN are unset.
  * Uses a lightweight ingest POST (no @sentry/nextjs — keeps production builds warning-free).
  *
- * Env / secret names:
+ * Env / secret names (never commit values):
  * - SENTRY_DSN (server)
  * - NEXT_PUBLIC_SENTRY_DSN (browser)
  */
@@ -15,7 +15,11 @@ type ParsedDsn = {
 };
 
 function activeDsn(): string | undefined {
-  return process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || undefined;
+  if (typeof window === "undefined") {
+    return process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || undefined;
+  }
+  // Browser must only see the public DSN.
+  return process.env.NEXT_PUBLIC_SENTRY_DSN || undefined;
 }
 
 function parseDsn(dsn: string): ParsedDsn | null {
@@ -39,10 +43,26 @@ export async function initServerSentry(): Promise<void> {
   serverReady = true;
 }
 
-/** Client bootstrap — no heavy SDK. */
+/** Client bootstrap — no heavy SDK. Call once from SentryInit. */
 export async function initClientSentry(): Promise<void> {
+  if (typeof window === "undefined") return;
   if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
+  if (clientReady) return;
   clientReady = true;
+
+  window.addEventListener("error", (event) => {
+    void captureException(event.error ?? event.message, {
+      source: "window.error",
+      filename: event.filename,
+    });
+  });
+  window.addEventListener("unhandledrejection", (event) => {
+    void captureException(event.reason, { source: "unhandledrejection" });
+  });
+}
+
+export function isSentryConfigured(): boolean {
+  return Boolean(activeDsn());
 }
 
 export async function captureException(
@@ -67,6 +87,12 @@ export async function captureException(
     timestamp: Date.now() / 1000,
     platform: "javascript",
     level: "error",
+    environment:
+      process.env.NEXT_PUBLIC_VERCEL_ENV ||
+      process.env.VERCEL_ENV ||
+      process.env.NODE_ENV ||
+      "production",
+    release: process.env.VERCEL_GIT_COMMIT_SHA || undefined,
     server_name:
       typeof process !== "undefined" ? process.env.VERCEL_URL || "alvand" : "browser",
     exception: {
@@ -98,7 +124,7 @@ export async function captureException(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Sentry-Auth": `Sentry sentry_version=7, sentry_key=${parsed.publicKey}, sentry_client=alvand-lite/1.0`,
+        "X-Sentry-Auth": `Sentry sentry_version=7, sentry_key=${parsed.publicKey}, sentry_client=alvand-lite/1.1`,
       },
       body: JSON.stringify(event),
       // Don't hang requests on observability

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SentryInit from "@/components/SentryInit";
-import { mediaUrl } from "@/lib/media";
+import { mediaPublicHostname, mediaUrl } from "@/lib/media";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const cdnHost = mediaPublicHostname() || "cdn.alvandmarketing.ir";
+const cdnOrigin = `https://${cdnHost}`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +31,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className="dark" suppressHydrationWarning>
       <head>
+        {/* Early connection to R2 CDN — no visual change; helps LCP/hero image. */}
+        <link rel="preconnect" href={cdnOrigin} crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href={cdnOrigin} />
         <link
           rel="preload"
           href="/fonts/IRANYekanXFaNum-Regular.woff2"

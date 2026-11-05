@@ -47,22 +47,48 @@ const nextConfig: NextConfig = {
     remotePatterns,
   },
   async headers() {
+    const longCache = [
+      {
+        key: "Cache-Control",
+        value: "public, max-age=31536000, immutable",
+      },
+    ];
     return [
       {
         source: "/fonts/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
+        headers: longCache,
       },
       {
         source: "/_next/static/:path*",
+        headers: longCache,
+      },
+      // Icons / PWA assets — safe CWV leftover (no visual change).
+      {
+        source: "/favicon.png",
+        headers: longCache,
+      },
+      {
+        source: "/icon.png",
+        headers: longCache,
+      },
+      {
+        source: "/icon1.png",
+        headers: longCache,
+      },
+      {
+        source: "/apple-icon.png",
+        headers: longCache,
+      },
+      {
+        source: "/web-app-manifest-:size.png",
+        headers: longCache,
+      },
+      {
+        source: "/manifest.json",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=86400",
           },
         ],
       },

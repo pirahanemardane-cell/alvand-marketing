@@ -53,17 +53,27 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 ## ۷. Observability (اختیاری)
 
-- `SENTRY_DSN` (سرور) و/یا `NEXT_PUBLIC_SENTRY_DSN` (مرورگر)
-- بدون این‌ها گزارش خطا no-op است (بدون وابستگی سنگین SDK؛ ingest سبک به Sentry).
-- Wiring: `instrumentation.ts` → `initServerSentry`; `components/SentryInit` → `initClientSentry`; `captureException` در APIها (مثلاً `/api/contact`).
+| نام env | کجا | نقش |
+|---------|-----|-----|
+| `SENTRY_DSN` | سرور / edge | ingest خطاهای سرور |
+| `NEXT_PUBLIC_SENTRY_DSN` | مرورگر | ingest خطاهای کلاینت |
+
+بدون این‌ها گزارش خطا no-op است (بدون وابستگی سنگین SDK؛ ingest سبک به Sentry).
+
+Wiring:
+- `instrumentation.ts` → `register` + `onRequestError`
+- `components/SentryInit` → `initClientSentry` (+ `window.error` / `unhandledrejection`)
+- `captureException` در APIهای تماس / نظرات / ادمین و مسیر عمومی بلاگ
 
 ## ۸. اعلان ایمیل فرم تماس (اختیاری)
 
-اگر هر دو مقدار زیر ست شود، بعد از insert موفق در `contact_leads` یک ایمیل از طریق Resend فرستاده می‌شود؛ در غیر این صورت no-op (فرم همچنان ۲۰۰ برمی‌گرداند):
+اگر **هر دو** مقدار زیر ست شود، بعد از insert موفق در `contact_leads` یک ایمیل از طریق Resend فرستاده می‌شود؛ در غیر این صورت no-op (فرم همچنان ۲۰۰ برمی‌گرداند؛ lead ذخیره می‌شود):
 
-- `RESEND_API_KEY`
-- `CONTACT_NOTIFY_EMAIL` (گیرنده)
-- اختیاری: `CONTACT_NOTIFY_FROM` (پیش‌فرض `Alvand Contact <onboarding@resend.dev>` — برای دامنهٔ تأییدشده در Resend عوض کنید)
+| نام env | لازم؟ | نقش |
+|---------|-------|-----|
+| `RESEND_API_KEY` | بله (با هم) | API key رزند |
+| `CONTACT_NOTIFY_EMAIL` | بله (با هم) | گیرنده اعلان |
+| `CONTACT_NOTIFY_FROM` | خیر | پیش‌فرض `Alvand Contact <onboarding@resend.dev>` — برای دامنهٔ تأییدشده در Resend عوض کنید |
 
 کد: `lib/contact-notify.ts` از `app/api/contact/route.ts`.
 
