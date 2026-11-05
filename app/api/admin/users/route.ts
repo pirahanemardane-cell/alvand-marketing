@@ -5,6 +5,7 @@ import {
   requireAdminUser,
 } from "@/lib/supabase/admin";
 import { isAdminAccount } from "@/lib/admin";
+import { captureException } from "@/lib/observability";
 
 export async function GET() {
   const user = await requireAdminUser();
@@ -79,6 +80,7 @@ export async function GET() {
 
     return NextResponse.json({ users });
   } catch (e) {
+    void captureException(e, { route: "/api/admin/users", method: "GET" });
     const msg = e instanceof Error ? e.message : "error";
     return NextResponse.json({ error: msg }, { status: 500 });
   }

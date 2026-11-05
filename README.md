@@ -20,10 +20,12 @@ npm run dev
 
 برای Auth و نظرات، فایل `.env.local` را طبق `SUPABASE.md` بسازید.
 
-Envهای مهم:
+Envهای مهم (نام‌ها فقط — مقادیر را در چت paste نکنید؛ از `.env.example` / Cursor Secrets / Vercel استفاده کنید):
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`
 - تصاویر CDN (R2): `NEXT_PUBLIC_R2_PUBLIC_BASE_URL`؛ آپلود: `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `R2_BUCKET` — سپس `npm run media:migrate-r2`
-- اختیاری: `NEXT_PUBLIC_SITE_URL`، `SENTRY_DSN`، `NEXT_PUBLIC_SENTRY_DSN`
+- اختیاری سایت: `NEXT_PUBLIC_SITE_URL`
+- اختیاری Sentry (no-op بدون DSN): `SENTRY_DSN` (سرور)، `NEXT_PUBLIC_SENTRY_DSN` (مرورگر)
+- اختیاری اعلان ایمیل فرم تماس (no-op مگر هر دو ست شوند): `RESEND_API_KEY`، `CONTACT_NOTIFY_EMAIL`؛ اختیاری `CONTACT_NOTIFY_FROM`
 
 SEO: `robots.txt` و `sitemap.xml` پویا؛ صفحات عمومی به‌صورت پیش‌فرض indexable هستند.
 پیش‌نمایش پیش‌نویس بلاگ برای ادمین: `/blog/<slug>?preview=1`

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { listPublishedPosts } from "@/lib/blog";
+import { captureException } from "@/lib/observability";
 
 /** Public list of published posts (for navbar search / client widgets). */
 export async function GET(req: NextRequest) {
@@ -15,7 +16,8 @@ export async function GET(req: NextRequest) {
         date: p.date,
       })),
     });
-  } catch {
+  } catch (e) {
+    void captureException(e, { route: "/api/blog", method: "GET" });
     return NextResponse.json({ posts: [] });
   }
 }

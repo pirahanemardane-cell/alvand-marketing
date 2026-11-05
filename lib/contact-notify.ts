@@ -14,6 +14,11 @@ export type ContactLeadPayload = {
   message: string;
 };
 
+/** Strip control chars so email bodies stay plain text. */
+function plain(value: string, max = 2000): string {
+  return value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").slice(0, max);
+}
+
 export async function notifyContactLead(
   lead: ContactLeadPayload
 ): Promise<"sent" | "skipped" | "failed"> {
@@ -24,12 +29,16 @@ export async function notifyContactLead(
   const from =
     process.env.CONTACT_NOTIFY_FROM?.trim() || "Alvand Contact <onboarding@resend.dev>";
 
+  const name = plain(lead.name, 80);
+  const phone = plain(lead.phone, 40);
+  const message = plain(lead.message || "(خالی)", 2000);
+
   const text = [
     "پیام جدید از فرم تماس الوند مارکتینگ",
     "",
-    `نام: ${lead.name}`,
-    `تلفن: ${lead.phone}`,
-    `پیام: ${lead.message || "(خالی)"}`,
+    `نام: ${name}`,
+    `تلفن: ${phone}`,
+    `پیام: ${message}`,
   ].join("\n");
 
   try {
@@ -42,7 +51,7 @@ export async function notifyContactLead(
       body: JSON.stringify({
         from,
         to: [to],
-        subject: `فرم تماس: ${lead.name}`,
+        subject: `فرم تماس: ${name}`,
         text,
       }),
       signal: AbortSignal.timeout(4000),
