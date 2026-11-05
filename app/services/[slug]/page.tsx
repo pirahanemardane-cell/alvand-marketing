@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
+import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
 import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 
@@ -20,10 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getServiceBySlug(slug);
   if (!service) return { title: "خدمت یافت نشد" };
   return {
-    title: `${service.title} | الوند مارکتینگ`,
-    description: service.shortDesc,
+    title: service.seoTitle,
+    description: service.seoDescription,
     robots: { index: true, follow: true },
     alternates: { canonical: `/services/${service.slug}` },
+    openGraph: {
+      title: service.seoTitle,
+      description: service.seoDescription,
+    },
   };
 }
 
@@ -55,18 +60,31 @@ export default async function ServiceDetailPage({ params }: Props) {
               {service.title}
             </h1>
           </div>
-          <p className="text-lg text-muted-foreground leading-persian mb-12">
-            {service.fullDesc}
-          </p>
+          <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
+            {service.heroHeading}
+          </h2>
+          <div className="mb-12 space-y-3">
+            {service.intro.map((p) => (
+              <p
+                key={p.slice(0, 40)}
+                className="text-lg text-muted-foreground leading-persian"
+              >
+                {p}
+              </p>
+            ))}
+          </div>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 w-full mb-14">
             <section>
               <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-                برای چه کسانی مناسب است؟
+                {service.forWhoHeading}
               </h2>
               <ul className="space-y-3">
                 {service.forWho.map((item) => (
-                  <li key={item} className="flex gap-3 text-caption text-muted-foreground leading-persian">
+                  <li
+                    key={item}
+                    className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                  >
                     <span className="text-accent shrink-0">●</span>
                     {item}
                   </li>
@@ -76,11 +94,14 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             <section>
               <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-                چه چیزی تحویل می‌گیرید؟
+                {service.deliverablesHeading}
               </h2>
               <ul className="space-y-3">
                 {service.deliverables.map((item) => (
-                  <li key={item} className="flex gap-3 text-caption text-muted-foreground leading-persian">
+                  <li
+                    key={item}
+                    className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                  >
                     <span className="text-accent shrink-0">✓</span>
                     {item}
                   </li>
@@ -89,28 +110,46 @@ export default async function ServiceDetailPage({ params }: Props) {
             </section>
           </div>
 
+          <ServiceContentBlocks blocks={service.beforeProcess} />
+
           <section className="mb-12 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">فرآیند کار</h2>
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              {service.processHeading}
+            </h2>
             <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               {service.process.map((step, i) => (
-                <li key={step} className="flex gap-4 rounded-xl border border-border p-4">
+                <li
+                  key={step}
+                  className="flex gap-4 rounded-xl border border-border p-4"
+                >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
                     {i + 1}
                   </span>
-                  <span className="pt-1 text-caption text-muted-foreground leading-persian">{step}</span>
+                  <span className="pt-1 text-caption text-muted-foreground leading-persian">
+                    {step}
+                  </span>
                 </li>
               ))}
             </ol>
           </section>
 
+          <ServiceContentBlocks blocks={service.afterProcess} />
+
           {service.faq.length > 0 && (
             <section className="mb-14 w-full">
-              <h2 className="text-xl font-bold mb-4 leading-persian-tight">سؤالات متداول این خدمت</h2>
+              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                سؤالات متداول
+              </h2>
               <div className="grid sm:grid-cols-2 gap-4 w-full">
                 {service.faq.map((item) => (
-                  <div key={item.q} className="rounded-xl border border-border bg-card p-5">
+                  <div
+                    key={item.q}
+                    className="rounded-xl border border-border bg-card p-5"
+                  >
                     <h3 className="font-bold mb-2">{item.q}</h3>
-                    <p className="text-caption text-muted-foreground leading-persian">{item.a}</p>
+                    <p className="text-caption text-muted-foreground leading-persian">
+                      {item.a}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -122,7 +161,8 @@ export default async function ServiceDetailPage({ params }: Props) {
               آماده‌اید درباره {service.title} صحبت کنیم؟
             </h2>
             <p className="text-caption text-muted-foreground leading-persian mb-6">
-              جلسه اول رایگان است. وضعیت شما را می‌شنویم و مسیر پیشنهادی را می‌گوییم.
+              جلسه اول رایگان است. وضعیت شما را می‌شنویم و مسیر پیشنهادی را
+              می‌گوییم.
             </p>
             <Link
               href="/contact"
@@ -144,7 +184,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                     className="rounded-xl border border-border p-4 hover:border-accent/50 transition-colors"
                   >
                     <p className="font-bold">{s.title}</p>
-                    <p className="text-caption text-muted-foreground mt-1 line-clamp-2">{s.shortDesc}</p>
+                    <p className="text-caption text-muted-foreground mt-1 line-clamp-2">
+                      {s.shortDesc}
+                    </p>
                   </Link>
                 ))}
               </div>

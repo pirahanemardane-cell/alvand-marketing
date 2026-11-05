@@ -17,7 +17,8 @@ export default function Services() {
           <div>
             <SectionLabel number="۰۱" title="خدمات دیجیتال مارکتینگ" />
             <p className="text-caption text-muted-foreground leading-persian">
-              شش خدمت اصلی که هر کدام برای حل یک مشکل مشخص طراحی شده‌اند.
+              شش حوزه: طراحی سایت، تولید محتوا، سئو، تبلیغات اینترنتی، مدیریت
+              اینستاگرام و هوش مصنوعی — هر کدام برای حل یک مشکل مشخص.
             </p>
             <Link
               href="/services"
