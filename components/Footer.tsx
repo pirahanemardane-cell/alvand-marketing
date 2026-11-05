@@ -1,11 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { mediaUrl } from "@/lib/media";
+import { isNavItemActive } from "@/lib/nav-active";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 
+const footerLinkIdle =
+  "text-muted-foreground hover:text-foreground transition-colors";
+const footerLinkActive = "text-accent font-bold transition-colors";
+
+function FooterLink({
+  href,
+  children,
+  pathname,
+  exact,
+}: {
+  href: string;
+  children: React.ReactNode;
+  pathname: string;
+  exact?: boolean;
+}) {
+  const active = isNavItemActive(href, pathname, "", { exact });
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={active ? footerLinkActive : footerLinkIdle}
+    >
+      {children}
+    </Link>
+  );
+}
+
 export default function Footer() {
+  const pathname = usePathname() || "/";
+
   return (
     <footer className="border-t border-border bg-background px-5 py-16 sm:px-8 md:px-12">
       <div className="mx-auto w-full">
@@ -29,34 +60,34 @@ export default function Footer() {
             <h4 className="text-sm font-bold mb-4">خدمات دیجیتال مارکتینگ</h4>
             <ul className="space-y-2.5 text-caption text-muted-foreground">
               <li>
-                <Link href="/services/طراحی-سایت" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/طراحی-سایت" pathname={pathname}>
                   طراحی سایت
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/services/تولید-محتوا" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/تولید-محتوا" pathname={pathname}>
                   تولید محتوا
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/services/سئو" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/سئو" pathname={pathname}>
                   سئو
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/services/اینستاگرام" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/اینستاگرام" pathname={pathname}>
                   اینستاگرام
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/services/تبلیغات-اینترنتی" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/تبلیغات-اینترنتی" pathname={pathname}>
                   تبلیغات اینترنتی
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/services/هوش-مصنوعی" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services/هوش-مصنوعی" pathname={pathname}>
                   هوش مصنوعی
-                </Link>
+                </FooterLink>
               </li>
             </ul>
           </div>
@@ -65,34 +96,34 @@ export default function Footer() {
             <h4 className="text-sm font-bold mb-4">سایت</h4>
             <ul className="space-y-2.5 text-caption text-muted-foreground">
               <li>
-                <Link href="/services" className="hover:text-foreground transition-colors">
+                <FooterLink href="/services" pathname={pathname} exact>
                   همه خدمات
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <a href="/#process" className="hover:text-foreground transition-colors">
+                <a href="/#process" className={footerLinkIdle}>
                   فرآیند همکاری
                 </a>
               </li>
               <li>
-                <a href="/#pricing" className="hover:text-foreground transition-colors">
+                <a href="/#pricing" className={footerLinkIdle}>
                   برآورد و مشاوره
                 </a>
               </li>
               <li>
-                <a href="/#faq" className="hover:text-foreground transition-colors">
+                <a href="/#faq" className={footerLinkIdle}>
                   سؤالات پرتکرار
                 </a>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-foreground transition-colors">
+                <FooterLink href="/blog" pathname={pathname}>
                   بلاگ
-                </Link>
+                </FooterLink>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-foreground transition-colors">
+                <FooterLink href="/contact" pathname={pathname}>
                   مشاوره رایگان
-                </Link>
+                </FooterLink>
               </li>
             </ul>
           </div>
