@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Search,
   Home,
@@ -18,12 +18,27 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { mediaUrl } from "@/lib/media";
+import { isNavItemActive } from "@/lib/nav-active";
 import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
 import { services } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
+
+const desktopLinkBase =
+  "inline-flex items-center gap-1.5 text-sm transition-colors duration-200 whitespace-nowrap px-2 py-1.5 rounded-md";
+const desktopLinkIdle =
+  "text-muted-foreground hover:text-foreground hover:bg-accent/5";
+const desktopLinkActive =
+  "text-accent font-bold bg-accent/10 hover:text-accent hover:bg-accent/15";
+
+const mobileLinkBase =
+  "flex items-center gap-3 text-lg font-medium py-3 px-3 rounded-xl transition-colors border-r-2";
+const mobileLinkIdle =
+  "text-foreground border-transparent hover:bg-accent/10 hover:text-accent";
+const mobileLinkActive =
+  "text-accent bg-accent/10 border-accent font-bold";
 
 const navItems = [
   { href: "/", label: "خانه", icon: Home },
@@ -54,8 +69,23 @@ export default function Navbar() {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [blogPosts, setBlogPosts] = useState<BlogSearchItem[]>([]);
+  const [hash, setHash] = useState("");
   const { mode, setMode, theme } = useTheme();
   const router = useRouter();
+  const rawPathname = usePathname() || "/";
+  let pathname = rawPathname;
+  try {
+    pathname = decodeURIComponent(rawPathname);
+  } catch {
+    pathname = rawPathname;
+  }
+
+  useEffect(() => {
+    const syncHash = () => setHash(window.location.hash);
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, [rawPathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -222,8 +252,10 @@ export default function Navbar() {
             <ul className="flex flex-wrap items-center justify-center gap-x-0.5 gap-y-1 list-none min-w-0">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const linkCls =
-                  "inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 whitespace-nowrap px-2 py-1.5 rounded-md hover:bg-accent/5";
+                const active = isNavItemActive(item.href, pathname, hash);
+                const linkCls = `${desktopLinkBase} ${
+                  active ? desktopLinkActive : desktopLinkIdle
+                }`;
 
                 if (item.mega) {
                   return (
@@ -233,8 +265,16 @@ export default function Navbar() {
                       onMouseEnter={() => setMegaOpen(true)}
                       onMouseLeave={() => setMegaOpen(false)}
                     >
-                      <Link href={item.href} className={linkCls}>
-                        <Icon className="h-4 w-4 opacity-70 shrink-0" />
+                      <Link
+                        href={item.href}
+                        className={linkCls}
+                        aria-current={active ? "page" : undefined}
+                      >
+                        <Icon
+                          className={`h-4 w-4 shrink-0 ${
+                            active ? "opacity-100" : "opacity-70"
+                          }`}
+                        />
                         {item.label}
                         <ChevronDown
                           className={`h-3.5 w-3.5 shrink-0 transition-transform ${
@@ -254,7 +294,14 @@ export default function Navbar() {
                             <div className="w-72 rounded-2xl border border-border bg-background shadow-2xl p-2 ring-1 ring-border/50">
                               <Link
                                 href="/services"
-                                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold hover:bg-accent/10 transition-colors"
+                                className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                                  pathname === "/services"
+                                    ? "bg-accent/10 text-accent"
+                                    : "hover:bg-accent/10"
+                                }`}
+                                aria-current={
+                                  pathname === "/services" ? "page" : undefined
+                                }
                                 onClick={() => setMegaOpen(false)}
                               >
                                 <LayoutGrid className="h-4 w-4 text-accent" />
@@ -263,12 +310,19 @@ export default function Navbar() {
                               <div className="h-px bg-border my-1" />
                               {services.map((s) => {
                                 const SIcon = getServiceIcon(s.slug);
+                                const svcActive =
+                                  pathname === `/services/${s.slug}`;
                                 return (
                                   <Link
                                     key={s.slug}
                                     href={`/services/${s.slug}`}
                                     onClick={() => setMegaOpen(false)}
-                                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors"
+                                    aria-current={svcActive ? "page" : undefined}
+                                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                                      svcActive
+                                        ? "text-accent font-bold bg-accent/10"
+                                        : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
+                                    }`}
                                   >
                                     <span className="text-accent">
                                       <SIcon className="h-4 w-4 shrink-0" />
@@ -286,8 +340,16 @@ export default function Navbar() {
                 }
                 return (
                   <li key={item.href}>
-                    <Link href={item.href} className={linkCls}>
-                      <Icon className="h-4 w-4 opacity-70 shrink-0" />
+                    <Link
+                      href={item.href}
+                      className={linkCls}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      <Icon
+                        className={`h-4 w-4 shrink-0 ${
+                          active ? "opacity-100" : "opacity-70"
+                        }`}
+                      />
                       {item.label}
                     </Link>
                   </li>
@@ -397,6 +459,7 @@ export default function Navbar() {
               <nav className="flex flex-col gap-0.5">
                 {navItems.map((item, i) => {
                   const Icon = item.icon;
+                  const active = isNavItemActive(item.href, pathname, hash);
                   if (item.mega) {
                     return (
                       <motion.div
@@ -409,9 +472,16 @@ export default function Navbar() {
                           <Link
                             href="/services"
                             onClick={closeMenu}
-                            className="flex-1 flex items-center gap-3 text-lg font-medium py-3 px-3 rounded-xl text-foreground hover:bg-accent/10 hover:text-accent transition-colors"
+                            aria-current={active ? "page" : undefined}
+                            className={`flex-1 ${mobileLinkBase} ${
+                              active ? mobileLinkActive : mobileLinkIdle
+                            }`}
                           >
-                            <Icon className="h-5 w-5 opacity-70" />
+                            <Icon
+                              className={`h-5 w-5 ${
+                                active ? "opacity-100" : "opacity-70"
+                              }`}
+                            />
                             خدمات
                           </Link>
                           <button
@@ -439,12 +509,21 @@ export default function Navbar() {
                             >
                               {services.map((s) => {
                                 const SIcon = getServiceIcon(s.slug);
+                                const svcActive =
+                                  pathname === `/services/${s.slug}`;
                                 return (
                                   <li key={s.slug}>
                                     <Link
                                       href={`/services/${s.slug}`}
                                       onClick={closeMenu}
-                                      className="flex items-center gap-2 py-2 px-3 text-sm text-muted-foreground hover:text-accent transition-colors"
+                                      aria-current={
+                                        svcActive ? "page" : undefined
+                                      }
+                                      className={`flex items-center gap-2 py-2 px-3 text-sm transition-colors ${
+                                        svcActive
+                                          ? "text-accent font-bold bg-accent/10 rounded-lg"
+                                          : "text-muted-foreground hover:text-accent"
+                                      }`}
                                     >
                                       <SIcon className="h-4 w-4 text-accent shrink-0" />
                                       {s.title}
@@ -468,9 +547,16 @@ export default function Navbar() {
                       <Link
                         href={item.href}
                         onClick={closeMenu}
-                        className="flex items-center gap-3 text-lg font-medium py-3 px-3 rounded-xl text-foreground hover:bg-accent/10 hover:text-accent transition-colors"
+                        aria-current={active ? "page" : undefined}
+                        className={`${mobileLinkBase} ${
+                          active ? mobileLinkActive : mobileLinkIdle
+                        }`}
                       >
-                        <Icon className="h-5 w-5 opacity-70" />
+                        <Icon
+                          className={`h-5 w-5 ${
+                            active ? "opacity-100" : "opacity-70"
+                          }`}
+                        />
                         {item.label}
                       </Link>
                     </motion.div>
