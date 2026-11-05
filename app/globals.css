@@ -459,3 +459,140 @@ main > section {
   content-visibility: auto;
   contain-intrinsic-size: 1px 720px;
 }
+
+/* ─── Service comparison tables (hub + PDPs) ─────────────────── */
+.service-table-card__head {
+  background:
+    linear-gradient(
+      105deg,
+      color-mix(in srgb, var(--accent) 14%, transparent) 0%,
+      transparent 55%
+    ),
+    var(--card);
+  border-inline-start: 3px solid var(--accent);
+}
+
+.service-table-frame {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+.service-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: inherit;
+  outline: none;
+}
+
+.service-table-scroll:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.service-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: start;
+  font-size: 0.875rem;
+}
+
+.service-table thead th {
+  position: relative;
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+  color: var(--foreground);
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--muted) 88%, var(--accent) 12%);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  vertical-align: bottom;
+}
+
+.service-table tbody td,
+.service-table tbody th[scope="row"] {
+  padding: 0.85rem 1rem;
+  color: var(--muted-foreground);
+  line-height: 1.75;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  max-width: 22rem;
+  font-weight: 400;
+  text-align: start;
+}
+
+.service-table tbody tr:last-child td,
+.service-table tbody tr:last-child th[scope="row"] {
+  border-bottom: 0;
+}
+
+.service-table tbody tr:nth-child(even) td,
+.service-table tbody tr:nth-child(even) th[scope="row"] {
+  background: color-mix(in srgb, var(--muted) 55%, transparent);
+}
+
+.service-table tbody tr:hover td,
+.service-table tbody tr:hover th[scope="row"] {
+  background: color-mix(in srgb, var(--accent) 8%, var(--muted));
+  color: var(--foreground);
+}
+
+.service-table tbody th[scope="row"] {
+  color: var(--foreground);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Sticky first column — inline-start works for RTL (right) and LTR */
+.service-table thead th:first-child,
+.service-table tbody th[scope="row"] {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+}
+
+.service-table thead th:first-child {
+  z-index: 2;
+  background: color-mix(in srgb, var(--muted) 82%, var(--accent) 18%);
+}
+
+.service-table tbody th[scope="row"] {
+  background: color-mix(in srgb, var(--background) 92%, var(--muted));
+}
+
+.service-table tbody tr:nth-child(even) th[scope="row"] {
+  background: color-mix(in srgb, var(--muted) 70%, var(--background));
+}
+
+.service-table tbody tr:hover th[scope="row"] {
+  background: color-mix(in srgb, var(--accent) 10%, var(--muted));
+}
+
+/* Edge shadow when horizontal scroll reveals columns under sticky col */
+[dir="rtl"] .service-table thead th:first-child,
+[dir="rtl"] .service-table tbody th[scope="row"] {
+  box-shadow: -10px 0 14px -12px rgba(0, 0, 0, 0.55);
+}
+
+[dir="ltr"] .service-table thead th:first-child,
+[dir="ltr"] .service-table tbody th[scope="row"] {
+  box-shadow: 10px 0 14px -12px rgba(0, 0, 0, 0.35);
+}
+
+html.light[dir="rtl"] .service-table thead th:first-child,
+html.light[dir="rtl"] .service-table tbody th[scope="row"] {
+  box-shadow: -10px 0 14px -12px rgba(0, 0, 0, 0.12);
+}
+
+html.light[dir="ltr"] .service-table thead th:first-child,
+html.light[dir="ltr"] .service-table tbody th[scope="row"] {
+  box-shadow: 10px 0 14px -12px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1280px) {
+  .service-table {
+    min-width: 0;
+  }
+}

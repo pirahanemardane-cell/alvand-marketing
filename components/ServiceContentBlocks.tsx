@@ -1,39 +1,85 @@
 import type { ServiceBlock, ServiceTable } from "@/lib/services";
 
 export function ServiceTableView({ table }: { table: ServiceTable }) {
+  const { headers, rows } = table;
+  const [leadHeader, ...fieldHeaders] = headers;
+
   return (
-    <div className="mt-4 overflow-x-auto rounded-xl border border-border">
-      <table className="w-full min-w-[28rem] text-sm text-right">
-        <thead>
-          <tr className="border-b border-border bg-muted/40">
-            {table.headers.map((h) => (
-              <th
-                key={h}
-                className="px-3 py-2.5 font-bold text-foreground whitespace-nowrap"
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {table.rows.map((row, i) => (
-            <tr
-              key={`${row[0]}-${i}`}
-              className="border-b border-border last:border-0"
+    <div className="service-table-root mt-4 w-full">
+      {/* Mobile / narrow: stacked labeled cards */}
+      <div className="md:hidden space-y-3" role="list">
+        {rows.map((row, i) => {
+          const [lead, ...fields] = row;
+          return (
+            <article
+              key={`${lead}-${i}`}
+              role="listitem"
+              className="service-table-card overflow-hidden rounded-2xl border border-border bg-card"
             >
-              {row.map((cell, j) => (
-                <td
-                  key={`${i}-${j}`}
-                  className="px-3 py-2.5 text-caption text-muted-foreground leading-persian align-top"
-                >
-                  {cell}
-                </td>
+              <header className="service-table-card__head border-b border-border px-4 py-3">
+                <p className="text-[0.7rem] font-bold tracking-wide text-accent/90 mb-1">
+                  {leadHeader}
+                </p>
+                <h4 className="text-base font-bold text-foreground leading-persian-tight">
+                  {lead}
+                </h4>
+              </header>
+              {fieldHeaders.length > 0 ? (
+                <dl className="divide-y divide-border">
+                  {fieldHeaders.map((header, j) => (
+                    <div
+                      key={`${i}-${header}`}
+                      className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(6.5rem,9rem)_1fr] sm:gap-4"
+                    >
+                      <dt className="text-[0.7rem] font-bold text-muted-foreground/80 leading-persian">
+                        {header}
+                      </dt>
+                      <dd className="text-sm text-muted-foreground leading-persian">
+                        {fields[j] ?? "—"}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
+            </article>
+          );
+        })}
+      </div>
+
+      {/* Tablet / desktop: elegant bordered table + sticky first column */}
+      <div className="service-table-frame hidden md:block">
+        <div className="service-table-scroll" tabIndex={0}>
+          <table className="service-table">
+            <caption className="sr-only">
+              جدول مقایسه‌ای خدمات و مشخصات
+            </caption>
+            <thead>
+              <tr>
+                {headers.map((h) => (
+                  <th key={h} scope="col">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr key={`${row[0]}-${i}`}>
+                  {row.map((cell, j) =>
+                    j === 0 ? (
+                      <th key={`${i}-${j}`} scope="row">
+                        {cell}
+                      </th>
+                    ) : (
+                      <td key={`${i}-${j}`}>{cell}</td>
+                    )
+                  )}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
