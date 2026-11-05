@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import SectionLabel from "./SectionLabel";
 import { services } from "@/lib/services";
+import { getServiceIcon } from "@/lib/category-icons";
 
 export default function Services() {
   return (
@@ -39,33 +40,42 @@ export default function Services() {
             </motion.h2>
 
             <div className="space-y-0">
-              {services.map((item, i) => (
-                <motion.div
-                  key={item.slug}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className="grid grid-cols-[1fr] gap-2 py-6 border-b border-border first:border-t"
-                >
-                  <div>
-                    <Link href={`/services/${item.slug}`}>
-                      <h3 className="text-lg font-bold mb-2 leading-persian-tight hover:text-accent transition-colors">
-                        {item.title}
-                      </h3>
-                    </Link>
-                    <p className="text-caption text-muted-foreground leading-persian mb-2">
-                      {item.shortDesc}
-                    </p>
-                    <Link
-                      href={`/services/${item.slug}`}
-                      className="text-sm font-medium text-accent hover:opacity-80"
-                    >
-                      جزئیات ←
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+              {services.map((item, i) => {
+                const Icon = getServiceIcon(item.slug);
+                return (
+                  <motion.div
+                    key={item.slug}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.6, delay: i * 0.08 }}
+                    className="grid grid-cols-[1fr] gap-2 py-6 border-b border-border first:border-t"
+                  >
+                    <div>
+                      <Link
+                        href={`/services/${item.slug}`}
+                        className="inline-flex items-center gap-2 mb-2"
+                      >
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-accent shrink-0">
+                          <Icon className="h-4 w-4" strokeWidth={1.75} />
+                        </span>
+                        <h3 className="text-lg font-bold leading-persian-tight hover:text-accent transition-colors">
+                          {item.title}
+                        </h3>
+                      </Link>
+                      <p className="text-caption text-muted-foreground leading-persian mb-2">
+                        {item.shortDesc}
+                      </p>
+                      <Link
+                        href={`/services/${item.slug}`}
+                        className="text-sm font-medium text-accent hover:opacity-80"
+                      >
+                        جزئیات ←
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>

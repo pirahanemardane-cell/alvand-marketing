@@ -7,6 +7,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/services";
+import { getServiceIcon } from "@/lib/category-icons";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -32,6 +33,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   if (!service) notFound();
 
   const others = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const Icon = getServiceIcon(service.slug);
 
   return (
     <main>
@@ -45,9 +47,14 @@ export default async function ServiceDetailPage({ params }: Props) {
             ]}
           />
 
-          <h1 className="text-3xl md:text-5xl font-bold leading-persian-tight mb-6">
-            {service.title}
-          </h1>
+          <div className="mb-6 flex items-center gap-3">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-accent">
+              <Icon className="h-6 w-6" strokeWidth={1.75} />
+            </span>
+            <h1 className="text-3xl md:text-5xl font-bold leading-persian-tight">
+              {service.title}
+            </h1>
+          </div>
           <p className="text-lg text-muted-foreground leading-persian mb-12">
             {service.fullDesc}
           </p>
