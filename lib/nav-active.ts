@@ -1,3 +1,14 @@
+/** Homepage section ids mirrored by Navbar hash links (`/#process`, …). */
+export const HOME_SECTION_IDS = [
+  "process",
+  "cases",
+  "pricing",
+  "about",
+  "faq",
+] as const;
+
+export type HomeSectionId = (typeof HOME_SECTION_IDS)[number];
+
 /**
  * Pathname/hash matching for Alvand site nav (App Router).
  * Hash links like `/#process` are current only on `/` with that fragment.
