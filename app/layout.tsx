@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SentryInit from "@/components/SentryInit";
 import { mediaPublicHostname, mediaUrl } from "@/lib/media";
+import { publicRobots, siteUrl } from "@/lib/seo/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: "الوند مارکتینگ | آژانس دیجیتال مارکتینگ",
   description:
     "الوند مارکتینگ — مثل کوه پشتتیم. آژانس دیجیتال مارکتینگ با استراتژی‌های پایدار و نتایج واقعی.",
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
-  robots: { index: true, follow: true },
+  robots: publicRobots,
 };
 
 const cdnHost = mediaPublicHostname() || "cdn.alvandmarketing.ir";

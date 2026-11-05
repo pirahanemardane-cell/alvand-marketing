@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createAnonClient } from "@/lib/supabase/public";
+import { publicRobots } from "@/lib/seo/site";
 
 export type SeoPageRow = {
   page_key: string;
@@ -67,14 +68,21 @@ export async function metadataForPageKey(
   const fb = FALLBACKS[pageKey] || FALLBACKS.home;
   const title = row?.meta_title || row?.title || fb.title;
   const description = row?.meta_description || fb.description;
-  // Launch default: indexable. Per-page seo_pages.robots_* still override when set.
+  // Public default: indexable. Per-page seo_pages.robots_* still override when false.
   const robotsIndex = row ? row.robots_index !== false : true;
   const robotsFollow = row ? row.robots_follow !== false : true;
 
   const meta: Metadata = {
     title,
     description,
-    robots: { index: robotsIndex, follow: robotsFollow },
+    robots:
+      robotsIndex && robotsFollow
+        ? publicRobots
+        : {
+            index: robotsIndex,
+            follow: robotsFollow,
+            googleBot: { index: robotsIndex, follow: robotsFollow },
+          },
   };
 
   const ogTitle = row?.og_title || title;

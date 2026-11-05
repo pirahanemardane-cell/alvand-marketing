@@ -1,12 +1,10 @@
 import type { MetadataRoute } from "next";
 import { listPublishedPosts } from "@/lib/blog";
 import { getAllServiceSlugs } from "@/lib/services";
-
-const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://alvandmarketing.ir";
+import { siteUrl } from "@/lib/seo/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const BASE = siteUrl();
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${BASE}/services`, changeFrequency: "monthly", priority: 0.9 },

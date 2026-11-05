@@ -27,7 +27,7 @@ Envهای مهم (نام‌ها فقط — مقادیر را در چت paste ن�
 - اختیاری Sentry (no-op بدون DSN): `SENTRY_DSN` (سرور)، `NEXT_PUBLIC_SENTRY_DSN` (مرورگر)
 - اختیاری اعلان ایمیل فرم تماس (no-op مگر هر دو ست شوند): `RESEND_API_KEY`، `CONTACT_NOTIFY_EMAIL`؛ اختیاری `CONTACT_NOTIFY_FROM`
 
-SEO: `robots.txt` و `sitemap.xml` پویا؛ صفحات عمومی به‌صورت پیش‌فرض indexable هستند.
+SEO: `robots.txt` و `sitemap.xml` پویا؛ `metadataBase` برای canonical مطلق؛ صفحات عمومی index/follow؛ مسیرهای auth/پنل noindex.
 پیش‌نمایش پیش‌نویس بلاگ برای ادمین: `/blog/<slug>?preview=1`
 
 ## ساخت نسخه پروداکشن
