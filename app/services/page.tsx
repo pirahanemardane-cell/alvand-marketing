@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
-import { services } from "@/lib/services";
+import { ServiceTableView } from "@/components/ServiceContentBlocks";
+import { services, servicesOverview } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
@@ -23,25 +24,36 @@ export default async function ServicesPage({ searchParams }: Props) {
         (s) =>
           s.title.includes(query) ||
           s.shortDesc.includes(query) ||
-          s.fullDesc.includes(query)
+          s.fullDesc.includes(query) ||
+          s.heroHeading.includes(query)
       )
     : services;
+  const o = servicesOverview;
 
   return (
     <main>
       <Navbar />
       <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
-          <PageBreadcrumb items={[{ label: "خدمات دیجیتال مارکتینگ" }]} />
+          <PageBreadcrumb items={[{ label: o.title }]} />
 
-          <div className="mb-14">
+          <div className="mb-10">
             <h1 className="text-3xl md:text-5xl font-bold leading-persian-tight mb-4">
-              خدمات دیجیتال مارکتینگ
+              {o.title}
             </h1>
-            <p className="text-muted-foreground leading-persian">
-              شش خدمت اصلی. هر کدام برای یک نیاز مشخص. روی هر خدمت کلیک کنید تا
-              جزئیات، فرآیند و مخاطب هدف را ببینید.
-            </p>
+            <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
+              {o.heroHeading}
+            </h2>
+            <div className="space-y-3 max-w-4xl">
+              {o.intro.map((p) => (
+                <p
+                  key={p.slice(0, 40)}
+                  className="text-muted-foreground leading-persian"
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
             {query && (
               <p className="mt-4 text-sm text-muted-foreground">
                 نتایج جستجو برای «{query}» — {filtered.length} مورد
@@ -49,12 +61,35 @@ export default async function ServicesPage({ searchParams }: Props) {
             )}
           </div>
 
+          <section className="mb-14">
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              {o.criteriaHeading}
+            </h2>
+            <ul className="space-y-3 max-w-4xl">
+              {o.criteria.map((item) => (
+                <li
+                  key={item}
+                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                >
+                  <span className="text-accent shrink-0">●</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mb-6">
+            <h2 className="text-xl font-bold mb-6 leading-persian-tight">
+              {o.outputsHeading}
+            </h2>
+          </section>
+
           {filtered.length === 0 ? (
-            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center">
+            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center mb-14">
               خدمتی با این عبارت پیدا نشد.
             </p>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
               {filtered.map((item) => {
                 const Icon = getServiceIcon(item.slug);
                 return (
@@ -66,9 +101,9 @@ export default async function ServicesPage({ searchParams }: Props) {
                     <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">
                       <Icon className="h-5 w-5" strokeWidth={1.75} />
                     </span>
-                    <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+                    <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
                       {item.title}
-                    </h2>
+                    </h3>
                     <p className="text-caption text-muted-foreground leading-persian mb-4">
                       {item.shortDesc}
                     </p>
@@ -82,11 +117,82 @@ export default async function ServicesPage({ searchParams }: Props) {
             </div>
           )}
 
-          <div className="mt-16 rounded-2xl border border-border bg-card p-8 text-center w-full">
+          <section className="mb-14 w-full">
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              {o.comparisonHeading}
+            </h2>
+            <ServiceTableView table={o.comparisonTable} />
+          </section>
+
+          <section className="mb-14 w-full">
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              {o.guideHeading}
+            </h2>
+            <ServiceTableView table={o.guideTable} />
+          </section>
+
+          <section className="mb-14 w-full">
+            <h3 className="text-lg font-bold mb-4 leading-persian-tight">
+              {o.budgetOrderHeading}
+            </h3>
+            <ol className="space-y-3 max-w-4xl mb-4">
+              {o.budgetOrder.map((item, i) => (
+                <li
+                  key={item}
+                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
+                    {i + 1}
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ol>
+            <p className="text-caption text-muted-foreground leading-persian max-w-4xl">
+              {o.budgetNote}
+            </p>
+          </section>
+
+          <section className="mb-14 w-full">
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              {o.tipsHeading}
+            </h2>
+            <ul className="space-y-3 max-w-4xl">
+              {o.tips.map((item) => (
+                <li
+                  key={item}
+                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                >
+                  <span className="text-accent shrink-0">●</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="mb-14 w-full">
+            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+              سؤالات متداول
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4 w-full">
+              {o.faq.map((item) => (
+                <div
+                  key={item.q}
+                  className="rounded-xl border border-border bg-card p-5"
+                >
+                  <h3 className="font-bold mb-2">{item.q}</h3>
+                  <p className="text-caption text-muted-foreground leading-persian">
+                    {item.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div className="mt-4 rounded-2xl border border-border bg-card p-8 text-center w-full">
             <h2 className="text-xl font-bold mb-2">نمی‌دانید از کجا شروع کنید؟</h2>
             <p className="text-caption text-muted-foreground leading-persian mb-6 mx-auto">
-              در یک جلسه کوتاه رایگان، وضعیت فعلی‌تان را می‌شنویم و مسیر منطقی را
-              پیشنهاد می‌دهیم.
+              {o.ctaNote}
             </p>
             <Link
               href="/contact"
