@@ -18,6 +18,7 @@ import {
 } from "@/lib/blog";
 import { getBlogCategoryIcon } from "@/lib/category-icons";
 import { requireAdminUser } from "@/lib/supabase/admin";
+import { publicRobots } from "@/lib/seo/site";
 
 export const dynamic = "force-dynamic";
 
@@ -61,10 +62,16 @@ export async function generateMetadata({
   return {
     title: isPreview ? `[پیش‌نمایش] ${title}` : title,
     description,
-    robots: {
-      index: isPreview ? false : post.robots_index !== false,
-      follow: isPreview ? false : post.robots_follow !== false,
-    },
+    robots: (() => {
+      const index = isPreview ? false : post.robots_index !== false;
+      const follow = isPreview ? false : post.robots_follow !== false;
+      if (index && follow) return publicRobots;
+      return {
+        index,
+        follow,
+        googleBot: { index, follow },
+      };
+    })(),
     openGraph: {
       title: post.og_title || title,
       description: post.og_description || description,

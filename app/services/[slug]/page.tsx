@@ -9,6 +9,7 @@ import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
 import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
+import { publicRobots } from "@/lib/seo/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: service.seoTitle,
     description: service.seoDescription,
-    robots: { index: true, follow: true },
+    robots: publicRobots,
     alternates: { canonical: `/services/${service.slug}` },
     openGraph: {
       title: service.seoTitle,

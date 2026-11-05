@@ -77,9 +77,10 @@ Wiring:
 
 کد: `lib/contact-notify.ts` از `app/api/contact/route.ts`.
 
-## ۹. دامنهٔ سایت برای sitemap
+## ۹. دامنهٔ سایت برای sitemap / canonical
 
-- اختیاری: `NEXT_PUBLIC_SITE_URL=https://alvandmarketing.ir` (پیش‌فرض همین دامنه در `app/sitemap.ts` / `app/robots.ts`)
+- اختیاری: `NEXT_PUBLIC_SITE_URL=https://alvandmarketing.ir` (پیش‌فرض همین دامنه در `lib/seo/site.ts` → sitemap / robots / `metadataBase`)
+- اگر ردیف‌های SEO اشتباهاً noindex مانده‌اند: `supabase/enable-public-indexing.sql`
 
 ## ۴. Realtime (اختیاری)
 
