@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="/#pricing" className="hover:text-foreground transition-colors">
-                  حدود هزینه
+                  برآورد و مشاوره
                 </a>
               </li>
               <li>
