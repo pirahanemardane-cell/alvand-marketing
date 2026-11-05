@@ -22,6 +22,7 @@ npm run dev
 
 Envهای مهم:
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`
+- تصاویر CDN (R2): `NEXT_PUBLIC_R2_PUBLIC_BASE_URL`؛ آپلود: `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `R2_BUCKET` — سپس `npm run media:migrate-r2`
 - اختیاری: `NEXT_PUBLIC_SITE_URL`، `SENTRY_DSN`، `NEXT_PUBLIC_SENTRY_DSN`
 
 SEO: `robots.txt` و `sitemap.xml` پویا؛ صفحات عمومی به‌صورت پیش‌فرض indexable هستند.

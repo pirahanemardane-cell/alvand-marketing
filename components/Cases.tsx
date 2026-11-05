@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { mediaUrl } from "@/lib/media";
 import SectionLabel from "./SectionLabel";
 
 const cases = [
@@ -12,7 +13,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی فروشگاه اینترنتی با تجربه خرید روان، فیلتر محصول، سبد خرید و پرداخت آنلاین.",
     result: "راه‌اندازی فروشگاه آنلاین و مسیر فروش دیجیتال برای عرضه انواع پیراهن مردانه",
     duration: "طراحی سایت",
-    image: "/images/nimble-made-kY8hmUQV9Ek-unsplash.webp",
+    image: mediaUrl("images/nimble-made-kY8hmUQV9Ek-unsplash.webp"),
     width: 1600,
     height: 1067,
   },
@@ -23,7 +24,7 @@ const cases = [
     work: "طراحی و کدنویسی اختصاصی سایت، سئو، تولید محتوا و اجرای تبلیغات اینترنتی برای پوشش کامل مسیر جذب مسافر.",
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "کدنویسی اختصاصی + سئو + محتوا + تبلیغات",
-    image: "/images/ash-gerlach-6fF-Ojxov6o-unsplash.webp",
+    image: mediaUrl("images/ash-gerlach-6fF-Ojxov6o-unsplash.webp"),
     width: 1600,
     height: 1067,
   },
@@ -34,7 +35,7 @@ const cases = [
     work: "طراحی و پیاده‌سازی سایت شرکتی وردپرس با ساختار صفحات، ظاهر حرفه‌ای و پنل مدیریت آسان.",
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
-    image: "/images/brent-ninaber-UTdA-_U4DQw-unsplash.webp",
+    image: mediaUrl("images/brent-ninaber-UTdA-_U4DQw-unsplash.webp"),
     width: 1600,
     height: 900,
   },
@@ -45,7 +46,7 @@ const cases = [
     work: "طراحی سایت وردپرس شرکتی با تمرکز بر معرفی خدمات، اعتبار برند و مسیر تماس واضح.",
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
-    image: "/images/venti-views-1cqIcrWFQBI-unsplash.webp",
+    image: mediaUrl("images/venti-views-1cqIcrWFQBI-unsplash.webp"),
     width: 1600,
     height: 1064,
   },

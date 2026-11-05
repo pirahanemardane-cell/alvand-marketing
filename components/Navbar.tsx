@@ -17,7 +17,10 @@ import {
   Newspaper,
   ChevronDown,
 } from "lucide-react";
+import { mediaUrl } from "@/lib/media";
 import { useTheme } from "./ThemeProvider";
+
+const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
 import { services } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
@@ -207,7 +210,7 @@ export default function Navbar() {
               aria-label="الوند مارکتینگ"
             >
               <img
-                src="/ALVAND-bg.webp"
+                src={logoSrc}
                 alt="الوند مارکتینگ"
                 className="h-9 w-auto object-contain rounded-md"
               />
@@ -373,7 +376,7 @@ export default function Navbar() {
               <div className="flex justify-start mb-5">
                 <Link href="/" onClick={closeMenu} aria-label="الوند مارکتینگ">
                   <img
-                    src="/ALVAND-bg.webp"
+                    src={logoSrc}
                     alt="الوند مارکتینگ"
                     className="h-9 w-auto object-contain rounded-md"
                   />
