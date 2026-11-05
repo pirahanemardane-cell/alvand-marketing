@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { mediaUrl } from "@/lib/media";
 import { isNavItemActive } from "@/lib/nav-active";
+import { useHomeSectionHash } from "@/lib/use-home-section-hash";
 import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
@@ -69,7 +70,6 @@ export default function Navbar() {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [blogPosts, setBlogPosts] = useState<BlogSearchItem[]>([]);
-  const [hash, setHash] = useState("");
   const { mode, setMode, theme } = useTheme();
   const router = useRouter();
   const rawPathname = usePathname() || "/";
@@ -79,13 +79,29 @@ export default function Navbar() {
   } catch {
     pathname = rawPathname;
   }
+  const { hash, activateSection, activateHome } = useHomeSectionHash(pathname);
 
-  useEffect(() => {
-    const syncHash = () => setHash(window.location.hash);
-    syncHash();
-    window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
-  }, [rawPathname]);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setMobileServicesOpen(false);
+  };
+
+  const onNavItemClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.includes("#")) {
+      const sectionId = href.split("#")[1];
+      if (sectionId) {
+        e.preventDefault();
+        activateSection(sectionId);
+      }
+    } else if (href === "/") {
+      e.preventDefault();
+      activateHome();
+    }
+    closeMenu();
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -120,11 +136,6 @@ export default function Navbar() {
       cancelled = true;
     };
   }, []);
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-    setMobileServicesOpen(false);
-  };
 
   type SearchHit = {
     kind: "service" | "blog";
@@ -344,6 +355,7 @@ export default function Navbar() {
                       href={item.href}
                       className={linkCls}
                       aria-current={active ? "page" : undefined}
+                      onClick={(e) => onNavItemClick(e, item.href)}
                     >
                       <Icon
                         className={`h-4 w-4 shrink-0 ${
@@ -546,7 +558,7 @@ export default function Navbar() {
                     >
                       <Link
                         href={item.href}
-                        onClick={closeMenu}
+                        onClick={(e) => onNavItemClick(e, item.href)}
                         aria-current={active ? "page" : undefined}
                         className={`${mobileLinkBase} ${
                           active ? mobileLinkActive : mobileLinkIdle
