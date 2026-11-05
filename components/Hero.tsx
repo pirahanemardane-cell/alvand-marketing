@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { mediaUrl } from "@/lib/media";
 import { useTheme } from "./ThemeProvider";
 
 const images = {
-  night: "/images/hero-night.webp",
-  morning: "/images/hero-morning.webp",
+  night: mediaUrl("images/hero-night.webp"),
+  morning: mediaUrl("images/hero-morning.webp"),
 } as const;
 
 export default function Hero() {

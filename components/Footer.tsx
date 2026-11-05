@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { mediaUrl } from "@/lib/media";
+
+const logoSrc = mediaUrl("ALVAND-bg.webp");
 
 export default function Footer() {
   return (
@@ -10,7 +13,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-4" aria-label="الوند مارکتینگ">
               <img
-                src="/ALVAND-bg.webp"
+                src={logoSrc}
                 alt="الوند مارکتینگ"
                 className="h-9 w-auto object-contain rounded-md"
               />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SentryInit from "@/components/SentryInit";
+import { mediaUrl } from "@/lib/media";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -51,7 +52,7 @@ export default function RootLayout({
         {/* Default theme is night/dark — only preload LCP hero; morning loads on theme toggle. */}
         <link
           rel="preload"
-          href="/images/hero-night.webp"
+          href={mediaUrl("images/hero-night.webp")}
           as="image"
           type="image/webp"
           fetchPriority="high"

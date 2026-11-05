@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "media:migrate-r2": "node scripts/migrate-images-to-r2.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",
@@ -21,11 +22,13 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1162.0",
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
+    "sharp": "^0.35.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2"
   }

@@ -5,6 +5,30 @@ function enc(segment: string): string {
   return encodeURIComponent(segment);
 }
 
+function r2PublicHostname(): string | null {
+  const base = process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL?.replace(/\/$/, "");
+  if (!base) return null;
+  try {
+    return new URL(base).hostname;
+  } catch {
+    return null;
+  }
+}
+
+const r2Host = r2PublicHostname();
+
+const remotePatterns: NonNullable<
+  NonNullable<NextConfig["images"]>["remotePatterns"]
+> = [
+  { protocol: "https", hostname: "hirael.com" },
+  // Always allow the production R2 custom domain (images served via mediaUrl).
+  { protocol: "https", hostname: "cdn.alvandmarketing.ir" },
+];
+
+if (r2Host && r2Host !== "cdn.alvandmarketing.ir") {
+  remotePatterns.push({ protocol: "https", hostname: r2Host });
+}
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
@@ -20,32 +44,12 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30,
     deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    remotePatterns: [
-      { protocol: "https", hostname: "hirael.com" },
-    ],
+    remotePatterns,
   },
   async headers() {
     return [
       {
         source: "/fonts/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/images/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/:path*.webp",
         headers: [
           {
             key: "Cache-Control",
