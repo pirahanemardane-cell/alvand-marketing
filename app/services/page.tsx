@@ -6,6 +6,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { services } from "@/lib/services";
+import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -54,24 +55,30 @@ export default async function ServicesPage({ searchParams }: Props) {
             </p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-              {filtered.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/services/${item.slug}`}
-                  className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
-                >
-                  <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
-                    {item.title}
-                  </h2>
-                  <p className="text-caption text-muted-foreground leading-persian mb-4">
-                    {item.shortDesc}
-                  </p>
-                  <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
-                    جزئیات خدمت
-                    <span className="text-xs">←</span>
-                  </span>
-                </Link>
-              ))}
+              {filtered.map((item) => {
+                const Icon = getServiceIcon(item.slug);
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/services/${item.slug}`}
+                    className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
+                  >
+                    <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">
+                      <Icon className="h-5 w-5" strokeWidth={1.75} />
+                    </span>
+                    <h2 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+                      {item.title}
+                    </h2>
+                    <p className="text-caption text-muted-foreground leading-persian mb-4">
+                      {item.shortDesc}
+                    </p>
+                    <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
+                      جزئیات خدمت
+                      <span className="text-xs">←</span>
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           )}
 

@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   description:
     "الوند مارکتینگ — مثل کوه پشتتیم. آژانس دیجیتال مارکتینگ با استراتژی‌های پایدار و نتایج واقعی.",
   icons: {
+    // Prefer compact PNGs — the legacy icon0.svg embeds a ~200KB raster and hurts PSI.
     icon: [
       { url: "/favicon.png", sizes: "48x48", type: "image/png" },
       { url: "/icon1.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon0.svg", type: "image/svg+xml" },
     ],
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
@@ -36,22 +36,25 @@ export default function RootLayout({
         />
         <link
           rel="preload"
-          href="/fonts/IRANYekanXFaNum-Bold.woff2"
+          href="/fonts/IRANYekanXFaNum-Heavy.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
         />
         <link
           rel="preload"
+          href="/fonts/IRANYekanXFaNum-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        {/* Default theme is night/dark — only preload LCP hero; morning loads on theme toggle. */}
+        <link
+          rel="preload"
           href="/images/hero-night.webp"
           as="image"
           type="image/webp"
-        />
-        <link
-          rel="preload"
-          href="/images/hero-morning.webp"
-          as="image"
-          type="image/webp"
+          fetchPriority="high"
         />
       </head>
 

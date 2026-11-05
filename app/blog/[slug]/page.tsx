@@ -16,6 +16,7 @@ import {
   toPersianDigits,
   type BlogPost,
 } from "@/lib/blog";
+import { getBlogCategoryIcon } from "@/lib/category-icons";
 import { requireAdminUser } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -88,6 +89,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
   const others = all.filter((p) => p.slug !== post.slug).slice(0, 2);
   const minutes = getReadingTimeMinutes(post);
   const hasToc = post.sections.length > 1;
+  const CatIcon = getBlogCategoryIcon(post.category);
 
   return (
     <main className="w-full">
@@ -114,7 +116,10 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
             ]}
           />
 
-          <span className="text-sm text-accent font-medium">{post.category}</span>
+          <span className="inline-flex items-center gap-1.5 text-sm text-accent font-medium">
+            <CatIcon className="h-4 w-4" strokeWidth={1.75} />
+            {post.category}
+          </span>
 
           <h1 className="text-3xl md:text-4xl font-bold leading-persian-tight mt-2 mb-4">
             {post.title}

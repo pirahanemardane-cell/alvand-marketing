@@ -32,39 +32,25 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 pt-24 pb-16 text-center w-full">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify"
-        >
+        {/* Static above-the-fold copy avoids motion-driven LCP render delay. */}
+        <p className="mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify">
           الوند مارکتینگ
-        </motion.p>
+        </p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full max-w-full px-1 text-display break-words text-center text-no-justify font-heavy"
-        >
+        <h1 className="w-full max-w-full px-1 text-display break-words text-center text-no-justify font-heavy">
           مثل کوه پشتتیم
-        </motion.p>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="mt-8 text-body text-muted-foreground"
-        >
+        <p className="mt-8 text-body text-muted-foreground">
           وقتی سایت دارید ولی فروش نمی‌آید، یا تبلیغات خرج می‌شود ولی نتیجه
           نمی‌دهد، ما همان تیمی هستیم که کنار شما می‌ماند و کار را تا رسیدن به
           نتیجه جلو می‌برد.
-        </motion.p>
+        </p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-10 flex flex-col sm:flex-row items-center gap-3"
         >
           <a

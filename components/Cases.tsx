@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import SectionLabel from "./SectionLabel";
 
@@ -12,8 +13,8 @@ const cases = [
     result: "راه‌اندازی فروشگاه آنلاین و مسیر فروش دیجیتال برای عرضه انواع پیراهن مردانه",
     duration: "طراحی سایت",
     image: "/images/nimble-made-kY8hmUQV9Ek-unsplash.webp",
-    width: 1680,
-    height: 1120,
+    width: 1600,
+    height: 1067,
   },
   {
     industry: "تعاونی اتوبوس رانی",
@@ -23,8 +24,8 @@ const cases = [
     result: "حضور آنلاین منسجم با امکان پیگیری ترافیک، محتوا و کمپین‌های تبلیغاتی",
     duration: "کدنویسی اختصاصی + سئو + محتوا + تبلیغات",
     image: "/images/ash-gerlach-6fF-Ojxov6o-unsplash.webp",
-    width: 1604,
-    height: 1070,
+    width: 1600,
+    height: 1067,
   },
   {
     industry: "نسپرسو — سایت شرکتی وردپرس",
@@ -34,8 +35,8 @@ const cases = [
     result: "سایت شرکتی آماده انتشار با امکان به‌روزرسانی محتوا توسط تیم داخلی",
     duration: "وردپرس شرکتی",
     image: "/images/brent-ninaber-UTdA-_U4DQw-unsplash.webp",
-    width: 1824,
-    height: 1026,
+    width: 1600,
+    height: 900,
   },
   {
     industry: "امور تجاری — سایت شرکتی وردپرس",
@@ -45,8 +46,8 @@ const cases = [
     result: "وب‌سایت شرکتی حرفه‌ای به‌عنوان مرجع رسمی معرفی کسب‌وکار",
     duration: "وردپرس شرکتی",
     image: "/images/venti-views-1cqIcrWFQBI-unsplash.webp",
-    width: 1611,
-    height: 1072,
+    width: 1600,
+    height: 1064,
   },
 ];
 
@@ -75,16 +76,16 @@ export default function Cases() {
                 transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="rounded-2xl overflow-hidden border border-border bg-card"
               >
-                <div className="bg-muted/40">
-                  <img
-                    decoding="async"
+                <div className="relative bg-muted/40 aspect-[16/10] md:aspect-[16/9]">
+                  <Image
                     src={item.image}
                     alt={item.industry}
                     width={item.width}
                     height={item.height}
-                    className="w-full h-48 object-cover object-center md:h-auto md:max-h-none md:object-contain"
+                    className="h-full w-full object-cover object-center"
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 72vw"
+                    quality={75}
                   />
                 </div>
                 <div className="p-6 space-y-3">

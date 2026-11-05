@@ -6,6 +6,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { listPublishedPosts } from "@/lib/blog";
+import { getBlogCategoryIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
 export const dynamic = "force-dynamic";
@@ -46,24 +47,30 @@ export default async function BlogPage({ searchParams }: Props) {
             </p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors"
-                >
-                  <span className="text-xs text-accent font-medium">
-                    {post.category}
-                  </span>
-                  <h2 className="text-lg font-bold mt-2 mb-2 group-hover:text-accent transition-colors leading-persian-tight">
-                    {post.title}
-                  </h2>
-                  <p className="text-caption text-muted-foreground leading-persian mb-4">
-                    {post.excerpt}
-                  </p>
-                  <span className="text-xs text-muted-foreground">{post.date}</span>
-                </Link>
-              ))}
+              {posts.map((post) => {
+                const CatIcon = getBlogCategoryIcon(post.category);
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors"
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-xs text-accent font-medium">
+                      <CatIcon className="h-3.5 w-3.5" strokeWidth={1.75} />
+                      {post.category}
+                    </span>
+                    <h2 className="text-lg font-bold mt-2 mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+                      {post.title}
+                    </h2>
+                    <p className="text-caption text-muted-foreground leading-persian mb-4">
+                      {post.excerpt}
+                    </p>
+                    <span className="text-xs text-muted-foreground">
+                      {post.date}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>

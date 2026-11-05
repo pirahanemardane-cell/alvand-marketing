@@ -16,24 +16,11 @@ import {
   Phone,
   Newspaper,
   ChevronDown,
-  Monitor,
-  PenLine,
-  Sparkles,
-  Instagram,
-  Megaphone,
 } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import AuthButton from "./AuthButton";
 import { services } from "@/lib/services";
-
-const serviceIcons: Record<string, React.ReactNode> = {
-  "طراحی-سایت": <Monitor className="h-4 w-4 shrink-0" />,
-  "تولید-محتوا": <PenLine className="h-4 w-4 shrink-0" />,
-  سئو: <Search className="h-4 w-4 shrink-0" />,
-  "هوش-مصنوعی": <Sparkles className="h-4 w-4 shrink-0" />,
-  اینستاگرام: <Instagram className="h-4 w-4 shrink-0" />,
-  "تبلیغات-اینترنتی": <Megaphone className="h-4 w-4 shrink-0" />,
-};
+import { getServiceIcon } from "@/lib/category-icons";
 
 const navItems = [
   { href: "/", label: "خانه", icon: Home },
@@ -271,21 +258,22 @@ export default function Navbar() {
                                 همه خدمات
                               </Link>
                               <div className="h-px bg-border my-1" />
-                              {services.map((s) => (
-                                <Link
-                                  key={s.slug}
-                                  href={`/services/${s.slug}`}
-                                  onClick={() => setMegaOpen(false)}
-                                  className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors"
-                                >
-                                  <span className="text-accent">
-                                    {serviceIcons[s.slug] ?? (
-                                      <LayoutGrid className="h-4 w-4" />
-                                    )}
-                                  </span>
-                                  {s.title}
-                                </Link>
-                              ))}
+                              {services.map((s) => {
+                                const SIcon = getServiceIcon(s.slug);
+                                return (
+                                  <Link
+                                    key={s.slug}
+                                    href={`/services/${s.slug}`}
+                                    onClick={() => setMegaOpen(false)}
+                                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-accent/10 transition-colors"
+                                  >
+                                    <span className="text-accent">
+                                      <SIcon className="h-4 w-4 shrink-0" />
+                                    </span>
+                                    {s.title}
+                                  </Link>
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -446,18 +434,21 @@ export default function Navbar() {
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden pr-4 pb-2 list-none"
                             >
-                              {services.map((s) => (
-                                <li key={s.slug}>
-                                  <Link
-                                    href={`/services/${s.slug}`}
-                                    onClick={closeMenu}
-                                    className="flex items-center gap-2 py-2 px-3 text-sm text-muted-foreground hover:text-accent transition-colors"
-                                  >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                                    {s.title}
-                                  </Link>
-                                </li>
-                              ))}
+                              {services.map((s) => {
+                                const SIcon = getServiceIcon(s.slug);
+                                return (
+                                  <li key={s.slug}>
+                                    <Link
+                                      href={`/services/${s.slug}`}
+                                      onClick={closeMenu}
+                                      className="flex items-center gap-2 py-2 px-3 text-sm text-muted-foreground hover:text-accent transition-colors"
+                                    >
+                                      <SIcon className="h-4 w-4 text-accent shrink-0" />
+                                      {s.title}
+                                    </Link>
+                                  </li>
+                                );
+                              })}
                             </motion.ul>
                           )}
                         </AnimatePresence>
