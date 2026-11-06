@@ -12,11 +12,17 @@ import SeoAnalysisPanel, {
   emptySeoValue,
   type SeoPanelValue,
 } from '@/components/admin/SeoAnalysisPanel';
+import { services } from '@/lib/services';
 import { Search } from 'lucide-react';
 
 const TABS: { key: string; label: string; slug: string }[] = [
   { key: 'home', label: 'صفحه اصلی', slug: '' },
-  { key: 'services', label: 'خدمات', slug: 'services' },
+  { key: 'services', label: 'لیست خدمات', slug: 'services' },
+  ...services.map((s) => ({
+    key: `service:${s.slug}`,
+    label: s.title,
+    slug: `services/${encodeURIComponent(s.slug)}`,
+  })),
   { key: 'blog', label: 'لیست بلاگ', slug: 'blog' },
   { key: 'contact', label: 'تماس', slug: 'contact' },
 ];

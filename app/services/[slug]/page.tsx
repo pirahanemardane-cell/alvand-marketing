@@ -10,6 +10,7 @@ import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
 import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { publicRobots } from "@/lib/seo/site";
+import { metadataForPageKey } from '@/lib/seo/pages';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -17,18 +18,37 @@ export async function generateStaticParams() {
   return getAllServiceSlugs().map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: raw } = await params;
+  const slug = decodeURIComponent(raw);
   const service = getServiceBySlug(slug);
-  if (!service) return { title: "خدمت یافت نشد" };
+  const fromDb = await metadataForPageKey(`service:${slug}`, {
+    path: `/services/${encodeURIComponent(slug)}`,
+  });
+  // Prefer admin seo_pages; fall back to static service.seoTitle/Description
   return {
-    title: service.seoTitle,
-    description: service.seoDescription,
-    robots: publicRobots,
-    alternates: { canonical: `/services/${service.slug}` },
+    ...fromDb,
+    title: fromDb.title || service?.seoTitle || slug,
+    description:
+      fromDb.description ||
+      service?.seoDescription ||
+      undefined,
     openGraph: {
-      title: service.seoTitle,
-      description: service.seoDescription,
+      ...fromDb.openGraph,
+      title:
+        (fromDb.openGraph && "title" in fromDb.openGraph && fromDb.openGraph.title) ||
+        service?.seoTitle ||
+        fromDb.title ||
+        slug,
+      description:
+        (fromDb.openGraph && "description" in fromDb.openGraph && fromDb.openGraph.description) ||
+        service?.seoDescription ||
+        fromDb.description ||
+        undefined,
     },
   };
 }
