@@ -88,7 +88,8 @@ export function servicesHubJsonLd(
 /** Service PDP — Service + WebPage + BreadcrumbList (no Offer/price). */
 export function servicePdpJsonLd(
   service: Service,
-  crumbs: { name: string; path: string }[]
+  crumbs: { name: string; path: string }[],
+  imageUrl?: string
 ) {
   const pageUrl = absoluteUrl(serviceHref(service.slug));
   return {
@@ -105,6 +106,7 @@ export function servicePdpJsonLd(
         about: { "@id": `${pageUrl}#service` },
         inLanguage: "fa-IR",
         breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+        ...(imageUrl ? { primaryImageOfPage: { "@type": "ImageObject", url: imageUrl } } : {}),
       },
       {
         "@type": "Service",
@@ -118,6 +120,7 @@ export function servicePdpJsonLd(
           "@type": "Country",
           name: "Iran",
         },
+        ...(imageUrl ? { image: imageUrl } : {}),
         // No Offer / price — consultation only
       },
       {

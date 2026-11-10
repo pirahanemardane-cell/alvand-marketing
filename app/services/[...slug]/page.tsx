@@ -18,9 +18,14 @@ import {
   serviceHref,
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
+import { getServiceImages, serviceImageSrc } from "@/lib/service-images";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicePdpJsonLd } from "@/lib/seo/jsonld";
 import { canonicalServiceSlug } from "@/lib/seo/service-redirects";
+import {
+  ServicePdpFeatured,
+  ServiceRelatedGallery,
+} from "@/components/ServiceImages";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -50,11 +55,24 @@ export async function generateMetadata({
   const slug = canonicalServiceSlug(raw) || raw;
   const service = getServiceBySlug(slug);
   const path = serviceHref(slug);
-  return metadataForPageKey(`service:${slug}`, {
+  const imgs = getServiceImages(slug);
+  const meta = await metadataForPageKey(`service:${slug}`, {
     path,
     fallbackTitle: service?.seoTitle,
     fallbackDescription: service?.seoDescription,
   });
+  if (imgs) {
+    const og = serviceImageSrc(imgs.featured);
+    meta.openGraph = {
+      ...meta.openGraph,
+      images: [{ url: og, width: imgs.featured.width, height: imgs.featured.height, alt: imgs.featured.alt }],
+    };
+    meta.twitter = {
+      ...meta.twitter,
+      images: [og],
+    };
+  }
+  return meta;
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
@@ -67,6 +85,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const slug = raw;
   const service = getServiceBySlug(slug);
   if (!service) notFound();
+  const pageImages = getServiceImages(service.slug);
 
   const ancestors = getServiceAncestors(service.slug);
   const parent = ancestors[ancestors.length - 1];
@@ -99,7 +118,13 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <main>
-      <JsonLd data={servicePdpJsonLd(service, schemaCrumbs)} />
+      <JsonLd
+        data={servicePdpJsonLd(
+          service,
+          schemaCrumbs,
+          pageImages ? serviceImageSrc(pageImages.featured) : undefined
+        )}
+      />
       <Navbar />
       <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
@@ -122,7 +147,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
             {service.heroHeading}
           </h2>
-          <div className="mb-12 space-y-3">
+          <div className="mb-8 space-y-3">
             {service.intro.map((p) => (
               <p
                 key={p.slice(0, 40)}
@@ -132,6 +157,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               </p>
             ))}
           </div>
+          {pageImages && <ServicePdpFeatured images={pageImages} />}
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 w-full mb-14">
             <section>
@@ -195,6 +221,10 @@ export default async function ServiceDetailPage({ params }: Props) {
           )}
 
           <ServiceContentBlocks blocks={service.afterProcess} />
+
+          {pageImages && (
+            <ServiceRelatedGallery images={[...pageImages.related]} />
+          )}
 
           {service.faq.length > 0 && (
             <section className="mb-14 w-full">
