@@ -24,7 +24,7 @@ import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
-import { services, serviceHref, servicesOverview } from "@/lib/services";
+import { services, serviceHref } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import {
   getMegaMenuColumns,
@@ -419,7 +419,7 @@ export default function Navbar() {
                                   );
                                 })}
                               </div>
-                              <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5 flex flex-col gap-1.5">
+                              <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5">
                                 <Link
                                   href="/services"
                                   onClick={() => setMegaOpen(false)}
@@ -432,13 +432,6 @@ export default function Navbar() {
                                 >
                                   <LayoutGrid className="h-4 w-4" />
                                   مشاهده همه خدمات
-                                </Link>
-                                <Link
-                                  href="/services"
-                                  onClick={() => setMegaOpen(false)}
-                                  className="block text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                  {servicesOverview.title}
                                 </Link>
                               </div>
                             </div>
@@ -734,7 +727,7 @@ export default function Navbar() {
                                   );
                                 }
                               )}
-                              <li className="pt-3 px-3 pb-1 space-y-2">
+                              <li className="pt-3 px-3 pb-1">
                                 <Link
                                   href="/services"
                                   onClick={closeMenu}
@@ -747,13 +740,6 @@ export default function Navbar() {
                                 >
                                   <LayoutGrid className="h-4 w-4" />
                                   مشاهده همه خدمات
-                                </Link>
-                                <Link
-                                  href="/services"
-                                  onClick={closeMenu}
-                                  className="block text-center text-xs text-muted-foreground"
-                                >
-                                  {servicesOverview.title}
                                 </Link>
                               </li>
                             </motion.ul>
