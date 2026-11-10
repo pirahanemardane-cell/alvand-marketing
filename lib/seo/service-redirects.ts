@@ -5,6 +5,8 @@
 export const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   // Prior Instagram PLP replaced by شبکه‌های اجتماعی
   اینستاگرام: "شبکه‌های-اجتماعی",
+  // Latin "api" slug → fully Persian
+  "api-و-یکپارچه‌سازی": "ای‌پی‌آی-و-یکپارچه‌سازی",
 };
 
 export function canonicalServiceSlug(slug: string): string | null {

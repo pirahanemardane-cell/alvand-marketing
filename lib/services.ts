@@ -1510,7 +1510,7 @@ export const services: Service[] = [
     ],
   }),
   withFullDesc({
-    slug: "api-و-یکپارچه‌سازی",
+    slug: "ای‌پی‌آی-و-یکپارچه‌سازی",
     num: "۱۲",
     title: "API و یکپارچه‌سازی",
     shortDesc: "اتصال سایت یا اپ به انبار، حسابداری، درگاه یا سرویس‌های دیگر.",
