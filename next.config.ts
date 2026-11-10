@@ -125,18 +125,7 @@ const nextConfig: NextConfig = {
         destination: "/reset-password",
         permanent: true,
       },
-      // Legacy Instagram PLP → شبکه‌های اجتماعی (explicit 301 for Google)
-      {
-        source: `/services/${enc("اینستاگرام")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}`,
-        statusCode: 301,
-      },
-      {
-        source: `/${enc("خدمات")}/${enc("اینستاگرام")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}`,
-        statusCode: 301,
-      },
-      // Latin api slug → fully Persian
+      // Latin api slug → fully Persian (Instagram PLP is live again — no 301)
       {
         source: `/services/${enc("api-و-یکپارچه‌سازی")}`,
         destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,

@@ -12,6 +12,9 @@ import {
   services,
   getServiceBySlug,
   getAllServiceSlugs,
+  getServiceAncestors,
+  getChildServices,
+  getTopLevelServices,
   serviceHref,
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
@@ -65,18 +68,27 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
-  const others = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const ancestors = getServiceAncestors(service.slug);
+  const parent = ancestors[ancestors.length - 1];
+  const siblingPool = parent
+    ? getChildServices(parent.slug).filter((s) => s.slug !== service.slug)
+    : getTopLevelServices().filter((s) => s.slug !== service.slug);
+  const childPool = getChildServices(service.slug);
+  const others = (
+    siblingPool.length > 0 ? siblingPool : childPool.length > 0 ? childPool : services
+  )
+    .filter((s) => s.slug !== service.slug)
+    .slice(0, 3);
   const Icon = getServiceIcon(service.slug);
 
   const breadcrumb = [
     { label: "خدمات دیجیتال مارکتینگ", href: "/services" },
   ];
-  if (service.slug.includes("/")) {
-    const parentSlug = service.slug.split("/")[0];
-    const parent = getServiceBySlug(parentSlug);
-    if (parent) {
-      breadcrumb.push({ label: parent.title, href: serviceHref(parent.slug) });
-    }
+  for (const ancestor of ancestors) {
+    breadcrumb.push({
+      label: ancestor.title,
+      href: serviceHref(ancestor.slug),
+    });
   }
   breadcrumb.push({ label: service.title, href: serviceHref(service.slug) });
 
