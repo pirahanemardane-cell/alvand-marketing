@@ -25,6 +25,7 @@ import { useTheme } from "./ThemeProvider";
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
 import { services, serviceHref } from "@/lib/services";
+import { blogHref } from "@/lib/blog";
 import { getServiceIcon } from "@/lib/category-icons";
 import {
   getMegaMenuColumns,
@@ -282,7 +283,7 @@ export default function Navbar() {
       .map((p) => ({
         kind: "blog" as const,
         title: p.title,
-        href: `/blog/${p.slug}`,
+        href: blogHref(p.slug),
         hint: "بلاگ",
       }));
     return [...svc, ...blg].slice(0, 8);

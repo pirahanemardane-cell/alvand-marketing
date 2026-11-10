@@ -1,5 +1,7 @@
 import type { Service, ServicesOverview } from "@/lib/services";
 import { serviceHref } from "@/lib/services";
+import type { BlogPost } from "@/lib/blog";
+import { blogHref } from "@/lib/blog";
 import { siteUrl } from "@/lib/seo/site";
 
 export function absoluteUrl(path: string): string {
@@ -71,6 +73,59 @@ export function servicesHubJsonLd(
           { name: "خانه", path: "/" },
           { name: overview.title, path: "/services" },
         ]),
+        "@id": `${pageUrl}#breadcrumb`,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${absoluteUrl("/")}/#website`,
+        url: absoluteUrl("/"),
+        name: "الوند مارکتینگ",
+        inLanguage: "fa-IR",
+        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+      },
+    ],
+  };
+}
+
+/** Blog article — BlogPosting + WebPage + BreadcrumbList. */
+export function blogArticleJsonLd(
+  post: BlogPost,
+  crumbs: { name: string; path: string }[],
+  imageUrl?: string
+) {
+  const pageUrl = absoluteUrl(blogHref(post.slug));
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationJsonLd(),
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: post.meta_title || post.title,
+        description: post.meta_description || post.excerpt,
+        isPartOf: { "@id": `${absoluteUrl("/")}/#website` },
+        inLanguage: "fa-IR",
+        breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+        ...(imageUrl
+          ? { primaryImageOfPage: { "@type": "ImageObject", url: imageUrl } }
+          : {}),
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": `${pageUrl}#article`,
+        headline: post.title,
+        description: post.meta_description || post.excerpt,
+        url: pageUrl,
+        inLanguage: "fa-IR",
+        datePublished: post.date || undefined,
+        author: { "@id": `${absoluteUrl("/")}/#organization` },
+        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+        mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
+        ...(imageUrl ? { image: imageUrl } : {}),
+      },
+      {
+        ...breadcrumbJsonLd(crumbs),
         "@id": `${pageUrl}#breadcrumb`,
       },
       {

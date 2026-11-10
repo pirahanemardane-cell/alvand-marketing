@@ -15,6 +15,20 @@ export function mediaObjectKey(path: string): string {
   return `${MEDIA_PREFIX}/${cleaned}`;
 }
 
+/** Encode each path segment so Persian / Unicode keys resolve on the CDN. */
+function encodeKeySegments(key: string): string {
+  return key
+    .split("/")
+    .map((part) => {
+      try {
+        return encodeURIComponent(decodeURIComponent(part));
+      } catch {
+        return encodeURIComponent(part);
+      }
+    })
+    .join("/");
+}
+
 /**
  * Absolute CDN URL for a media object.
  * Pass a site-relative path like `images/hero-night.webp` or `ALVAND-bg.webp`.
@@ -22,10 +36,11 @@ export function mediaObjectKey(path: string): string {
  */
 export function mediaUrl(path: string): string {
   const key = mediaObjectKey(path);
+  const encoded = encodeKeySegments(key);
   if (!PUBLIC_BASE) {
-    return `/${key.replace(/^media\//, "")}`;
+    return `/${encoded.replace(/^media\//, "")}`;
   }
-  return `${PUBLIC_BASE}/${key}`;
+  return `${PUBLIC_BASE}/${encoded}`;
 }
 
 /** Hostname of the R2 public base (for next/image remotePatterns). */

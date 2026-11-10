@@ -265,3 +265,19 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
 export function getAllPostSlugs(): string[] {
   return posts.map((p) => p.slug);
 }
+
+/** Public href for nested Persian blog slugs (e.g. سئو/سئو-چیست). */
+export function blogHref(slug: string): string {
+  const path = slug
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+  return `/blog/${path}`;
+}
+
+export function blogUrlPath(slug: string): string {
+  return slug
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+}

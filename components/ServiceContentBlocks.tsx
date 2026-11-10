@@ -1,6 +1,7 @@
 import type { ServiceBlock, ServiceTable } from "@/lib/services";
 import type { ServiceImageAsset } from "@/lib/service-images";
 import { ServiceInlineImage } from "@/components/ServiceImages";
+import { richTextNodes } from "@/components/RichText";
 
 export function ServiceTableView({ table }: { table: ServiceTable }) {
   const { headers, rows } = table;
@@ -119,7 +120,7 @@ export function ServiceContentBlocks({
                 key={p.slice(0, 48)}
                 className="text-caption text-muted-foreground leading-persian mb-3"
               >
-                {p}
+                {richTextNodes(p)}
               </p>
             ))}
             {block.items && block.items.length > 0 ? (
@@ -130,7 +131,7 @@ export function ServiceContentBlocks({
                     className="flex gap-3 text-caption text-muted-foreground leading-persian"
                   >
                     <span className="text-accent shrink-0">●</span>
-                    {item}
+                    <span>{richTextNodes(item)}</span>
                   </li>
                 ))}
               </ul>

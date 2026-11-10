@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SectionLabel from "./SectionLabel";
-import { listPublishedPosts } from "@/lib/blog";
+import { listPublishedPosts, blogHref } from "@/lib/blog";
 
 export default async function Resources() {
   // Public list already excludes smoke markers; never hide this section when empty.
@@ -33,7 +33,7 @@ export default async function Resources() {
                     key={item.slug}
                     className="block py-6 border-b border-border first:border-t group"
                   >
-                    <Link href={`/blog/${item.slug}`} className="block">
+                    <Link href={blogHref(item.slug)} className="block">
                       <h3 className="text-lg font-bold mb-1.5 group-hover:text-accent transition-colors leading-persian-tight">
                         {item.title}
                       </h3>
