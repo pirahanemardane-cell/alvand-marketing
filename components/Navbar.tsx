@@ -326,15 +326,15 @@ export default function Navbar() {
                       <AnimatePresence>
                         {megaOpen && (
                           <motion.div
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 8 }}
+                            initial={{ opacity: 0, y: 8, x: "-50%" }}
+                            animate={{ opacity: 1, y: 0, x: "-50%" }}
+                            exit={{ opacity: 0, y: 8, x: "-50%" }}
                             transition={{ duration: 0.15 }}
-                            className="absolute top-full right-0 pt-2 z-[70]"
+                            className="fixed left-1/2 top-[3.75rem] z-[70] w-[min(72rem,calc(100vw-2rem))] pt-2"
                             role="menu"
                             aria-label="منوی خدمات"
                           >
-                            <div className="w-[min(96vw,72rem)] max-h-[calc(100vh-5.5rem)] flex flex-col rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
+                            <div className="w-full max-h-[calc(100vh-5.5rem)] flex flex-col rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
                               <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5">
                                 {megaColumns.map(({ parent, featuredChildren }) => {
                                   const SIcon = getServiceIcon(parent.slug);
