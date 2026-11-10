@@ -28,6 +28,7 @@ import {
   ServicePdpFeatured,
 } from "@/components/ServiceImages";
 import ServiceChildrenList from "@/components/ServiceChildrenList";
+import { richTextNodes } from "@/components/RichText";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -173,7 +174,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 key={p.slice(0, 40)}
                 className="text-lg text-muted-foreground leading-persian"
               >
-                {p}
+                {richTextNodes(p)}
               </p>
             ))}
           </div>
@@ -198,7 +199,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                     className="flex gap-3 text-caption text-muted-foreground leading-persian"
                   >
                     <span className="text-accent shrink-0">●</span>
-                    {item}
+                    <span>{richTextNodes(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -218,7 +219,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                     className="flex gap-3 text-caption text-muted-foreground leading-persian"
                   >
                     <span className="text-accent shrink-0">✓</span>
-                    {item}
+                    <span>{richTextNodes(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -252,7 +253,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                       {i + 1}
                     </span>
                     <span className="pt-1 text-caption text-muted-foreground leading-persian">
-                      {step}
+                      {richTextNodes(step)}
                     </span>
                   </li>
                 ))}
@@ -286,7 +287,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   >
                     <h3 className="font-bold mb-2">{item.q}</h3>
                     <p className="text-caption text-muted-foreground leading-persian">
-                      {item.a}
+                      {richTextNodes(item.a)}
                     </p>
                   </div>
                 ))}

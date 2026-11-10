@@ -7,6 +7,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import BlogComments from "@/components/BlogComments";
+import BlogBody, { blogTocFromBody } from "@/components/BlogBody";
+import JsonLd from "@/components/JsonLd";
 import {
   getPublishedPostBySlug,
   getPostBySlugAnyStatus,
@@ -14,22 +16,39 @@ import {
   listPublishedSlugs,
   getReadingTimeMinutes,
   toPersianDigits,
+  blogHref,
   type BlogPost,
 } from "@/lib/blog";
 import { getBlogCategoryIcon } from "@/lib/category-icons";
+import { getBlogImages, blogImageSrc } from "@/lib/blog-images";
 import { requireAdminUser } from "@/lib/supabase/admin";
 import { publicRobots } from "@/lib/seo/site";
+import { blogArticleJsonLd } from "@/lib/seo/jsonld";
 
 export const dynamic = "force-dynamic";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
   searchParams: Promise<{ preview?: string }>;
 };
 
+function joinSlug(segments: string[]): string {
+  return segments
+    .map((s) => {
+      try {
+        return decodeURIComponent(s);
+      } catch {
+        return s;
+      }
+    })
+    .join("/");
+}
+
 export async function generateStaticParams() {
   const slugs = await listPublishedSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return slugs.map((slug) => ({
+    slug: slug.split("/"),
+  }));
 }
 
 async function resolvePost(
@@ -52,13 +71,16 @@ export async function generateMetadata({
   params,
   searchParams,
 }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: segments } = await params;
   const { preview } = await searchParams;
+  const slug = joinSlug(segments);
   const resolved = await resolvePost(slug, preview);
   if (!resolved) return { title: "مقاله یافت نشد", robots: { index: false } };
   const { post, isPreview } = resolved;
   const title = post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`;
   const description = post.meta_description || post.excerpt;
+  const imgs = getBlogImages(post.slug);
+  const ogImage = post.og_image_url || (imgs ? blogImageSrc(imgs.featured) : undefined);
   return {
     title: isPreview ? `[پیش‌نمایش] ${title}` : title,
     description,
@@ -75,31 +97,52 @@ export async function generateMetadata({
     openGraph: {
       title: post.og_title || title,
       description: post.og_description || description,
-      ...(post.og_image_url
-        ? { images: [{ url: post.og_image_url }] }
-        : {}),
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     alternates: {
-      canonical: post.canonical_url || `/blog/${post.slug}`,
+      canonical: post.canonical_url || blogHref(post.slug),
     },
   };
 }
 
 export default async function BlogPostPage({ params, searchParams }: Props) {
-  const { slug } = await params;
+  const { slug: segments } = await params;
   const { preview } = await searchParams;
+  const slug = joinSlug(segments);
   const resolved = await resolvePost(slug, preview);
   if (!resolved) notFound();
   const { post, isPreview } = resolved;
 
   const all = await listPublishedPosts();
-  const others = all.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const others = all
+    .filter((p) => p.slug !== post.slug && p.category === post.category)
+    .slice(0, 2);
+  const fallbackOthers =
+    others.length > 0
+      ? others
+      : all.filter((p) => p.slug !== post.slug).slice(0, 2);
   const minutes = getReadingTimeMinutes(post);
-  const hasToc = post.sections.length > 1;
+  const toc = blogTocFromBody(post.body || "");
+  const hasToc = toc.length > 1;
   const CatIcon = getBlogCategoryIcon(post.category);
+  const images = getBlogImages(post.slug);
+  const crumbs = [
+    { name: "خانه", path: "/" },
+    { name: "بلاگ", path: "/blog" },
+    { name: post.title, path: blogHref(post.slug) },
+  ];
 
   return (
     <main className="w-full">
+      {!isPreview && (
+        <JsonLd
+          data={blogArticleJsonLd(
+            post,
+            crumbs,
+            images ? blogImageSrc(images.featured) : post.og_image_url || undefined
+          )}
+        />
+      )}
       <Navbar />
       <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
@@ -119,6 +162,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
           <PageBreadcrumb
             items={[
               { label: "بلاگ", href: "/blog" },
+              { label: post.category },
               { label: post.title },
             ]}
           />
@@ -149,13 +193,13 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
                 فهرست مطالب
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                {post.sections.map((section) => (
-                  <li key={section.id}>
+                {toc.map((item) => (
+                  <li key={item.id}>
                     <a
-                      href={`#${section.id}`}
+                      href={`#${item.id}`}
                       className="hover:text-accent transition-colors text-justify"
                     >
-                      {section.title}
+                      {item.title}
                     </a>
                   </li>
                 ))}
@@ -163,32 +207,13 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
             </nav>
           )}
 
-          <div className="space-y-10">
-            {post.sections.length > 0 ? (
-              post.sections.map((section) => (
-                <section
-                  key={section.id}
-                  id={section.id}
-                  className="scroll-mt-28"
-                >
-                  {hasToc && (
-                    <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-4">
-                      {section.title}
-                    </h2>
-                  )}
-                  <div className="space-y-4 text-muted-foreground leading-persian text-justify">
-                    {section.paragraphs.map((para, i) => (
-                      <p key={`${section.id}-${i}`}>{para}</p>
-                    ))}
-                  </div>
-                </section>
-              ))
-            ) : (
-              <p className="text-muted-foreground leading-persian">
-                محتوای این مقاله هنوز تکمیل نشده است.
-              </p>
-            )}
-          </div>
+          {post.body ? (
+            <BlogBody body={post.body} images={images} />
+          ) : (
+            <p className="text-muted-foreground leading-persian">
+              محتوای این مقاله هنوز تکمیل نشده است.
+            </p>
+          )}
 
           {!isPreview && <BlogComments postSlug={post.slug} />}
 
@@ -201,14 +226,14 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
             </Link>
           </div>
 
-          {others.length > 0 && (
+          {fallbackOthers.length > 0 && (
             <section className="mt-14">
               <h2 className="text-lg font-bold mb-4">مقالات مرتبط</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                {others.map((p) => (
+                {fallbackOthers.map((p) => (
                   <Link
                     key={p.slug}
-                    href={`/blog/${p.slug}`}
+                    href={blogHref(p.slug)}
                     className="rounded-xl border border-border p-4 hover:border-accent/50 transition-colors"
                   >
                     <p className="font-bold text-sm">{p.title}</p>

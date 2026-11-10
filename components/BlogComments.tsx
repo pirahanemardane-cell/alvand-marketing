@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient, hasSupabaseEnv } from "@/lib/supabase/client";
 import { containsLink } from "@/lib/comments";
+import { blogHref } from "@/lib/blog";
 import type { User } from "@supabase/supabase-js";
 
 type Comment = {
@@ -175,7 +176,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
-              href={`/login?next=${encodeURIComponent(`/blog/${postSlug}`)}`}
+              href={`/login?next=${encodeURIComponent(blogHref(postSlug))}`}
               className="rounded-full bg-accent text-accent-foreground font-bold text-sm px-6 py-2.5"
             >
               ورود

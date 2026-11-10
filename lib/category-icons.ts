@@ -28,6 +28,7 @@ import {
 export const serviceIcons: Record<string, LucideIcon> = {
   "طراحی-سایت": Monitor,
   "طراحی-سایت/وردپرس": Monitor,
+  "طراحی-سایت/کدنویسی": Monitor,
   "تولید-محتوا": PenLine,
   سئو: Search,
   "هوش-مصنوعی": Sparkles,
@@ -35,6 +36,7 @@ export const serviceIcons: Record<string, LucideIcon> = {
   اینستاگرام: Instagram,
   لینکدین: Linkedin,
   "تبلیغات-اینترنتی": Megaphone,
+  "تبلیغات-اینترنتی/گوگل-ادز": Megaphone,
   "پشتیبانی-سایت": Headphones,
   "پشتیبانی-سایت/امنیت": Shield,
   "پشتیبانی-سایت/افزایش-سرعت": Gauge,
@@ -59,6 +61,11 @@ const blogCategoryIcons: Record<string, LucideIcon> = {
   "تبلیغات اینترنتی": Megaphone,
   بازاریابی: Sparkles,
   عمومی: BookOpen,
+  "اپلیکیشن، وب‌اپ و API": Smartphone,
+  "محتوا، شبکه‌های اجتماعی و هوش مصنوعی": PenLine,
+  "دیجیتال مارکتینگ و برندینگ": Sparkles,
+  "پشتیبانی، امنیت و سرعت سایت": Headphones,
+  "آنالیتیکس و ابزارهای گوگل": BarChart3,
 };
 
 export function getServiceIcon(slug: string): LucideIcon {

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { listPublishedPosts } from "@/lib/blog";
+import { listPublishedPosts, blogUrlPath } from "@/lib/blog";
 import { getAllServiceSlugs, serviceUrlPath } from "@/lib/services";
 import { siteUrl } from "@/lib/seo/site";
 
@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const posts = await listPublishedPosts();
     postRoutes = posts.map((p) => ({
-      url: `${BASE}/blog/${encodeURIComponent(p.slug)}`,
+      url: `${BASE}/blog/${blogUrlPath(p.slug)}`,
       changeFrequency: "weekly" as const,
       priority: 0.65,
     }));

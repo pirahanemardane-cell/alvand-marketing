@@ -500,7 +500,25 @@ const img_linkedin_management: ServiceImageSet = {
   ],
 };
 
+const img_custom_coding_website: ServiceImageSet = {
+  featured: asset("images/services/custom-coding-website/featured-1461749280684.webp", "تصویر شاخص طراحی سایت کدنویسی — الوند مارکتینگ", 1400, 935, "Mohammad Rahmani", "1461749280684-dccba630e2f6"),
+  related: [
+    asset("images/services/custom-coding-website/related-1-1498050108023.webp", "تصویر مرتبط 1 برای طراحی سایت کدنویسی — الوند مارکتینگ", 1000, 666, "Christopher Gower", "1498050108023-c5249f4df085"),
+    asset("images/services/custom-coding-website/related-2-1586717791821.webp", "تصویر مرتبط 2 برای طراحی سایت کدنویسی — الوند مارکتینگ", 1000, 667, "Hal Gatewood", "1586717791821-3f44a563fa4c"),
+    asset("images/services/custom-coding-website/related-3-1555066931-43.webp", "تصویر مرتبط 3 برای طراحی سایت کدنویسی — الوند مارکتینگ", 1000, 667, "Fotis Fotopoulos", "1555066931-4365d14bab8c"),
+  ],
+};
+const img_google_ads: ServiceImageSet = {
+  featured: asset("images/services/google-ads/featured-1557804506-66.webp", "تصویر شاخص گوگل ادز — الوند مارکتینگ", 1400, 1050, "Austin Distel", "1557804506-669a67965ba0"),
+  related: [
+    asset("images/services/google-ads/related-1-1533750349088.webp", "تصویر مرتبط 1 برای گوگل ادز — الوند مارکتینگ", 1000, 667, "Stephen Dawson", "1533750349088-cd871a92f312"),
+    asset("images/services/google-ads/related-2-1460925895917.webp", "تصویر مرتبط 2 برای گوگل ادز — الوند مارکتینگ", 1000, 712, "Luke Chesser", "1460925895917-afdab827c52f"),
+    asset("images/services/google-ads/related-3-1432888622747.webp", "تصویر مرتبط 3 برای گوگل ادز — الوند مارکتینگ", 1000, 667, "Stephen Dawson", "1454165804606-c3d57bc86b40"),
+  ],
+};
 export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
+  "تبلیغات-اینترنتی/گوگل-ادز": img_google_ads,
+  "طراحی-سایت/کدنویسی": img_custom_coding_website,
   "طراحی-سایت": img_website_design,
   "طراحی-سایت/وردپرس": img_wordpress_website,
   "طراحی-سایت/پزشکی": img_medical_website,
