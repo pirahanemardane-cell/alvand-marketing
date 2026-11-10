@@ -5,8 +5,8 @@ import Link from "next/link";
 import SectionLabel from "./SectionLabel";
 
 const stats = [
-  { value: "۴۰۰+", label: "پروژه تحویل‌شده" },
-  { value: "۳.۲M", label: "بازدید ماهانه مشتریان" },
+  { value: "+۴۰", label: "پروژه تحویل شده" },
+  { value: "+۱M", label: "بازدید ماهانه مشتریان" },
   { value: "۹", label: "صنعت مختلف" },
   { value: "۷ سال", label: "فعالیت مستمر" },
 ];

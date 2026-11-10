@@ -7,9 +7,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceTableView } from "@/components/ServiceContentBlocks";
 import {
-  services,
   servicesOverview,
   serviceHref,
+  getTopLevelServices,
   type Service,
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
@@ -18,7 +18,6 @@ import {
   getServiceImages,
   serviceImageSrc,
 } from "@/lib/service-images";
-import { getHubCatalogGroups } from "@/lib/mega-menu";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicesHubJsonLd } from "@/lib/seo/jsonld";
 import JsonLd from "@/components/JsonLd";
@@ -87,23 +86,23 @@ function ServiceCatalogCard({ item }: { item: Service }) {
 export default async function ServicesPage({ searchParams }: Props) {
   const { q } = await searchParams;
   const query = q?.trim() || "";
-  const groups = getHubCatalogGroups();
-  const allCatalog = groups.flatMap((g) => g.items);
+  /** Hub cards: top-level PLPs only (nested PDPs live under parent pages / mega-menu). */
+  const topLevel = getTopLevelServices();
   const filtered = query
-    ? services.filter(
+    ? topLevel.filter(
         (s) =>
           s.title.includes(query) ||
           s.shortDesc.includes(query) ||
           s.fullDesc.includes(query) ||
           s.heroHeading.includes(query)
       )
-    : null;
+    : topLevel;
   const o = servicesOverview;
   const hubImages = getHubImages();
 
   return (
     <main>
-      <JsonLd data={servicesHubJsonLd(o, allCatalog)} />
+      <JsonLd data={servicesHubJsonLd(o, topLevel)} />
       <Navbar />
       <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
@@ -128,7 +127,7 @@ export default async function ServicesPage({ searchParams }: Props) {
             </div>
             {query && (
               <p className="mt-4 text-sm text-muted-foreground">
-                نتایج جستجو برای «{query}» — {filtered?.length ?? 0} مورد
+                نتایج جستجو برای «{query}» — {filtered.length} مورد
               </p>
             )}
           </div>
@@ -160,68 +159,20 @@ export default async function ServicesPage({ searchParams }: Props) {
               {o.outputsHeading}
             </h2>
             <p className="text-caption text-muted-foreground leading-persian mb-8 max-w-3xl">
-              همه خدمات الوند مارکتینگ به‌صورت دسته‌بندی‌شده. روی عنوان هر خدمت
-              بزنید تا جزئیات همان صفحه را ببینید.
+              خدمات اصلی الوند مارکتینگ. روی هر خدمت بزنید تا جزئیات و زیرخدمت‌ها
+              را در همان صفحه ببینید.
             </p>
           </section>
 
-          {filtered ? (
-            filtered.length === 0 ? (
-              <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center mb-14">
-                خدمتی با این عبارت پیدا نشد.
-              </p>
-            ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
-                {filtered.map((item) => (
-                  <ServiceCatalogCard key={item.slug} item={item} />
-                ))}
-              </div>
-            )
+          {filtered.length === 0 ? (
+            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center mb-14">
+              خدمتی با این عبارت پیدا نشد.
+            </p>
           ) : (
-            <div className="space-y-16 mb-16 w-full">
-              {groups.map(({ parent, items }) => {
-                const ParentIcon = getServiceIcon(parent.slug);
-                return (
-                  <section
-                    key={parent.slug}
-                    id={`cat-${parent.slug.replace(/\//g, "-")}`}
-                    className="w-full scroll-mt-28"
-                  >
-                    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-border pb-4">
-                      <div className="flex items-start gap-3 min-w-0">
-                        <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted text-accent">
-                          <ParentIcon className="h-5 w-5" strokeWidth={1.75} />
-                        </span>
-                        <div className="min-w-0">
-                          <h3 className="text-2xl font-bold leading-persian-tight">
-                            <Link
-                              href={serviceHref(parent.slug)}
-                              className="hover:text-accent transition-colors"
-                            >
-                              {parent.title}
-                            </Link>
-                          </h3>
-                          <p className="text-caption text-muted-foreground leading-persian mt-1 line-clamp-2 max-w-2xl">
-                            {parent.shortDesc}
-                          </p>
-                        </div>
-                      </div>
-                      <Link
-                        href={serviceHref(parent.slug)}
-                        className="inline-flex items-center gap-1 text-sm font-bold text-accent hover:opacity-80 shrink-0"
-                      >
-                        {parent.title}
-                        <span className="text-xs">←</span>
-                      </Link>
-                    </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-                      {items.map((item) => (
-                        <ServiceCatalogCard key={item.slug} item={item} />
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
+              {filtered.map((item) => (
+                <ServiceCatalogCard key={item.slug} item={item} />
+              ))}
             </div>
           )}
 
