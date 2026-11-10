@@ -127,18 +127,39 @@ export default function Navbar() {
       setMegaMoreBelow(false);
       return;
     }
-    const el = megaScrollRef.current;
-    if (!el) return;
-    const update = () => syncScrollAffordance(el, setMegaMoreBelow);
-    update();
-    const raf = requestAnimationFrame(update);
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
+    let cancelled = false;
+    let attached: HTMLElement | null = null;
+    let ro: ResizeObserver | null = null;
+    let raf = 0;
+    const update = () =>
+      syncScrollAffordance(attached, setMegaMoreBelow);
+    const attach = () => {
+      const el = megaScrollRef.current;
+      if (!el || cancelled) return false;
+      attached = el;
+      update();
+      el.addEventListener("scroll", update, { passive: true });
+      ro = new ResizeObserver(update);
+      ro.observe(el);
+      // Re-measure after paint / framer layout settles
+      raf = requestAnimationFrame(() => {
+        update();
+        raf = requestAnimationFrame(update);
+      });
+      return true;
+    };
+    if (!attach()) {
+      raf = requestAnimationFrame(() => {
+        if (!attach() && !cancelled) {
+          raf = requestAnimationFrame(attach);
+        }
+      });
+    }
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
-      el.removeEventListener("scroll", update);
-      ro.disconnect();
+      if (attached) attached.removeEventListener("scroll", update);
+      ro?.disconnect();
     };
   }, [megaOpen, syncScrollAffordance]);
 
@@ -147,18 +168,38 @@ export default function Navbar() {
       setMobileMoreBelow(false);
       return;
     }
-    const el = mobileDrawerRef.current;
-    if (!el) return;
-    const update = () => syncScrollAffordance(el, setMobileMoreBelow);
-    update();
-    const raf = requestAnimationFrame(update);
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
+    let cancelled = false;
+    let attached: HTMLElement | null = null;
+    let ro: ResizeObserver | null = null;
+    let raf = 0;
+    const update = () =>
+      syncScrollAffordance(attached, setMobileMoreBelow);
+    const attach = () => {
+      const el = mobileDrawerRef.current;
+      if (!el || cancelled) return false;
+      attached = el;
+      update();
+      el.addEventListener("scroll", update, { passive: true });
+      ro = new ResizeObserver(update);
+      ro.observe(el);
+      raf = requestAnimationFrame(() => {
+        update();
+        raf = requestAnimationFrame(update);
+      });
+      return true;
+    };
+    if (!attach()) {
+      raf = requestAnimationFrame(() => {
+        if (!attach() && !cancelled) {
+          raf = requestAnimationFrame(attach);
+        }
+      });
+    }
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
-      el.removeEventListener("scroll", update);
-      ro.disconnect();
+      if (attached) attached.removeEventListener("scroll", update);
+      ro?.disconnect();
     };
   }, [menuOpen, mobileServicesOpen, mobileExpandedSlug, syncScrollAffordance]);
 
@@ -480,14 +521,15 @@ export default function Navbar() {
                                   );
                                 })}
                               </div>
-                              {megaMoreBelow && (
+                              {megaMoreBelow ? (
                                 <div
-                                  className="shrink-0 border-t border-border/70 bg-background px-3 py-2"
+                                  className="shrink-0 border-t border-border bg-muted/50 px-3 py-2.5"
                                   aria-live="polite"
+                                  data-mega-scroll-cue="true"
                                 >
-                                  <div className="flex items-center justify-center gap-1.5 text-foreground/75">
+                                  <div className="flex items-center justify-center gap-1.5 text-foreground">
                                     <ChevronDown
-                                      className="h-4 w-4 shrink-0"
+                                      className="h-4 w-4 shrink-0 text-muted-foreground"
                                       strokeWidth={2}
                                       aria-hidden
                                     />
@@ -496,7 +538,7 @@ export default function Navbar() {
                                     </p>
                                   </div>
                                 </div>
-                              )}
+                              ) : null}
                               <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5">
                                 <Link
                                   href="/services"
@@ -888,14 +930,15 @@ export default function Navbar() {
                 </div>
               </div>
               </div>
-              {mobileMoreBelow && (
+              {mobileMoreBelow ? (
                 <div
-                  className="shrink-0 border-t border-border/70 bg-background px-3 py-2.5"
+                  className="shrink-0 border-t border-border bg-muted/50 px-3 py-2.5"
                   aria-live="polite"
+                  data-mega-scroll-cue="true"
                 >
-                  <div className="flex items-center justify-center gap-1.5 text-foreground/75">
+                  <div className="flex items-center justify-center gap-1.5 text-foreground">
                     <ChevronDown
-                      className="h-4 w-4 shrink-0"
+                      className="h-4 w-4 shrink-0 text-muted-foreground"
                       strokeWidth={2}
                       aria-hidden
                     />
@@ -904,7 +947,7 @@ export default function Navbar() {
                     </p>
                   </div>
                 </div>
-              )}
+              ) : null}
             </motion.div>
           </>
         )}
