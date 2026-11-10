@@ -24,7 +24,7 @@ export function ServiceTableView({ table }: { table: ServiceTable }) {
                   {leadHeader}
                 </p>
                 <h4 className="text-base font-bold text-foreground leading-persian-tight">
-                  {lead}
+                  {richTextNodes(lead)}
                 </h4>
               </header>
               {fieldHeaders.length > 0 ? (
@@ -38,7 +38,7 @@ export function ServiceTableView({ table }: { table: ServiceTable }) {
                         {header}
                       </dt>
                       <dd className="text-sm text-muted-foreground leading-persian">
-                        {fields[j] ?? "—"}
+                        {richTextNodes(fields[j] ?? "—")}
                       </dd>
                     </div>
                   ))}
@@ -71,10 +71,10 @@ export function ServiceTableView({ table }: { table: ServiceTable }) {
                   {row.map((cell, j) =>
                     j === 0 ? (
                       <th key={`${i}-${j}`} scope="row">
-                        {cell}
+                        {richTextNodes(cell)}
                       </th>
                     ) : (
-                      <td key={`${i}-${j}`}>{cell}</td>
+                      <td key={`${i}-${j}`}>{richTextNodes(cell)}</td>
                     )
                   )}
                 </tr>

@@ -1,4 +1,5 @@
 import { ServiceInlineImage, ServiceFeaturedImage } from "@/components/ServiceImages";
+import { ServiceTableView } from "@/components/ServiceContentBlocks";
 import { richTextNodes } from "@/components/RichText";
 import type { ServiceImageSet } from "@/lib/service-images";
 
@@ -179,36 +180,10 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
     }
     if (block.type === "table") {
       return (
-        <div
+        <ServiceTableView
           key={`tbl-${idx}`}
-          className="overflow-x-auto rounded-xl border border-border my-4"
-        >
-          <table className="w-full text-sm text-right">
-            <thead className="bg-muted/50">
-              <tr>
-                {block.headers.map((h) => (
-                  <th key={h} className="px-3 py-2 font-bold">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {block.rows.map((row, ri) => (
-                <tr key={ri} className="border-t border-border">
-                  {row.map((cell, ci) => (
-                    <td
-                      key={`${ri}-${ci}`}
-                      className="px-3 py-2 text-muted-foreground leading-persian"
-                    >
-                      {richTextNodes(cell)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          table={{ headers: block.headers, rows: block.rows }}
+        />
       );
     }
     return null;
