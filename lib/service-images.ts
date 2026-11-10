@@ -294,7 +294,7 @@ const img_social_ads: ServiceImageSet = {
 };
 
 const img_social_media: ServiceImageSet = {
-  featured: asset("images/services/social-media/featured-1611162616305-c.webp", "تصویر شاخص شبکه‌های اجتماعی — الوند مارکتینگ", 1200, 900, "Souvik Banerjee", "1611162616305-c69b3fa7fbe0"),
+  featured: asset("images/services/social-media/featured-1529156069898-4.webp", "تصویر شاخص شبکه‌های اجتماعی — ارتباط و جامعه مخاطبان — الوند مارکتینگ", 1600, 900, "Perry Grone", "1529156069898-49953e39b3ac"),
   related: [
     asset("images/services/social-media/related-1-1522071820081-0.webp", "تصویر مرتبط 1 برای شبکه‌های اجتماعی — الوند مارکتینگ", 900, 600, "LinkedIn Sales Solutions", "1522071820081-009f0129c71c"),
     asset("images/services/social-media/related-2-1511707171634-5.webp", "تصویر مرتبط 2 برای شبکه‌های اجتماعی — الوند مارکتینگ", 900, 900, "William Iven", "1511707171634-5f897ff02aa9"),
@@ -568,8 +568,8 @@ export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
   "ای‌پی‌آی-و-یکپارچه‌سازی": img_api_integration,
   "مشاوره-دیجیتال-مارکتینگ": img_digital_consulting,
   "برندینگ": img_branding,
-  "اینستاگرام": img_instagram_management,
-  "لینکدین": img_linkedin_management,
+  "شبکه‌های-اجتماعی/اینستاگرام": img_instagram_management,
+  "شبکه‌های-اجتماعی/لینکدین": img_linkedin_management,
 };
 
 export function getServiceImages(slug: string): ServiceImageSet | undefined {

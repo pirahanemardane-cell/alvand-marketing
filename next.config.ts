@@ -125,7 +125,7 @@ const nextConfig: NextConfig = {
         destination: "/reset-password",
         permanent: true,
       },
-      // Latin api slug → fully Persian (Instagram PLP is live again — no 301)
+      // Latin api slug → fully Persian
       {
         source: `/services/${enc("api-و-یکپارچه‌سازی")}`,
         destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
@@ -134,6 +134,27 @@ const nextConfig: NextConfig = {
       {
         source: `/${enc("خدمات")}/${enc("api-و-یکپارچه‌سازی")}`,
         destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
+        statusCode: 301,
+      },
+      // Legacy top-level Instagram / LinkedIn → nested under social PLP
+      {
+        source: `/services/${enc("اینستاگرام")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("اینستاگرام")}`,
+        statusCode: 301,
+      },
+      {
+        source: `/${enc("خدمات")}/${enc("اینستاگرام")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("اینستاگرام")}`,
+        statusCode: 301,
+      },
+      {
+        source: `/services/${enc("لینکدین")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("لینکدین")}`,
+        statusCode: 301,
+      },
+      {
+        source: `/${enc("خدمات")}/${enc("لینکدین")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("لینکدین")}`,
         statusCode: 301,
       },
     ];
