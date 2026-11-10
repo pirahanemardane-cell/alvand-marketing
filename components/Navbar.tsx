@@ -334,8 +334,8 @@ export default function Navbar() {
                             role="menu"
                             aria-label="منوی خدمات"
                           >
-                            <div className="w-[min(96vw,72rem)] rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
-                              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 p-3 max-h-[min(70vh,36rem)] overflow-y-auto">
+                            <div className="w-[min(96vw,72rem)] max-h-[calc(100vh-5.5rem)] flex flex-col rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
+                              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5">
                                 {megaColumns.map(({ parent, featuredChildren }) => {
                                   const SIcon = getServiceIcon(parent.slug);
                                   const href = serviceHref(parent.slug);
@@ -347,7 +347,7 @@ export default function Navbar() {
                                   return (
                                     <div
                                       key={parent.slug}
-                                      className="min-w-0 rounded-xl p-2 hover:bg-accent/5 transition-colors"
+                                      className="min-w-0 rounded-lg p-1.5 hover:bg-accent/5 transition-colors"
                                     >
                                       <Link
                                         href={href}
@@ -356,7 +356,7 @@ export default function Navbar() {
                                         aria-current={
                                           svcActive ? "page" : undefined
                                         }
-                                        className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm font-bold transition-colors ${
+                                        className={`flex items-center gap-1.5 px-1.5 py-1 rounded-md text-sm font-bold transition-colors ${
                                           svcActive
                                             ? "text-accent bg-accent/10"
                                             : "text-foreground hover:text-accent"
@@ -370,7 +370,7 @@ export default function Navbar() {
                                         </span>
                                       </Link>
                                       {featuredChildren.length > 0 && (
-                                        <ul className="mt-1 space-y-0.5 list-none pr-1">
+                                        <ul className="mt-0.5 space-y-0 list-none pr-0.5">
                                           {featuredChildren.map((child) => {
                                             const childHref = serviceHref(
                                               child.slug
@@ -393,7 +393,7 @@ export default function Navbar() {
                                                       ? "page"
                                                       : undefined
                                                   }
-                                                  className={`block px-2 py-1 rounded-md text-xs leading-relaxed transition-colors ${
+                                                  className={`block px-1.5 py-0.5 rounded-md text-xs leading-snug transition-colors ${
                                                     childActive
                                                       ? "text-accent font-bold bg-accent/10"
                                                       : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
@@ -410,7 +410,7 @@ export default function Navbar() {
                                         href={href}
                                         role="menuitem"
                                         onClick={() => setMegaOpen(false)}
-                                        className="mt-1.5 inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-accent hover:opacity-80 transition-opacity"
+                                        className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-bold text-accent hover:opacity-80 transition-opacity"
                                       >
                                         مشاهده همه
                                         <span className="text-[0.65rem]">←</span>
@@ -419,7 +419,7 @@ export default function Navbar() {
                                   );
                                 })}
                               </div>
-                              <div className="border-t border-border bg-muted/40 px-4 py-3 flex flex-col gap-2">
+                              <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5 flex flex-col gap-1.5">
                                 <Link
                                   href="/services"
                                   onClick={() => setMegaOpen(false)}
@@ -428,7 +428,7 @@ export default function Navbar() {
                                       ? "page"
                                       : undefined
                                   }
-                                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-accent-foreground hover:opacity-90 transition-opacity"
+                                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-foreground hover:opacity-90 transition-opacity"
                                 >
                                   <LayoutGrid className="h-4 w-4" />
                                   مشاهده همه خدمات
