@@ -14,6 +14,7 @@ import {
   getAllServiceSlugs,
   getServiceAncestors,
   getChildServices,
+  getDirectChildServices,
   getTopLevelServices,
   serviceHref,
 } from "@/lib/services";
@@ -26,6 +27,7 @@ import {
   ServiceInlineImage,
   ServicePdpFeatured,
 } from "@/components/ServiceImages";
+import ServiceChildrenCarousel from "@/components/ServiceChildrenCarousel";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -93,12 +95,30 @@ export default async function ServiceDetailPage({ params }: Props) {
     ? getChildServices(parent.slug).filter((s) => s.slug !== service.slug)
     : getTopLevelServices().filter((s) => s.slug !== service.slug);
   const childPool = getChildServices(service.slug);
+  const directChildren = getDirectChildServices(service.slug);
   const others = (
     siblingPool.length > 0 ? siblingPool : childPool.length > 0 ? childPool : services
   )
     .filter((s) => s.slug !== service.slug)
     .slice(0, 3);
   const Icon = getServiceIcon(service.slug);
+  const childCards = directChildren.map((child) => {
+    const imgs = getServiceImages(child.slug);
+    return {
+      slug: child.slug,
+      title: child.title,
+      shortDesc: child.shortDesc,
+      href: serviceHref(child.slug),
+      image: imgs
+        ? {
+            src: serviceImageSrc(imgs.featured),
+            alt: imgs.featured.alt,
+            width: imgs.featured.width,
+            height: imgs.featured.height,
+          }
+        : undefined,
+    };
+  });
 
   const breadcrumb = [
     { label: "خدمات دیجیتال مارکتینگ", href: "/services" },
@@ -158,6 +178,13 @@ export default async function ServiceDetailPage({ params }: Props) {
             ))}
           </div>
           {pageImages && <ServicePdpFeatured images={pageImages} />}
+
+          {childCards.length > 0 && (
+            <ServiceChildrenCarousel
+              parentTitle={service.title}
+              items={childCards}
+            />
+          )}
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 w-full mb-14">
             <section>

@@ -8454,6 +8454,15 @@ export function getChildServices(parentSlug: string): Service[] {
   return services.filter((s) => s.slug.startsWith(prefix));
 }
 
+/** Direct children only (one nesting level under parent). */
+export function getDirectChildServices(parentSlug: string): Service[] {
+  const prefix = parentSlug.endsWith("/") ? parentSlug : `${parentSlug}/`;
+  return getChildServices(parentSlug).filter((s) => {
+    const rest = s.slug.slice(prefix.length);
+    return rest.length > 0 && !rest.includes("/");
+  });
+}
+
 /** Ancestor chain for nested slugs (excluding self), root → leaf parent. */
 export function getServiceAncestors(slug: string): Service[] {
   const parts = slug.split("/");
