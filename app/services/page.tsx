@@ -13,16 +13,41 @@ import {
   getTopLevelServices,
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
+import {
+  getHubImages,
+  getServiceImages,
+  serviceImageSrc,
+} from "@/lib/service-images";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicesHubJsonLd } from "@/lib/seo/jsonld";
 import JsonLd from "@/components/JsonLd";
+import {
+  ServiceCardImage,
+  ServiceHubHeroImage,
+  ServiceRelatedGallery,
+} from "@/components/ServiceImages";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return metadataForPageKey("services", {
+  const meta = await metadataForPageKey("services", {
     path: "/services",
     fallbackTitle: servicesOverview.seoTitle,
     fallbackDescription: servicesOverview.seoDescription,
   });
+  const hub = getHubImages();
+  const og = serviceImageSrc(hub.featured);
+  meta.openGraph = {
+    ...meta.openGraph,
+    images: [
+      {
+        url: og,
+        width: hub.featured.width,
+        height: hub.featured.height,
+        alt: hub.featured.alt,
+      },
+    ],
+  };
+  meta.twitter = { ...meta.twitter, images: [og] };
+  return meta;
 }
 
 type Props = { searchParams: Promise<{ q?: string }> };
@@ -41,6 +66,7 @@ export default async function ServicesPage({ searchParams }: Props) {
       )
     : topLevel;
   const o = servicesOverview;
+  const hubImages = getHubImages();
 
   return (
     <main>
@@ -74,6 +100,8 @@ export default async function ServicesPage({ searchParams }: Props) {
             )}
           </div>
 
+          <ServiceHubHeroImage images={hubImages} />
+
           <section className="mb-14">
             <h2 className="text-xl font-bold mb-4 leading-persian-tight">
               {o.criteriaHeading}
@@ -105,12 +133,14 @@ export default async function ServicesPage({ searchParams }: Props) {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
               {filtered.map((item) => {
                 const Icon = getServiceIcon(item.slug);
+                const imgs = getServiceImages(item.slug);
                 return (
                   <Link
                     key={item.slug}
                     href={serviceHref(item.slug)}
                     className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
                   >
+                    {imgs && <ServiceCardImage image={imgs.featured} />}
                     <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">
                       <Icon className="h-5 w-5" strokeWidth={1.75} />
                     </span>
@@ -129,6 +159,8 @@ export default async function ServicesPage({ searchParams }: Props) {
               })}
             </div>
           )}
+
+          <ServiceRelatedGallery images={[...hubImages.related]} />
 
           <section className="mb-14 w-full">
             <h2 className="text-xl font-bold mb-4 leading-persian-tight">
