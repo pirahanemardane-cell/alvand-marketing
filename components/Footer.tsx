@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { mediaUrl } from "@/lib/media";
 import { isNavItemActive } from "@/lib/nav-active";
-import { services, serviceHref } from "@/lib/services";
+import { serviceHref, servicesOverview } from "@/lib/services";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 
@@ -12,8 +12,17 @@ const footerLinkIdle =
   "text-muted-foreground hover:text-foreground transition-colors";
 const footerLinkActive = "text-accent font-bold transition-colors";
 
-/** Keep footer compact: top-level services only (skip nested e.g. WordPress). */
-const footerServices = services.filter((s) => !s.slug.includes("/"));
+/**
+ * Curated high-demand footer services (exact order).
+ * Item 5 keeps user-requested label «اینستاگرام» while linking to the live social PLP.
+ */
+const footerServices: { label: string; slug: string }[] = [
+  { label: "طراحی سایت", slug: "طراحی-سایت" },
+  { label: "سئو و بهینه‌سازی", slug: "سئو" },
+  { label: "هوش مصنوعی", slug: "هوش-مصنوعی" },
+  { label: "تولید محتوا", slug: "تولید-محتوا" },
+  { label: "اینستاگرام", slug: "شبکه‌های-اجتماعی" },
+];
 
 function FooterLink({
   href,
@@ -62,11 +71,11 @@ export default function Footer() {
 
           <div>
             <h4 className="text-sm font-bold mb-4">خدمات دیجیتال مارکتینگ</h4>
-            <ul className="space-y-2.5 text-caption text-muted-foreground max-h-64 overflow-y-auto pe-1">
+            <ul className="space-y-2.5 text-caption text-muted-foreground">
               {footerServices.map((s) => (
                 <li key={s.slug}>
                   <FooterLink href={serviceHref(s.slug)} pathname={pathname}>
-                    {s.title}
+                    {s.label}
                   </FooterLink>
                 </li>
               ))}
@@ -78,7 +87,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-caption text-muted-foreground">
               <li>
                 <FooterLink href="/services" pathname={pathname} exact>
-                  همه خدمات
+                  {servicesOverview.title}
                 </FooterLink>
               </li>
               <li>
