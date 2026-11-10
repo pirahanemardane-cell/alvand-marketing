@@ -596,35 +596,3 @@ html.light[dir="ltr"] .service-table tbody th[scope="row"] {
     min-width: 0;
   }
 }
-
-/* ─── Mega-menu / drawer scroll affordance ───────────────────── */
-@keyframes mega-scroll-cue {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  7% {
-    transform: translateY(7px);
-  }
-  14% {
-    transform: translateY(0);
-  }
-  21% {
-    transform: translateY(7px);
-  }
-  28% {
-    transform: translateY(0);
-  }
-  64% {
-    transform: translateY(3px);
-    opacity: 0.72;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.mega-scroll-cue-icon {
-  animation: mega-scroll-cue 2.8s ease-in-out infinite;
-}
