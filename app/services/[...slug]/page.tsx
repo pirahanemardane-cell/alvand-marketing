@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
+import JsonLd from "@/components/JsonLd";
 import {
   services,
   getServiceBySlug,
@@ -15,6 +16,8 @@ import {
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
+import { servicePdpJsonLd } from "@/lib/seo/jsonld";
+import { canonicalServiceSlug } from "@/lib/seo/service-redirects";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -40,38 +43,25 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug: segments } = await params;
-  const slug = joinSlug(segments);
+  const raw = joinSlug(segments);
+  const slug = canonicalServiceSlug(raw) || raw;
   const service = getServiceBySlug(slug);
   const path = serviceHref(slug);
-  const fromDb = await metadataForPageKey(`service:${slug}`, { path });
-  return {
-    ...fromDb,
-    title: fromDb.title || service?.seoTitle || slug,
-    description:
-      fromDb.description || service?.seoDescription || undefined,
-    openGraph: {
-      ...fromDb.openGraph,
-      title:
-        (fromDb.openGraph &&
-          "title" in fromDb.openGraph &&
-          fromDb.openGraph.title) ||
-        service?.seoTitle ||
-        fromDb.title ||
-        slug,
-      description:
-        (fromDb.openGraph &&
-          "description" in fromDb.openGraph &&
-          fromDb.openGraph.description) ||
-        service?.seoDescription ||
-        fromDb.description ||
-        undefined,
-    },
-  };
+  return metadataForPageKey(`service:${slug}`, {
+    path,
+    fallbackTitle: service?.seoTitle,
+    fallbackDescription: service?.seoDescription,
+  });
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug: segments } = await params;
-  const slug = joinSlug(segments);
+  const raw = joinSlug(segments);
+  const redirected = canonicalServiceSlug(raw);
+  if (redirected) {
+    permanentRedirect(serviceHref(redirected));
+  }
+  const slug = raw;
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
@@ -90,8 +80,14 @@ export default async function ServiceDetailPage({ params }: Props) {
   }
   breadcrumb.push({ label: service.title, href: serviceHref(service.slug) });
 
+  const schemaCrumbs = [
+    { name: "خانه", path: "/" },
+    ...breadcrumb.map((b) => ({ name: b.label, path: b.href })),
+  ];
+
   return (
     <main>
+      <JsonLd data={servicePdpJsonLd(service, schemaCrumbs)} />
       <Navbar />
       <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">

@@ -9,9 +9,15 @@ import { ServiceTableView } from "@/components/ServiceContentBlocks";
 import { services, servicesOverview, serviceHref } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
+import { servicesHubJsonLd } from "@/lib/seo/jsonld";
+import JsonLd from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return metadataForPageKey("services", { path: "/services" });
+  return metadataForPageKey("services", {
+    path: "/services",
+    fallbackTitle: servicesOverview.seoTitle,
+    fallbackDescription: servicesOverview.seoDescription,
+  });
 }
 
 type Props = { searchParams: Promise<{ q?: string }> };
@@ -32,6 +38,7 @@ export default async function ServicesPage({ searchParams }: Props) {
 
   return (
     <main>
+      <JsonLd data={servicesHubJsonLd(o, services)} />
       <Navbar />
       <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">

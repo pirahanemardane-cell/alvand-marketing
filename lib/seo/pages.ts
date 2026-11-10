@@ -62,12 +62,26 @@ export async function getSeoPage(
 
 export async function metadataForPageKey(
   pageKey: string,
-  opts?: { path?: string }
+  opts?: {
+    path?: string;
+    /** Used when no seo_pages row and pageKey is not in FALLBACKS (e.g. service:*). */
+    fallbackTitle?: string;
+    fallbackDescription?: string;
+  }
 ): Promise<Metadata> {
   const row = await getSeoPage(pageKey);
-  const fb = FALLBACKS[pageKey] || FALLBACKS.home;
-  const title = row?.meta_title || row?.title || fb.title;
-  const description = row?.meta_description || fb.description;
+  const fb = FALLBACKS[pageKey];
+  const title =
+    row?.meta_title ||
+    row?.title ||
+    opts?.fallbackTitle ||
+    fb?.title ||
+    FALLBACKS.home.title;
+  const description =
+    row?.meta_description ||
+    opts?.fallbackDescription ||
+    fb?.description ||
+    FALLBACKS.home.description;
   // Public default: indexable. Per-page seo_pages.robots_* still override when false.
   const robotsIndex = row ? row.robots_index !== false : true;
   const robotsFollow = row ? row.robots_follow !== false : true;

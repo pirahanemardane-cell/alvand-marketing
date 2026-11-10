@@ -14,14 +14,14 @@ const footerLinkActive = "text-accent font-bold transition-colors";
 
 /**
  * Curated high-demand footer services (exact order).
- * Item 5 keeps user-requested label «اینستاگرام» while linking to the live social PLP.
+ * Labels match destination page titles except SEO-style «سئو و بهینه‌سازی» for سئو.
  */
 const footerServices: { label: string; slug: string }[] = [
   { label: "طراحی سایت", slug: "طراحی-سایت" },
   { label: "سئو و بهینه‌سازی", slug: "سئو" },
   { label: "هوش مصنوعی", slug: "هوش-مصنوعی" },
   { label: "تولید محتوا", slug: "تولید-محتوا" },
-  { label: "اینستاگرام", slug: "شبکه‌های-اجتماعی" },
+  { label: "شبکه‌های اجتماعی", slug: "شبکه‌های-اجتماعی" },
 ];
 
 function FooterLink({
