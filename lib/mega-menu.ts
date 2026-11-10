@@ -120,8 +120,9 @@ export type HubCatalogGroup = {
 };
 
 /**
- * Full hub catalog: every top-level PLP with all nested PDPs under it.
- * Used by `/services` — not capped like the mega-menu.
+ * Hub grouping helper (parent + nested descendants).
+ * `/services` lists top-level PLPs only via `getTopLevelServices()`;
+ * nested PDPs remain on parent pages and mega-menu samples.
  */
 export function getHubCatalogGroups(): HubCatalogGroup[] {
   return orderedTopLevelServices().map((parent) => {
