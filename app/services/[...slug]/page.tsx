@@ -27,7 +27,7 @@ import {
   ServiceInlineImage,
   ServicePdpFeatured,
 } from "@/components/ServiceImages";
-import ServiceChildrenCarousel from "@/components/ServiceChildrenCarousel";
+import ServiceChildrenList from "@/components/ServiceChildrenList";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
@@ -180,7 +180,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           {pageImages && <ServicePdpFeatured images={pageImages} />}
 
           {childCards.length > 0 && (
-            <ServiceChildrenCarousel
+            <ServiceChildrenList
               parentTitle={service.title}
               items={childCards}
             />
