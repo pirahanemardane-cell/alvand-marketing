@@ -3,10 +3,15 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import SectionLabel from "./SectionLabel";
-import { services, serviceHref, servicesOverview } from "@/lib/services";
+import {
+  getTopLevelServices,
+  serviceHref,
+  servicesOverview,
+} from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 
 export default function Services() {
+  const topLevel = getTopLevelServices();
   return (
     <section
       id="services"
@@ -40,7 +45,7 @@ export default function Services() {
             </motion.h2>
 
             <div className="space-y-0">
-              {services.map((item, i) => {
+              {topLevel.map((item, i) => {
                 const Icon = getServiceIcon(item.slug);
                 return (
                   <motion.div

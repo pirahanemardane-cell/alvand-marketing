@@ -6,7 +6,12 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceTableView } from "@/components/ServiceContentBlocks";
-import { services, servicesOverview, serviceHref } from "@/lib/services";
+import {
+  services,
+  servicesOverview,
+  serviceHref,
+  getTopLevelServices,
+} from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicesHubJsonLd } from "@/lib/seo/jsonld";
@@ -25,6 +30,7 @@ type Props = { searchParams: Promise<{ q?: string }> };
 export default async function ServicesPage({ searchParams }: Props) {
   const { q } = await searchParams;
   const query = q?.trim() || "";
+  const topLevel = getTopLevelServices();
   const filtered = query
     ? services.filter(
         (s) =>
@@ -33,12 +39,12 @@ export default async function ServicesPage({ searchParams }: Props) {
           s.fullDesc.includes(query) ||
           s.heroHeading.includes(query)
       )
-    : services;
+    : topLevel;
   const o = servicesOverview;
 
   return (
     <main>
-      <JsonLd data={servicesHubJsonLd(o, services)} />
+      <JsonLd data={servicesHubJsonLd(o, topLevel)} />
       <Navbar />
       <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">

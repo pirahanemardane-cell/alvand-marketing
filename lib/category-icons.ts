@@ -3,8 +3,10 @@ import {
   BarChart3,
   BookOpen,
   Cable,
+  Gauge,
   Headphones,
   Instagram,
+  Linkedin,
   Mail,
   Megaphone,
   MessageCircle,
@@ -13,8 +15,10 @@ import {
   PenLine,
   Search,
   Share2,
+  Shield,
   Smartphone,
   Sparkles,
+  Wrench,
 } from "lucide-react";
 
 /**
@@ -29,8 +33,12 @@ export const serviceIcons: Record<string, LucideIcon> = {
   "هوش-مصنوعی": Sparkles,
   "شبکه‌های-اجتماعی": Share2,
   اینستاگرام: Instagram,
+  لینکدین: Linkedin,
   "تبلیغات-اینترنتی": Megaphone,
   "پشتیبانی-سایت": Headphones,
+  "پشتیبانی-سایت/امنیت": Shield,
+  "پشتیبانی-سایت/افزایش-سرعت": Gauge,
+  "پشتیبانی-سایت/رفع-ارور": Wrench,
   "اپلیکیشن-و-وب-اپ": Smartphone,
   آنالیتیکس: BarChart3,
   "ای‌پی‌آی-و-یکپارچه‌سازی": Cable,
@@ -46,6 +54,7 @@ const blogCategoryIcons: Record<string, LucideIcon> = {
   سئو: Search,
   "هوش مصنوعی": Sparkles,
   اینستاگرام: Instagram,
+  لینکدین: Linkedin,
   "شبکه‌های اجتماعی": Share2,
   "تبلیغات اینترنتی": Megaphone,
   بازاریابی: Sparkles,
@@ -53,8 +62,22 @@ const blogCategoryIcons: Record<string, LucideIcon> = {
 };
 
 export function getServiceIcon(slug: string): LucideIcon {
-  const decoded = decodeURIComponent(slug);
-  return serviceIcons[slug] || serviceIcons[decoded] || Monitor;
+  const decoded = (() => {
+    try {
+      return decodeURIComponent(slug);
+    } catch {
+      return slug;
+    }
+  })();
+  if (serviceIcons[slug]) return serviceIcons[slug];
+  if (serviceIcons[decoded]) return serviceIcons[decoded];
+  // Walk nested prefixes: طراحی-سایت/پزشکی → طراحی-سایت
+  const parts = decoded.split("/");
+  for (let i = parts.length - 1; i >= 1; i--) {
+    const prefix = parts.slice(0, i).join("/");
+    if (serviceIcons[prefix]) return serviceIcons[prefix];
+  }
+  return Monitor;
 }
 
 export function getBlogCategoryIcon(name: string): LucideIcon {
@@ -64,7 +87,6 @@ export function getBlogCategoryIcon(name: string): LucideIcon {
   for (const [k, icon] of Object.entries(blogCategoryIcons)) {
     if (k.toLowerCase() === lower) return icon;
   }
-  // Fallback: match a service title contained in the category name
   for (const [slug, icon] of Object.entries(serviceIcons)) {
     const titleHint = slug.replace(/-/g, " ");
     if (key.includes(titleHint) || titleHint.includes(key)) return icon;

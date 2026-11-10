@@ -24,8 +24,21 @@ import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
-import { services, serviceHref } from "@/lib/services";
+import {
+  services,
+  serviceHref,
+  getTopLevelServices,
+  getChildServices,
+} from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
+
+/** Direct children only (one nesting level) for mega-menu grouping. */
+function getDirectChildServices(parentSlug: string) {
+  return getChildServices(parentSlug).filter((s) => {
+    const rest = s.slug.slice(parentSlug.length + 1);
+    return rest.length > 0 && !rest.includes("/");
+  });
+}
 
 const desktopLinkBase =
   "inline-flex items-center gap-1.5 text-sm transition-colors duration-200 whitespace-nowrap px-2 py-1.5 rounded-md";
@@ -302,7 +315,7 @@ export default function Navbar() {
                             transition={{ duration: 0.15 }}
                             className="absolute top-full right-0 pt-2 z-[70]"
                           >
-                            <div className="w-72 rounded-2xl border border-border bg-background shadow-2xl p-2 ring-1 ring-border/50">
+                            <div className="w-[min(92vw,36rem)] max-h-[70vh] overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl p-2 ring-1 ring-border/50">
                               <Link
                                 href="/services"
                                 className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
@@ -319,31 +332,75 @@ export default function Navbar() {
                                 همه خدمات
                               </Link>
                               <div className="h-px bg-border my-1" />
-                              {services.map((s) => {
-                                const SIcon = getServiceIcon(s.slug);
-                                const href = serviceHref(s.slug);
-                                const svcActive =
-                                  pathname === href ||
-                                  pathname === decodeURIComponent(href);
-                                return (
-                                  <Link
-                                    key={s.slug}
-                                    href={href}
-                                    onClick={() => setMegaOpen(false)}
-                                    aria-current={svcActive ? "page" : undefined}
-                                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
-                                      svcActive
-                                        ? "text-accent font-bold bg-accent/10"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
-                                    }`}
-                                  >
-                                    <span className="text-accent">
-                                      <SIcon className="h-4 w-4 shrink-0" />
-                                    </span>
-                                    {s.title}
-                                  </Link>
-                                );
-                              })}
+                              <div className="grid sm:grid-cols-2 gap-0.5">
+                                {getTopLevelServices().map((s) => {
+                                  const SIcon = getServiceIcon(s.slug);
+                                  const href = serviceHref(s.slug);
+                                  const svcActive =
+                                    pathname === href ||
+                                    pathname === decodeURIComponent(href) ||
+                                    pathname.startsWith(
+                                      decodeURIComponent(href) + "/"
+                                    );
+                                  const children = getDirectChildServices(s.slug);
+                                  return (
+                                    <div key={s.slug} className="min-w-0">
+                                      <Link
+                                        href={href}
+                                        onClick={() => setMegaOpen(false)}
+                                        aria-current={
+                                          svcActive ? "page" : undefined
+                                        }
+                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                                          svcActive
+                                            ? "text-accent font-bold bg-accent/10"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
+                                        }`}
+                                      >
+                                        <span className="text-accent">
+                                          <SIcon className="h-4 w-4 shrink-0" />
+                                        </span>
+                                        {s.title}
+                                      </Link>
+                                      {children.length > 0 && (
+                                        <ul className="pr-8 pb-1 space-y-0.5 list-none">
+                                          {children.map((child) => {
+                                            const childHref = serviceHref(
+                                              child.slug
+                                            );
+                                            const childActive =
+                                              pathname === childHref ||
+                                              pathname ===
+                                                decodeURIComponent(childHref);
+                                            return (
+                                              <li key={child.slug}>
+                                                <Link
+                                                  href={childHref}
+                                                  onClick={() =>
+                                                    setMegaOpen(false)
+                                                  }
+                                                  aria-current={
+                                                    childActive
+                                                      ? "page"
+                                                      : undefined
+                                                  }
+                                                  className={`block px-2 py-1 rounded-lg text-xs transition-colors ${
+                                                    childActive
+                                                      ? "text-accent font-bold bg-accent/10"
+                                                      : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
+                                                  }`}
+                                                >
+                                                  {child.title}
+                                                </Link>
+                                              </li>
+                                            );
+                                          })}
+                                        </ul>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
                           </motion.div>
                         )}
@@ -521,12 +578,13 @@ export default function Navbar() {
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden pr-4 pb-2 list-none"
                             >
-                              {services.map((s) => {
+                              {getTopLevelServices().map((s) => {
                                 const SIcon = getServiceIcon(s.slug);
                                 const href = serviceHref(s.slug);
                                 const svcActive =
                                   pathname === href ||
                                   pathname === decodeURIComponent(href);
+                                const children = getDirectChildServices(s.slug);
                                 return (
                                   <li key={s.slug}>
                                     <Link
@@ -544,6 +602,39 @@ export default function Navbar() {
                                       <SIcon className="h-4 w-4 text-accent shrink-0" />
                                       {s.title}
                                     </Link>
+                                    {children.length > 0 && (
+                                      <ul className="pr-6 list-none">
+                                        {children.map((child) => {
+                                          const childHref = serviceHref(
+                                            child.slug
+                                          );
+                                          const childActive =
+                                            pathname === childHref ||
+                                            pathname ===
+                                              decodeURIComponent(childHref);
+                                          return (
+                                            <li key={child.slug}>
+                                              <Link
+                                                href={childHref}
+                                                onClick={closeMenu}
+                                                aria-current={
+                                                  childActive
+                                                    ? "page"
+                                                    : undefined
+                                                }
+                                                className={`block py-1.5 px-3 text-xs transition-colors ${
+                                                  childActive
+                                                    ? "text-accent font-bold"
+                                                    : "text-muted-foreground hover:text-accent"
+                                                }`}
+                                              >
+                                                {child.title}
+                                              </Link>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    )}
                                   </li>
                                 );
                               })}

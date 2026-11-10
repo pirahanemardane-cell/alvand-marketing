@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert service-plp DOCX files into lib/services.ts content."""
+"""Convert PLP/PDP DOCX packs into lib/services.ts (+ manifest JSON)."""
 
 from __future__ import annotations
 
@@ -12,13 +12,96 @@ from pathlib import Path
 import mammoth
 from bs4 import BeautifulSoup, NavigableString, Tag
 
-DOCX_DIR = Path(
-    "/cursor/stores/bc-7622b6eb-ed98-4c41-a575-821dde6494d9/docs/service-plp-docx"
+BATCH = Path(
+    "/cursor/stores/bc-7622b6eb-ed98-4c41-a575-821dde6494d9/docs/service-pdp-batch/unpacked"
 )
 OUT_TS = Path("/workspace/lib/services.ts")
 OUT_JSON = Path("/tmp/docx-extract/services-parsed.json")
+OUT_MANIFEST = Path("/tmp/docx-extract/import-manifest.json")
 
 PERSIAN_NUMS = "۰۱۲۳۴۵۶۷۸۹"
+
+# Prefer Persian canonical when workbook/DOCX still suggest Latin "api"
+SLUG_OVERRIDES: dict[str, str] = {
+    "api-و-یکپارچه‌سازی": "ای‌پی‌آی-و-یکپارچه‌سازی",
+    "api-و-یکپارچه\u200cسازی": "ای‌پی‌آی-و-یکپارچه‌سازی",
+}
+
+# Hub + core PLPs first (update), then PLP 31–45, then specialty PDPs
+DOC_ORDER: list[tuple[str, str]] = [
+    # hub handled separately
+    ("PLP-01-15_5885", "02-tarahi-site.docx"),
+    ("PLP-01-15_5885", "15-tarahi-site-wordpress.docx"),
+    ("PLP-01-15_5885", "03-seo.docx"),
+    ("PLP-01-15_5885", "04-tolid-mohtava.docx"),
+    ("PLP-01-15_5885", "06-tablighat-interneti.docx"),
+    ("PLP-01-15_5885", "07-shabake-haye-ejtemaei.docx"),
+    ("PLP-01-15_5885", "05-hoosh-masnooi.docx"),
+    ("PLP-01-15_5885", "12-email-marketing.docx"),
+    ("PLP-01-15_5885", "10-abzarhaye-analytics.docx"),
+    ("PLP-01-15_5885", "08-poshtibani-site.docx"),
+    ("PLP-01-15_5885", "09-tarahi-sakht-application.docx"),
+    ("PLP-01-15_5885", "11-api-yekparche-sazi.docx"),
+    ("PLP-01-15_5885", "13-moshavere-digital-marketing.docx"),
+    ("PLP-01-15_5885", "14-branding.docx"),
+    # PLP 31–45
+    ("PLP-31-45_8150", "31-tablighat-banari.docx"),
+    ("PLP-31-45_8150", "32-reportage-agahi.docx"),
+    ("PLP-31-45_8150", "33-push-notification.docx"),
+    ("PLP-31-45_8150", "34-tablighat-shabakeh-ejtemaei.docx"),
+    ("PLP-31-45_8150", "35-modiriat-instagram.docx"),
+    ("PLP-31-45_8150", "36-modiriat-linkedin.docx"),
+    ("PLP-31-45_8150", "37-afzayesh-sorat-site.docx"),
+    ("PLP-31-45_8150", "38-amniat-site.docx"),
+    ("PLP-31-45_8150", "39-monitoring-site.docx"),
+    ("PLP-31-45_8150", "40-nasb-ghaleb-afzoneh-wordpress.docx"),
+    ("PLP-31-45_8150", "41-rafe-error-site.docx"),
+    ("PLP-31-45_8150", "42-web-application.docx"),
+    ("PLP-31-45_8150", "43-google-analytics.docx"),
+    ("PLP-31-45_8150", "44-google-tag-manager.docx"),
+    ("PLP-31-45_8150", "45-search-console.docx"),
+    # PDP specialty
+    ("PDP-01-08_cee7", "01-tarahi-site-pezeshki.docx"),
+    ("PDP-01-08_cee7", "02-tarahi-landing-page.docx"),
+    ("PDP-01-08_cee7", "03-seo-site-foroushgahi.docx"),
+    ("PDP-01-08_cee7", "04-tarahi-site-restaurant.docx"),
+    ("PDP-01-08_cee7", "05-tarahi-site-amlak.docx"),
+    ("PDP-01-08_cee7", "06-tarahi-site-amoozeshi.docx"),
+    ("PDP-01-08_cee7", "07-tarahi-site-sanati.docx"),
+    ("PDP-01-08_cee7", "08-tarahi-site-dandanpezeshki.docx"),
+    ("PDP-09-15_7540", "09-tarahi-site-clinic-zibayi.docx"),
+    ("PDP-09-15_7540", "10-seo-pezeshki.docx"),
+    ("PDP-09-15_7540", "11-tarahi-application-foroushgahi.docx"),
+    ("PDP-09-15_7540", "12-tarahi-site-khadamati.docx"),
+    ("PDP-09-15_7540", "13-tarahi-site-gardeshgari.docx"),
+    ("PDP-09-15_7540", "14-tolid-mohtava-video.docx"),
+    ("PDP-09-15_7540", "15-mohajerat-site-be-wordpress.docx"),
+    ("PDP-16-22_8da2", "16-paksazi-site-hack-shode.docx"),
+    ("PDP-16-22_8da2", "17-tarahi-site-chandzabane.docx"),
+    ("PDP-16-22_8da2", "18-tarahi-site-nobat-dehi.docx"),
+    ("PDP-16-22_8da2", "19-tarahi-site-khabari.docx"),
+    ("PDP-16-22_8da2", "20-seo-beynolmelali.docx"),
+    ("PDP-16-22_8da2", "21-poshtibani-site-foroushgahi.docx"),
+    ("PDP-16-22_8da2", "22-tarahi-site-hoghooghi.docx"),
+]
+
+# Existing slugs before this batch (for created vs updated)
+EXISTING_SLUGS = {
+    "طراحی-سایت",
+    "طراحی-سایت/وردپرس",
+    "سئو",
+    "تولید-محتوا",
+    "تبلیغات-اینترنتی",
+    "شبکه‌های-اجتماعی",
+    "هوش-مصنوعی",
+    "ایمیل-مارکتینگ",
+    "آنالیتیکس",
+    "پشتیبانی-سایت",
+    "اپلیکیشن-و-وب-اپ",
+    "ای‌پی‌آی-و-یکپارچه‌سازی",
+    "مشاوره-دیجیتال-مارکتینگ",
+    "برندینگ",
+}
 
 
 def to_persian_num(n: int) -> str:
@@ -33,14 +116,12 @@ def clean_text(s: str) -> str:
     s = re.sub(r"[ \t]+", " ", s)
     s = s.replace("\\.", ".")
     s = s.strip()
-    # Drop authoring placeholders that shouldn't ship
     s = re.sub(r"\[نیاز به تأیید[^\]]*\]", "", s).strip()
     s = re.sub(r"\s{2,}", " ", s)
     return s
 
 
 def cell_text(td: Tag) -> str:
-    # Prefer plain text; keep link labels
     return clean_text(td.get_text(" ", strip=True))
 
 
@@ -57,7 +138,6 @@ def parse_table(table: Tag) -> dict | None:
         headers = [cell_text(th) for th in ths]
         body = rows_el[1:]
     else:
-        # treat first row as header if all strong / th-like
         cells = first.find_all(["th", "td"])
         headers = [cell_text(c) for c in cells]
         body = rows_el[1:]
@@ -67,7 +147,6 @@ def parse_table(table: Tag) -> dict | None:
             continue
         row = [cell_text(c) for c in cells]
         if any(row):
-            # pad/truncate to header width
             if headers:
                 if len(row) < len(headers):
                     row = row + [""] * (len(headers) - len(row))
@@ -95,19 +174,27 @@ def extract_spec(soup: BeautifulSoup) -> dict[str, str]:
 
 def slug_from_spec(spec: dict[str, str], fallback: str) -> str:
     addr = spec.get("آدرس", "")
+    addr = addr.replace("پیشنهادی:", "").replace("موجود:", "").strip()
     m = re.search(r"/services/([^\s\)\"']+)", addr)
     if m:
         slug = m.group(1).replace("\\", "").rstrip("/")
+        slug = SLUG_OVERRIDES.get(slug, slug)
         return slug
-    return fallback
+    if re.search(r"/services/?$", addr):
+        return ""
+    return SLUG_OVERRIDES.get(fallback, fallback)
 
 
 def rewrite_links_in_text(text: str) -> str:
-    """Strip absolute site URLs to path-only forms inside prose (already plain text)."""
     text = re.sub(
         r"https?://alvandmarketing\.ir(/[^\s\)\]\"]*)",
         r"\1",
         text,
+    )
+    # Prefer Persian API path in prose
+    text = text.replace(
+        "/services/api-و-یکپارچه‌سازی",
+        "/services/ای‌پی‌آی-و-یکپارچه‌سازی",
     )
     return text
 
@@ -133,12 +220,14 @@ def ensure_consult_cta(answer: str, question: str = "") -> str:
     q = clean_text(question)
     costish = bool(COST_HINT.search(a) or COST_HINT.search(q))
     if costish and "مشاوره" not in a and "فرم تماس" not in a and "جلسه شناخت" not in a:
-        a = a.rstrip(".") + ". برای برآورد دقیق، درخواست مشاوره رایگان ثبت کنید یا از فرم تماس پیام بدهید."
+        a = (
+            a.rstrip(".")
+            + ". برای برآورد دقیق، درخواست مشاوره رایگان ثبت کنید یا از فرم تماس پیام بدهید."
+        )
     return a
 
 
 def iter_content_nodes(soup: BeautifulSoup):
-    """Yield content nodes after 'مرحله دوم: محتوا' heading, else after page title."""
     body = soup.body if soup.body else soup
     started = False
     for el in body.descendants:
@@ -150,17 +239,13 @@ def iter_content_nodes(soup: BeautifulSoup):
                 started = True
                 continue
             if not started and el.name == "h1":
-                # wait for مرحله دوم; if never found, start after first content h2
                 continue
         if not started:
             continue
-        # only top-ish block elements that are direct structural
         if el.name in ("h2", "h3", "p", "ul", "ol", "table"):
-            # skip nested duplicates: only yield if parent isn't another yielded container
             parent = el.parent
             if parent and parent.name in ("td", "th", "li"):
                 continue
-            # avoid nested p inside table etc already handled
             if el.name == "p" and el.find_parent("table"):
                 continue
             if el.name in ("ul", "ol") and el.find_parent("table"):
@@ -169,7 +254,6 @@ def iter_content_nodes(soup: BeautifulSoup):
 
 
 def collect_sections(soup: BeautifulSoup) -> list[dict]:
-    """Parse content into ordered sections with heading/level/paras/items/tables."""
     sections: list[dict] = []
     current: dict | None = None
 
@@ -184,20 +268,20 @@ def collect_sections(soup: BeautifulSoup) -> list[dict]:
         }
         sections.append(current)
 
-    # If no مرحله دوم, fall back: start at first h2 that isn't scaffold
     nodes = list(iter_content_nodes(soup))
     if not nodes:
         body = soup.body if soup.body else soup
         started = False
         for el in body.find_all(["h2", "h3", "p", "ul", "ol", "table"]):
-            if el.name in ("h2", "h3") and is_scaffold_heading(el.get_text(" ", strip=True)):
+            if el.name in ("h2", "h3") and is_scaffold_heading(
+                el.get_text(" ", strip=True)
+            ):
                 if "مرحله دوم" in el.get_text():
                     started = True
                 continue
             if el.name in ("h2", "h3") and el.get_text(" ", strip=True) == "مشخصات صفحه":
                 continue
             if el.name == "h2" and not started:
-                # skip heading hierarchy table's following — start at content hero-like h2
                 started = True
             if not started:
                 continue
@@ -242,9 +326,7 @@ def match_heading(h: str | None, *needles: str) -> bool:
 def short_desc_from_intro(intro: list[str], title: str) -> str:
     if not intro:
         return title
-    # first sentence-ish, capped
     text = intro[0]
-    # trim to ~120 chars at word boundary
     if len(text) <= 140:
         return text
     cut = text[:140]
@@ -253,15 +335,47 @@ def short_desc_from_intro(intro: list[str], title: str) -> str:
     return cut.rstrip("،,;") + "…"
 
 
+def section_to_block(sec: dict, skip_items: bool = False) -> dict | None:
+    h = sec.get("heading")
+    paras = list(sec.get("paragraphs") or [])
+    items = [] if skip_items else list(sec.get("items") or [])
+    tables = list(sec.get("tables") or [])
+    if not h and not paras and not items and not tables:
+        return None
+    block: dict = {}
+    if h:
+        block["heading"] = h
+        block["level"] = sec.get("level") or 2
+    if paras:
+        block["paragraphs"] = paras
+    if items:
+        block["items"] = items
+    if tables:
+        block["table"] = tables[0]
+    return block
+
+
 def build_service(docx_path: Path, index: int) -> dict:
     with open(docx_path, "rb") as f:
         html = mammoth.convert_to_html(f).value
     soup = BeautifulSoup(html, "lxml")
-    title = clean_text(soup.find("h1").get_text(" ", strip=True)) if soup.find("h1") else docx_path.stem
+    title = (
+        clean_text(soup.find("h1").get_text(" ", strip=True))
+        if soup.find("h1")
+        else docx_path.stem
+    )
     spec = extract_spec(soup)
+    # Prefer نام صفحه from spec when present
+    if spec.get("نام صفحه"):
+        title = clean_text(spec["نام صفحه"])
     slug = slug_from_spec(spec, title.replace(" ", "-"))
-    seo_title = clean_text(spec.get("عنوان سئو پیشنهادی", f"{title} | الوند مارکتینگ"))
+    seo_title = clean_text(
+        spec.get("عنوان سئو پیشنهادی", f"{title} | الوند مارکتینگ")
+    )
     seo_desc = clean_text(spec.get("توضیحات متا پیشنهادی", ""))
+    parent_page = clean_text(spec.get("صفحه والد", ""))
+    page_type = clean_text(spec.get("نوع صفحه", ""))
+    status = clean_text(spec.get("وضعیت", ""))
 
     sections = collect_sections(soup)
 
@@ -277,15 +391,11 @@ def build_service(docx_path: Path, index: int) -> dict:
     before: list[dict] = []
     after: list[dict] = []
 
-    # First section with h2 is typically hero
-    consumed = set()
     if sections and sections[0].get("heading"):
         hero_heading = sections[0]["heading"]
         intro = list(sections[0]["paragraphs"])
-        # bold CTA lines stay as paragraphs
-        consumed.add(0)
 
-    phase = "before"  # before process vs after
+    phase = "before"
     process_seen = False
 
     i = 1
@@ -294,7 +404,6 @@ def build_service(docx_path: Path, index: int) -> dict:
         h = sec.get("heading") or ""
 
         if match_heading(h, "سؤالات متداول", "سوالات متداول"):
-            # following h3s are Q, paragraphs are A — but mammoth may put Q as h3 sections
             j = i + 1
             while j < len(sections):
                 qs = sections[j]
@@ -321,10 +430,7 @@ def build_service(docx_path: Path, index: int) -> dict:
         ) and ("چه" in h or "مناسب" in h):
             if match_heading(h, "این خدمت برای چه", "برای چه"):
                 for_who_heading = h
-                for_who = list(sec["items"]) or [
-                    p for p in sec["paragraphs"] if p
-                ]
-                consumed.add(i)
+                for_who = list(sec["items"]) or [p for p in sec["paragraphs"] if p]
                 i += 1
                 continue
 
@@ -355,7 +461,6 @@ def build_service(docx_path: Path, index: int) -> dict:
             process_heading = h
             process = []
             if sec.get("tables"):
-                # Prefer step table over trailing note lists
                 tbl = sec["tables"][0]
                 for row in tbl.get("rows") or []:
                     if not row:
@@ -396,16 +501,14 @@ def build_service(docx_path: Path, index: int) -> dict:
                 after.append(block)
         i += 1
 
-    # If forWho empty, try find any matching section again loosely
     if not for_who:
         for sec in sections:
             h = sec.get("heading") or ""
             if "مناسب" in h and sec["items"]:
                 for_who_heading = h
                 for_who = list(sec["items"])
-                # remove from before/after if duplicated
                 before = [b for b in before if b.get("heading") != h]
-                after = [b for b in after if b.get("heading") != h]
+                after = [a for a in after if a.get("heading") != h]
                 break
 
     if not deliverables:
@@ -415,25 +518,33 @@ def build_service(docx_path: Path, index: int) -> dict:
                 deliverables_heading = h
                 deliverables = list(sec["items"])
                 before = [b for b in before if b.get("heading") != h]
-                after = [b for b in after if b.get("heading") != h]
+                after = [a for a in after if a.get("heading") != h]
                 break
 
     if not deliverables:
-        # Fall back: first before-block with a solid item list
         for b in list(before):
             items = b.get("items") or []
             if len(items) >= 3 and b.get("heading"):
                 deliverables_heading = b["heading"]
                 deliverables = list(items)
                 before = [x for x in before if x is not b]
-                # keep table/paras from that block if any
-                leftover = {k: v for k, v in b.items() if k in ("paragraphs", "table", "level", "heading") and k != "items"}
+                leftover = {
+                    k: v
+                    for k, v in b.items()
+                    if k in ("paragraphs", "table", "level", "heading") and k != "items"
+                }
                 if leftover.get("table") or leftover.get("paragraphs"):
-                    before.insert(0, {**leftover, "heading": leftover.get("heading"), "level": leftover.get("level") or 3})
+                    before.insert(
+                        0,
+                        {
+                            **leftover,
+                            "heading": leftover.get("heading"),
+                            "level": leftover.get("level") or 3,
+                        },
+                    )
                 break
 
     if not deliverables:
-        # Last resort: synthesize from first comparison/services table rows
         for b in before:
             tbl = b.get("table")
             if not tbl or len(tbl.get("rows") or []) < 2:
@@ -449,7 +560,6 @@ def build_service(docx_path: Path, index: int) -> dict:
                     deliverables.append(f"{row[0]} — {row[1]}")
             break
 
-    # If still no process, keep empty (UI will hide)
     if not intro and sections:
         intro = list(sections[0].get("paragraphs") or [])
 
@@ -473,38 +583,26 @@ def build_service(docx_path: Path, index: int) -> dict:
         "beforeProcess": before,
         "afterProcess": after,
         "faq": faq,
-        "source": docx_path.name,
+        "source": str(docx_path.relative_to(BATCH)) if BATCH in docx_path.parents else docx_path.name,
+        "parentPage": parent_page,
+        "pageType": page_type,
+        "status": status,
+        "processSeen": process_seen,
     }
-
-
-def section_to_block(sec: dict, skip_items: bool = False) -> dict | None:
-    h = sec.get("heading")
-    paras = list(sec.get("paragraphs") or [])
-    items = [] if skip_items else list(sec.get("items") or [])
-    tables = list(sec.get("tables") or [])
-    if not h and not paras and not items and not tables:
-        return None
-    block: dict = {}
-    if h:
-        block["heading"] = h
-        block["level"] = sec.get("level") or 2
-    if paras:
-        block["paragraphs"] = paras
-    if items:
-        block["items"] = items
-    if tables:
-        # one table per block (first); extra tables become sibling blocks handled by caller ideally
-        block["table"] = tables[0]
-    # If multiple tables, only first — extras appended as paragraphs note skipped; improve below
-    return block
 
 
 def build_overview(docx_path: Path, hub_short: dict[str, str]) -> dict:
     with open(docx_path, "rb") as f:
         html = mammoth.convert_to_html(f).value
     soup = BeautifulSoup(html, "lxml")
-    title = clean_text(soup.find("h1").get_text(" ", strip=True)) if soup.find("h1") else "خدمات دیجیتال مارکتینگ"
+    title = (
+        clean_text(soup.find("h1").get_text(" ", strip=True))
+        if soup.find("h1")
+        else "خدمات دیجیتال مارکتینگ"
+    )
     spec = extract_spec(soup)
+    if spec.get("نام صفحه"):
+        title = clean_text(spec["نام صفحه"])
     seo_title = clean_text(spec.get("عنوان سئو پیشنهادی", title))
     seo_desc = clean_text(spec.get("توضیحات متا پیشنهادی", ""))
     sections = collect_sections(soup)
@@ -559,7 +657,6 @@ def build_overview(docx_path: Path, hub_short: dict[str, str]) -> dict:
         if match_heading(h, "خدمات الوند مارکتینگ و خروجی"):
             outputs_heading = h
             i += 1
-            # consume following h3 groups until comparison or guide
             while i < len(sections):
                 g = sections[i]
                 gh = g.get("heading") or ""
@@ -567,15 +664,12 @@ def build_overview(docx_path: Path, hub_short: dict[str, str]) -> dict:
                     break
                 if match_heading(gh, "مقایسه سریع"):
                     break
-                # parse bullets for shortDesc map
                 group_intro = " ".join(g.get("paragraphs") or [])
                 items_out = []
                 for item in g.get("items") or []:
-                    # "Title: blurb" or "Title — blurb"
                     m = re.match(r"^(.+?)[:：]\s*(.+)$", item)
                     if m:
                         tname, blurb = clean_text(m.group(1)), clean_text(m.group(2))
-                        # strip markdown-ish bold leftovers
                         tname = tname.strip("*_ ")
                         hub_short[tname] = blurb
                         items_out.append({"title": tname, "blurb": blurb})
@@ -604,8 +698,11 @@ def build_overview(docx_path: Path, hub_short: dict[str, str]) -> dict:
         if match_heading(h, "ترتیب پیشنهادی", "بودجه محدود"):
             budget_heading = h
             budget_order = list(sec["items"]) or list(sec["paragraphs"])
-            # note may be in paragraphs after items
-            notes = [p for p in sec["paragraphs"] if "ترکیب" in p or "هم‌زمان" in p or " همزمان" in p]
+            notes = [
+                p
+                for p in sec["paragraphs"]
+                if "ترکیب" in p or "هم‌زمان" in p or " همزمان" in p
+            ]
             if notes:
                 budget_note = notes[0]
             elif len(sec["paragraphs"]) > len(budget_order):
@@ -622,13 +719,11 @@ def build_overview(docx_path: Path, hub_short: dict[str, str]) -> dict:
             i += 1
             continue
 
-        # orphan comparison as h3
         if match_heading(h, "مقایسه سریع") and sec["tables"]:
             comparison_heading = h
             comparison_table = sec["tables"][0]
         i += 1
 
-    # Also harvest short blurbs from any leftover list under outputs if hub_short empty
     return {
         "title": title,
         "heroHeading": hero_heading,
@@ -691,20 +786,16 @@ def emit_block(block: dict, indent: int) -> str:
             lines.append(f"{sp}    {ts_string(it)},")
         lines.append(f"{sp}  ],")
     if block.get("table"):
-        lines.append(f"{sp}  table: {emit_table(block['table'], indent + 2).lstrip()},")
+        lines.append(
+            f"{sp}  table: {emit_table(block['table'], indent + 2).lstrip()},"
+        )
     lines.append(f"{sp}}}")
     return "\n".join(lines)
 
 
 def emit_service(svc: dict) -> str:
     lines = ["  withFullDesc({"]
-    for key in (
-        "slug",
-        "num",
-        "title",
-        "shortDesc",
-        "heroHeading",
-    ):
+    for key in ("slug", "num", "title", "shortDesc", "heroHeading"):
         lines.append(f"    {key}: {ts_string(svc[key])},")
     lines.append("    intro: [")
     for p in svc["intro"]:
@@ -761,7 +852,9 @@ def emit_overview(o: dict) -> str:
     lines.append("  ],")
     lines.append(f"  outputsHeading: {ts_string(o['outputsHeading'])},")
     lines.append(f"  comparisonHeading: {ts_string(o['comparisonHeading'])},")
-    lines.append("  comparisonTable: " + emit_table(o["comparisonTable"], 2).lstrip() + ",")
+    lines.append(
+        "  comparisonTable: " + emit_table(o["comparisonTable"], 2).lstrip() + ","
+    )
     lines.append(f"  guideHeading: {ts_string(o['guideHeading'])},")
     lines.append("  guideTable: " + emit_table(o["guideTable"], 2).lstrip() + ",")
     lines.append(f"  budgetOrderHeading: {ts_string(o['budgetOrderHeading'])},")
@@ -868,33 +961,52 @@ export function getServiceBySlug(slug: string): Service | undefined {
 export function getAllServiceSlugs(): string[] {
   return services.map((s) => s.slug);
 }
-'''
 
-# Preferred display order (hub children + wordpress)
-ORDER = [
-    "02-tarahi-site_d9d5.docx",
-    "15-tarahi-site-wordpress_1e07.docx",
-    "03-seo_225c.docx",
-    "04-tolid-mohtava_2207.docx",
-    "06-tablighat-interneti_60d5.docx",
-    "07-shabake-haye-ejtemaei_0f1d.docx",
-    "05-hoosh-masnooi_fb8c.docx",
-    "12-email-marketing_78e1.docx",
-    "10-abzarhaye-analytics_29f7.docx",
-    "08-poshtibani-site_46b7.docx",
-    "09-tarahi-sakht-application_853c.docx",
-    "11-api-yekparche-sazi_bdb8.docx",
-    "13-moshavere-digital-marketing_f8a4.docx",
-    "14-branding_c719.docx",
-]
-
-# Title → better shortDesc overrides from hub when fuzzy match fails
-TITLE_ALIASES = {
-    "طراحی و ساخت اپلیکیشن": ["طراحی و ساخت اپلیکیشن", "اپلیکیشن"],
-    "API و یکپارچه‌سازی": ["API و یکپارچه‌سازی", "API"],
-    "برندینگ و هویت بصری": ["برندینگ و هویت بصری", "برندینگ"],
-    "ابزارهای آنالیتیکس": ["ابزارهای آنالیتیکس", "آنالیتیکس"],
+/** Top-level hub/nav services (no nested path segment). */
+export function isTopLevelServiceSlug(slug: string): boolean {
+  return !slug.includes("/");
 }
+
+export function getTopLevelServices(): Service[] {
+  return services.filter((s) => isTopLevelServiceSlug(s.slug));
+}
+
+/** Direct + nested children under a parent slug prefix. */
+export function getChildServices(parentSlug: string): Service[] {
+  const prefix = parentSlug.endsWith("/") ? parentSlug : `${parentSlug}/`;
+  return services.filter((s) => s.slug.startsWith(prefix));
+}
+
+/** Ancestor chain for nested slugs (excluding self), root → leaf parent. */
+export function getServiceAncestors(slug: string): Service[] {
+  const parts = slug.split("/");
+  if (parts.length < 2) return [];
+  const out: Service[] = [];
+  for (let i = 1; i < parts.length; i++) {
+    const ancestorSlug = parts.slice(0, i).join("/");
+    const svc = getServiceBySlug(ancestorSlug);
+    if (svc) out.push(svc);
+  }
+  return out;
+}
+
+/** Public href for a service slug (supports nested slugs like طراحی-سایت/وردپرس). */
+export function serviceHref(slug: string): string {
+  const path = slug
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+  return `/services/${path}`;
+}
+
+/** Absolute path segments for sitemap / canonical URLs. */
+export function serviceUrlPath(slug: string): string {
+  return slug
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+}
+'''
 
 
 def apply_hub_shorts(services: list[dict], hub_short: dict[str, str]) -> None:
@@ -903,7 +1015,6 @@ def apply_hub_shorts(services: list[dict], hub_short: dict[str, str]) -> None:
         if title in hub_short:
             svc["shortDesc"] = hub_short[title]
             continue
-        # Soft match: hub key equals title ignoring ZWNJ/spacing only
         norm = lambda s: s.replace("\u200c", "").replace(" ", "")
         nt = norm(title)
         for k, v in hub_short.items():
@@ -912,37 +1023,142 @@ def apply_hub_shorts(services: list[dict], hub_short: dict[str, str]) -> None:
                 break
 
 
+def depth_first_order(services: list[dict]) -> list[dict]:
+    """Top-level in DOC_ORDER, each followed by its descendants (also DOC_ORDER)."""
+    by_slug = {s["slug"]: s for s in services}
+    ordered: list[dict] = []
+    seen: set[str] = set()
+
+    tops = [s for s in services if "/" not in s["slug"]]
+    for top in tops:
+        if top["slug"] in seen:
+            continue
+        ordered.append(top)
+        seen.add(top["slug"])
+        for s in services:
+            if s["slug"].startswith(top["slug"] + "/") and s["slug"] not in seen:
+                ordered.append(s)
+                seen.add(s["slug"])
+
+    for s in services:
+        if s["slug"] not in seen:
+            ordered.append(s)
+            seen.add(s["slug"])
+
+    # Renumber
+    for i, s in enumerate(ordered, start=1):
+        s["num"] = to_persian_num(i)
+    return ordered
+
+
 def main() -> int:
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     hub_short: dict[str, str] = {}
-    overview = build_overview(DOCX_DIR / "01-khadamat-digital-marketing_a058.docx", hub_short)
+    hub_path = BATCH / "PLP-01-15_5885" / "01-khadamat-digital-marketing.docx"
+    if not hub_path.exists():
+        print("MISSING hub", hub_path, file=sys.stderr)
+        return 1
+    overview = build_overview(hub_path, hub_short)
 
     services: list[dict] = []
-    for i, name in enumerate(ORDER, start=1):
-        path = DOCX_DIR / name
+    manifest_rows: list[dict] = []
+    for i, (pack, name) in enumerate(DOC_ORDER, start=1):
+        path = BATCH / pack / name
         if not path.exists():
             print("MISSING", path, file=sys.stderr)
             continue
         svc = build_service(path, i)
+        if not svc["slug"]:
+            print("NO SLUG", path, file=sys.stderr)
+            continue
         services.append(svc)
-        print(f"OK {name} -> {svc['slug']} faq={len(svc['faq'])} deliv={len(svc['deliverables'])} before={len(svc['beforeProcess'])} process={len(svc['process'])}")
+        action = "updated" if svc["slug"] in EXISTING_SLUGS else "created"
+        manifest_rows.append(
+            {
+                "source": f"{pack}/{name}",
+                "action": action,
+                "title": svc["title"],
+                "slug": svc["slug"],
+                "route": f"/services/{svc['slug']}",
+                "parentPage": svc.get("parentPage"),
+                "seoTitle": svc["seoTitle"],
+            }
+        )
+        print(
+            f"OK {pack}/{name} -> {svc['slug']} [{action}] faq={len(svc['faq'])} deliv={len(svc['deliverables'])}"
+        )
 
     apply_hub_shorts(services, hub_short)
+    services = depth_first_order(services)
 
-    # Fix wordpress slug: keep nested form from doc
-    for svc in services:
-        if svc["title"] == "طراحی سایت وردپرس":
-            svc["slug"] = "طراحی-سایت/وردپرس"
+    # Deduplicate by slug (keep first)
+    deduped: list[dict] = []
+    seen_slugs: set[str] = set()
+    for s in services:
+        if s["slug"] in seen_slugs:
+            print("DUP slug skipped", s["slug"], s.get("source"), file=sys.stderr)
+            continue
+        seen_slugs.add(s["slug"])
+        deduped.append(s)
+    services = deduped
+    for i, s in enumerate(services, start=1):
+        s["num"] = to_persian_num(i)
 
-    payload = {"overview": overview, "services": services, "hubShort": hub_short}
-    OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    payload = {
+        "overview": overview,
+        "services": services,
+        "hubShort": hub_short,
+        "manifest": manifest_rows,
+    }
+    OUT_JSON.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    OUT_MANIFEST.write_text(
+        json.dumps(
+            {
+                "hub": {
+                    "source": "PLP-01-15_5885/01-khadamat-digital-marketing.docx",
+                    "action": "updated",
+                    "route": "/services",
+                },
+                "services": manifest_rows,
+                "counts": {
+                    "hub": 1,
+                    "services": len(services),
+                    "created": sum(1 for r in manifest_rows if r["action"] == "created"),
+                    "updated": sum(1 for r in manifest_rows if r["action"] == "updated"),
+                    "topLevel": sum(1 for s in services if "/" not in s["slug"]),
+                    "nested": sum(1 for s in services if "/" in s["slug"]),
+                },
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
-    parts = [HEADER, emit_overview(overview), "", FOOTER, "export const services: Service[] = ["]
+    parts = [
+        HEADER,
+        emit_overview(overview),
+        "",
+        FOOTER,
+        "export const services: Service[] = [",
+    ]
     for i, svc in enumerate(services):
         parts.append(emit_service(svc) + ("," if i < len(services) - 1 else ""))
     parts.append("];")
     parts.append(GETTERS)
     OUT_TS.write_text("\n".join(parts) + "\n", encoding="utf-8")
-    print("Wrote", OUT_TS, "services=", len(services))
+    print(
+        "Wrote",
+        OUT_TS,
+        "services=",
+        len(services),
+        "created=",
+        sum(1 for r in manifest_rows if r["action"] == "created"),
+        "updated=",
+        sum(1 for r in manifest_rows if r["action"] == "updated"),
+    )
     return 0
 
 

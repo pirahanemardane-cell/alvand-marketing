@@ -39,13 +39,19 @@ function legacyServiceRedirect(request: NextRequest): NextResponse | null {
   let root = segments[0];
   const rest = segments.slice(1);
   if (PERSIAN_ROOT[root]) root = PERSIAN_ROOT[root];
-  if (root !== "services" || rest.length !== 1) return null;
+  if (root !== "services" || rest.length === 0) return null;
 
-  const canonical = LEGACY_SERVICE_SLUGS[rest[0]];
+  const joined = rest.join("/");
+  const canonical =
+    LEGACY_SERVICE_SLUGS[joined] ??
+    (rest.length === 1 ? LEGACY_SERVICE_SLUGS[rest[0]] : undefined);
   if (!canonical) return null;
 
   const dest = request.nextUrl.clone();
-  dest.pathname = `/services/${encodeURIComponent(canonical)}`;
+  dest.pathname = `/services/${canonical
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/")}`;
   return NextResponse.redirect(dest, 301);
 }
 
