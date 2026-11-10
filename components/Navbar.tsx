@@ -482,19 +482,44 @@ export default function Navbar() {
                                 })}
                               </div>
                               <div
-                                className={`pointer-events-none absolute inset-x-0 bottom-0 transition-opacity duration-200 ${
+                                className={`absolute inset-x-0 bottom-0 z-[1] transition-opacity duration-200 ${
                                   megaMoreBelow
                                     ? "opacity-100"
-                                    : "opacity-0"
+                                    : "opacity-0 pointer-events-none"
                                 }`}
                                 aria-hidden={!megaMoreBelow}
                               >
-                                <div className="h-10 bg-gradient-to-t from-background via-background/80 to-transparent" />
-                                <div className="flex flex-col items-center gap-0.5 bg-background/95 px-3 pb-2 pt-0.5 backdrop-blur-[2px]">
-                                  <ChevronDown className="h-4 w-4 text-accent animate-bounce" />
-                                  <p className="text-xs text-muted-foreground leading-persian">
-                                    برای دیدن همه خدمات اسکرول کنید
-                                  </p>
+                                <div className="pointer-events-none h-16 bg-gradient-to-t from-background from-35% via-background/90 to-transparent" />
+                                <div className="pointer-events-none border-t border-accent/25 bg-background/95 px-3 pt-1.5 backdrop-blur-sm">
+                                  <div className="flex flex-col items-center gap-1.5 pb-2.5">
+                                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent shadow-sm">
+                                      <ChevronDown
+                                        className="mega-scroll-cue-icon h-5 w-5"
+                                        strokeWidth={2.5}
+                                        aria-hidden
+                                      />
+                                    </span>
+                                    <p className="text-sm font-bold text-foreground leading-persian text-center">
+                                      برای دیدن همه خدمات اسکرول کنید
+                                    </p>
+                                    <button
+                                      type="button"
+                                      tabIndex={megaMoreBelow ? 0 : -1}
+                                      className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-accent/50 bg-accent/15 px-3.5 py-1.5 text-sm font-bold text-accent shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                                      aria-label="اسکرول به خدمات بیشتر در منو"
+                                      onClick={() => {
+                                        const el = megaScrollRef.current;
+                                        if (!el) return;
+                                        el.scrollBy({
+                                          top: Math.max(160, el.clientHeight * 0.7),
+                                          behavior: "smooth",
+                                        });
+                                      }}
+                                    >
+                                      اسکرول
+                                      <ChevronDown className="h-4 w-4" aria-hidden />
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                               </div>
@@ -890,17 +915,44 @@ export default function Navbar() {
               </div>
               </div>
               <div
-                className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 transition-opacity duration-200 ${
-                  mobileMoreBelow ? "opacity-100" : "opacity-0"
+                className={`absolute inset-x-0 bottom-0 z-10 transition-opacity duration-200 ${
+                  mobileMoreBelow
+                    ? "opacity-100"
+                    : "opacity-0 pointer-events-none"
                 }`}
                 aria-hidden={!mobileMoreBelow}
               >
-                <div className="h-10 bg-gradient-to-t from-background via-background/85 to-transparent" />
-                <div className="flex flex-col items-center gap-0.5 bg-background/95 px-3 pb-3 pt-0.5 backdrop-blur-[2px]">
-                  <ChevronDown className="h-4 w-4 text-accent animate-bounce" />
-                  <p className="text-xs text-muted-foreground leading-persian">
-                    برای دیدن همه خدمات اسکرول کنید
-                  </p>
+                <div className="pointer-events-none h-14 bg-gradient-to-t from-background from-40% via-background/90 to-transparent" />
+                <div className="pointer-events-none border-t border-accent/25 bg-background/95 px-3 pt-1.5 backdrop-blur-sm">
+                  <div className="flex flex-col items-center gap-1.5 pb-3">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-accent/40 bg-accent/15 text-accent shadow-sm">
+                      <ChevronDown
+                        className="mega-scroll-cue-icon h-5 w-5"
+                        strokeWidth={2.5}
+                        aria-hidden
+                      />
+                    </span>
+                    <p className="text-sm font-bold text-foreground leading-persian text-center">
+                      برای دیدن همه خدمات اسکرول کنید
+                    </p>
+                    <button
+                      type="button"
+                      tabIndex={mobileMoreBelow ? 0 : -1}
+                      className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-accent/50 bg-accent/15 px-3.5 py-1.5 text-sm font-bold text-accent shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                      aria-label="اسکرول به خدمات بیشتر"
+                      onClick={() => {
+                        const el = mobileDrawerRef.current;
+                        if (!el) return;
+                        el.scrollBy({
+                          top: Math.max(160, el.clientHeight * 0.7),
+                          behavior: "smooth",
+                        });
+                      }}
+                    >
+                      اسکرول
+                      <ChevronDown className="h-4 w-4" aria-hidden />
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
