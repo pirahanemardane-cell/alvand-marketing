@@ -24,7 +24,7 @@ import JsonLd from "@/components/JsonLd";
 import {
   ServiceCardImage,
   ServiceHubHeroImage,
-  ServiceRelatedGallery,
+  ServiceInlineImage,
 } from "@/components/ServiceImages";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -117,6 +117,9 @@ export default async function ServicesPage({ searchParams }: Props) {
                 </li>
               ))}
             </ul>
+            {hubImages.related[0] && (
+              <ServiceInlineImage image={hubImages.related[0]} />
+            )}
           </section>
 
           <section className="mb-6">
@@ -160,13 +163,14 @@ export default async function ServicesPage({ searchParams }: Props) {
             </div>
           )}
 
-          <ServiceRelatedGallery images={[...hubImages.related]} />
-
           <section className="mb-14 w-full">
             <h2 className="text-xl font-bold mb-4 leading-persian-tight">
               {o.comparisonHeading}
             </h2>
             <ServiceTableView table={o.comparisonTable} />
+            {hubImages.related[1] && (
+              <ServiceInlineImage image={hubImages.related[1]} />
+            )}
           </section>
 
           <section className="mb-14 w-full">
@@ -213,6 +217,9 @@ export default async function ServicesPage({ searchParams }: Props) {
                 </li>
               ))}
             </ul>
+            {hubImages.related[2] && (
+              <ServiceInlineImage image={hubImages.related[2]} />
+            )}
           </section>
 
           <section className="mb-14 w-full">

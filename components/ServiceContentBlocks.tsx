@@ -1,4 +1,6 @@
 import type { ServiceBlock, ServiceTable } from "@/lib/services";
+import type { ServiceImageAsset } from "@/lib/service-images";
+import { ServiceInlineImage } from "@/components/ServiceImages";
 
 export function ServiceTableView({ table }: { table: ServiceTable }) {
   const { headers, rows } = table;
@@ -86,10 +88,15 @@ export function ServiceTableView({ table }: { table: ServiceTable }) {
 
 export function ServiceContentBlocks({
   blocks,
+  /** Optional related image placed under the first headed block (inline, not a gallery). */
+  inlineImageAfterFirst,
 }: {
   blocks: ServiceBlock[];
+  inlineImageAfterFirst?: ServiceImageAsset;
 }) {
   if (!blocks.length) return null;
+
+  const firstHeadedIdx = blocks.findIndex((b) => !!b.heading);
 
   return (
     <div className="space-y-10 w-full mb-12">
@@ -99,6 +106,8 @@ export function ServiceContentBlocks({
           block.level === 3
             ? "text-lg font-bold mb-3 leading-persian-tight"
             : "text-xl font-bold mb-4 leading-persian-tight";
+        const showInline =
+          !!inlineImageAfterFirst && idx === firstHeadedIdx;
 
         return (
           <section key={`${block.heading || "block"}-${idx}`} className="w-full">
@@ -127,6 +136,9 @@ export function ServiceContentBlocks({
               </ul>
             ) : null}
             {block.table ? <ServiceTableView table={block.table} /> : null}
+            {showInline && inlineImageAfterFirst ? (
+              <ServiceInlineImage image={inlineImageAfterFirst} />
+            ) : null}
           </section>
         );
       })}
