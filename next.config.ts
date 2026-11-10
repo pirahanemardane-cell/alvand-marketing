@@ -136,6 +136,17 @@ const nextConfig: NextConfig = {
         destination: `/services/${enc("شبکه‌های-اجتماعی")}`,
         statusCode: 301,
       },
+      // Latin api slug → fully Persian
+      {
+        source: `/services/${enc("api-و-یکپارچه‌سازی")}`,
+        destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
+        statusCode: 301,
+      },
+      {
+        source: `/${enc("خدمات")}/${enc("api-و-یکپارچه‌سازی")}`,
+        destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
+        statusCode: 301,
+      },
     ];
   },
   async rewrites() {

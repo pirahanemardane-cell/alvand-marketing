@@ -33,7 +33,7 @@ export const serviceIcons: Record<string, LucideIcon> = {
   "پشتیبانی-سایت": Headphones,
   "اپلیکیشن-و-وب-اپ": Smartphone,
   آنالیتیکس: BarChart3,
-  "api-و-یکپارچه‌سازی": Cable,
+  "ای‌پی‌آی-و-یکپارچه‌سازی": Cable,
   "ایمیل-مارکتینگ": Mail,
   "مشاوره-دیجیتال-مارکتینگ": MessageCircle,
   برندینگ: Palette,
