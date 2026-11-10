@@ -1,5 +1,6 @@
 import {
   getChildServices,
+  getDirectChildServices,
   getServiceBySlug,
   getTopLevelServices,
   type Service,
@@ -70,15 +71,6 @@ const COLUMN_ORDER: string[] = [
   "مشاوره-دیجیتال-مارکتینگ",
   "برندینگ",
 ];
-
-/** Direct children only (one nesting level under parent). */
-function getDirectChildServices(parentSlug: string): Service[] {
-  const prefix = parentSlug.endsWith("/") ? parentSlug : `${parentSlug}/`;
-  return getChildServices(parentSlug).filter((s) => {
-    const rest = s.slug.slice(prefix.length);
-    return rest.length > 0 && !rest.includes("/");
-  });
-}
 
 /**
  * Featured sample PDPs under a PLP (≤4).
