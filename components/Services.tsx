@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import SectionLabel from "./SectionLabel";
-import { services } from "@/lib/services";
+import { services, serviceHref, servicesOverview } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 
 export default function Services() {
@@ -17,8 +17,7 @@ export default function Services() {
           <div>
             <SectionLabel number="۰۱" title="خدمات دیجیتال مارکتینگ" />
             <p className="text-caption text-muted-foreground leading-persian">
-              شش حوزه: طراحی سایت، تولید محتوا، سئو، تبلیغات اینترنتی، مدیریت
-              اینستاگرام و هوش مصنوعی — هر کدام برای حل یک مشکل مشخص.
+              {servicesOverview.intro[0]}
             </p>
             <Link
               href="/services"
@@ -54,7 +53,7 @@ export default function Services() {
                   >
                     <div>
                       <Link
-                        href={`/services/${item.slug}`}
+                        href={serviceHref(item.slug)}
                         className="inline-flex items-center gap-2 mb-2"
                       >
                         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-accent shrink-0">
@@ -68,7 +67,7 @@ export default function Services() {
                         {item.shortDesc}
                       </p>
                       <Link
-                        href={`/services/${item.slug}`}
+                        href={serviceHref(item.slug)}
                         className="text-sm font-medium text-accent hover:opacity-80"
                       >
                         جزئیات ←

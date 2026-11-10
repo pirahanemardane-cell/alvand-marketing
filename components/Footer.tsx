@@ -4,12 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { mediaUrl } from "@/lib/media";
 import { isNavItemActive } from "@/lib/nav-active";
+import { services, serviceHref } from "@/lib/services";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 
 const footerLinkIdle =
   "text-muted-foreground hover:text-foreground transition-colors";
 const footerLinkActive = "text-accent font-bold transition-colors";
+
+/** Keep footer compact: top-level services only (skip nested e.g. WordPress). */
+const footerServices = services.filter((s) => !s.slug.includes("/"));
 
 function FooterLink({
   href,
@@ -58,37 +62,14 @@ export default function Footer() {
 
           <div>
             <h4 className="text-sm font-bold mb-4">خدمات دیجیتال مارکتینگ</h4>
-            <ul className="space-y-2.5 text-caption text-muted-foreground">
-              <li>
-                <FooterLink href="/services/طراحی-سایت" pathname={pathname}>
-                  طراحی سایت
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/services/تولید-محتوا" pathname={pathname}>
-                  تولید محتوا
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/services/سئو" pathname={pathname}>
-                  سئو
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/services/اینستاگرام" pathname={pathname}>
-                  اینستاگرام
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/services/تبلیغات-اینترنتی" pathname={pathname}>
-                  تبلیغات اینترنتی
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/services/هوش-مصنوعی" pathname={pathname}>
-                  هوش مصنوعی
-                </FooterLink>
-              </li>
+            <ul className="space-y-2.5 text-caption text-muted-foreground max-h-64 overflow-y-auto pe-1">
+              {footerServices.map((s) => (
+                <li key={s.slug}>
+                  <FooterLink href={serviceHref(s.slug)} pathname={pathname}>
+                    {s.title}
+                  </FooterLink>
+                </li>
+              ))}
             </ul>
           </div>
 

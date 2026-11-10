@@ -7,45 +7,61 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
-import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/services";
+import {
+  services,
+  getServiceBySlug,
+  getAllServiceSlugs,
+  serviceHref,
+} from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
-import { publicRobots } from "@/lib/seo/site";
-import { metadataForPageKey } from '@/lib/seo/pages';
+import { metadataForPageKey } from "@/lib/seo/pages";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string[] }> };
+
+function joinSlug(segments: string[]): string {
+  return segments.map((s) => {
+    try {
+      return decodeURIComponent(s);
+    } catch {
+      return s;
+    }
+  }).join("/");
+}
 
 export async function generateStaticParams() {
-  return getAllServiceSlugs().map((slug) => ({ slug }));
+  return getAllServiceSlugs().map((slug) => ({
+    slug: slug.split("/"),
+  }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-  const { slug: raw } = await params;
-  const slug = decodeURIComponent(raw);
+  const { slug: segments } = await params;
+  const slug = joinSlug(segments);
   const service = getServiceBySlug(slug);
-  const fromDb = await metadataForPageKey(`service:${slug}`, {
-    path: `/services/${encodeURIComponent(slug)}`,
-  });
-  // Prefer admin seo_pages; fall back to static service.seoTitle/Description
+  const path = serviceHref(slug);
+  const fromDb = await metadataForPageKey(`service:${slug}`, { path });
   return {
     ...fromDb,
     title: fromDb.title || service?.seoTitle || slug,
     description:
-      fromDb.description ||
-      service?.seoDescription ||
-      undefined,
+      fromDb.description || service?.seoDescription || undefined,
     openGraph: {
       ...fromDb.openGraph,
       title:
-        (fromDb.openGraph && "title" in fromDb.openGraph && fromDb.openGraph.title) ||
+        (fromDb.openGraph &&
+          "title" in fromDb.openGraph &&
+          fromDb.openGraph.title) ||
         service?.seoTitle ||
         fromDb.title ||
         slug,
       description:
-        (fromDb.openGraph && "description" in fromDb.openGraph && fromDb.openGraph.description) ||
+        (fromDb.openGraph &&
+          "description" in fromDb.openGraph &&
+          fromDb.openGraph.description) ||
         service?.seoDescription ||
         fromDb.description ||
         undefined,
@@ -54,12 +70,25 @@ export async function generateMetadata({
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: segments } = await params;
+  const slug = joinSlug(segments);
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
   const others = services.filter((s) => s.slug !== service.slug).slice(0, 3);
   const Icon = getServiceIcon(service.slug);
+
+  const breadcrumb = [
+    { label: "خدمات دیجیتال مارکتینگ", href: "/services" },
+  ];
+  if (service.slug.includes("/")) {
+    const parentSlug = service.slug.split("/")[0];
+    const parent = getServiceBySlug(parentSlug);
+    if (parent) {
+      breadcrumb.push({ label: parent.title, href: serviceHref(parent.slug) });
+    }
+  }
+  breadcrumb.push({ label: service.title, href: serviceHref(service.slug) });
 
   return (
     <main>
@@ -67,10 +96,11 @@ export default async function ServiceDetailPage({ params }: Props) {
       <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
           <PageBreadcrumb
-            items={[
-              { label: "خدمات دیجیتال مارکتینگ", href: "/services" },
-              { label: service.title },
-            ]}
+            items={breadcrumb.map((b, i) =>
+              i === breadcrumb.length - 1
+                ? { label: b.label }
+                : { label: b.label, href: b.href }
+            )}
           />
 
           <div className="mb-6 flex items-center gap-3">
@@ -133,26 +163,28 @@ export default async function ServiceDetailPage({ params }: Props) {
 
           <ServiceContentBlocks blocks={service.beforeProcess} />
 
-          <section className="mb-12 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              {service.processHeading}
-            </h2>
-            <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-              {service.process.map((step, i) => (
-                <li
-                  key={step}
-                  className="flex gap-4 rounded-xl border border-border p-4"
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
-                    {i + 1}
-                  </span>
-                  <span className="pt-1 text-caption text-muted-foreground leading-persian">
-                    {step}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </section>
+          {service.process.length > 0 && (
+            <section className="mb-12 w-full">
+              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                {service.processHeading}
+              </h2>
+              <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                {service.process.map((step, i) => (
+                  <li
+                    key={step}
+                    className="flex gap-4 rounded-xl border border-border p-4"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
+                      {i + 1}
+                    </span>
+                    <span className="pt-1 text-caption text-muted-foreground leading-persian">
+                      {step}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           <ServiceContentBlocks blocks={service.afterProcess} />
 
@@ -201,7 +233,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 {others.map((s) => (
                   <Link
                     key={s.slug}
-                    href={`/services/${s.slug}`}
+                    href={serviceHref(s.slug)}
                     className="rounded-xl border border-border p-4 hover:border-accent/50 transition-colors"
                   >
                     <p className="font-bold">{s.title}</p>

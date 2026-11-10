@@ -6,7 +6,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceTableView } from "@/components/ServiceContentBlocks";
-import { services, servicesOverview } from "@/lib/services";
+import { services, servicesOverview, serviceHref } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
@@ -95,7 +95,7 @@ export default async function ServicesPage({ searchParams }: Props) {
                 return (
                   <Link
                     key={item.slug}
-                    href={`/services/${item.slug}`}
+                    href={serviceHref(item.slug)}
                     className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
                   >
                     <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">

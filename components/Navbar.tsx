@@ -24,7 +24,7 @@ import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
-import { services } from "@/lib/services";
+import { services, serviceHref } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 
 const desktopLinkBase =
@@ -152,7 +152,7 @@ export default function Navbar() {
       .map((s) => ({
         kind: "service" as const,
         title: s.title,
-        href: `/services/${s.slug}`,
+        href: serviceHref(s.slug),
         hint: "خدمت",
       }));
     const blg = blogPosts
@@ -321,12 +321,14 @@ export default function Navbar() {
                               <div className="h-px bg-border my-1" />
                               {services.map((s) => {
                                 const SIcon = getServiceIcon(s.slug);
+                                const href = serviceHref(s.slug);
                                 const svcActive =
-                                  pathname === `/services/${s.slug}`;
+                                  pathname === href ||
+                                  pathname === decodeURIComponent(href);
                                 return (
                                   <Link
                                     key={s.slug}
-                                    href={`/services/${s.slug}`}
+                                    href={href}
                                     onClick={() => setMegaOpen(false)}
                                     aria-current={svcActive ? "page" : undefined}
                                     className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
@@ -521,12 +523,14 @@ export default function Navbar() {
                             >
                               {services.map((s) => {
                                 const SIcon = getServiceIcon(s.slug);
+                                const href = serviceHref(s.slug);
                                 const svcActive =
-                                  pathname === `/services/${s.slug}`;
+                                  pathname === href ||
+                                  pathname === decodeURIComponent(href);
                                 return (
                                   <li key={s.slug}>
                                     <Link
-                                      href={`/services/${s.slug}`}
+                                      href={href}
                                       onClick={closeMenu}
                                       aria-current={
                                         svcActive ? "page" : undefined
