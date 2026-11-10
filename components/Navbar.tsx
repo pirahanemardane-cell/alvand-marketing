@@ -396,7 +396,7 @@ export default function Navbar() {
                               <div className="relative min-h-0 flex-1 flex flex-col">
                               <div
                                 ref={megaScrollRef}
-                                className="min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5"
+                                className="mega-scroll-panel min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5"
                               >
                                 {megaColumns.map(({ parent, featuredChildren }) => {
                                   const SIcon = getServiceIcon(parent.slug);
@@ -489,12 +489,15 @@ export default function Navbar() {
                                 }`}
                                 aria-hidden={!megaMoreBelow}
                               >
-                                <div className="flex h-12 flex-col justify-end bg-gradient-to-t from-background via-background/70 to-transparent pb-1.5">
+                                <div className="flex h-14 flex-col items-center justify-end gap-0.5 bg-gradient-to-t from-background via-background/75 to-transparent pb-2">
                                   <ChevronDown
-                                    className="mx-auto h-4 w-4 text-muted-foreground/70"
+                                    className="h-4 w-4 text-muted-foreground"
                                     strokeWidth={2}
                                     aria-hidden
                                   />
+                                  <p className="text-sm font-medium text-muted-foreground leading-persian">
+                                    ادامه خدمات با اسکرول
+                                  </p>
                                 </div>
                               </div>
                               </div>
@@ -620,7 +623,7 @@ export default function Navbar() {
             >
               <div
                 ref={mobileDrawerRef}
-                className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4 pb-8 px-5"
+                className="mega-scroll-panel relative min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4 pb-8 px-5"
               >
               <div className="flex justify-start mb-5">
                 <Link href="/" onClick={closeMenu} aria-label="الوند مارکتینگ">
@@ -895,12 +898,15 @@ export default function Navbar() {
                 }`}
                 aria-hidden={!mobileMoreBelow}
               >
-                <div className="flex h-12 flex-col justify-end bg-gradient-to-t from-background via-background/70 to-transparent pb-2">
+                <div className="flex h-14 flex-col items-center justify-end gap-0.5 bg-gradient-to-t from-background via-background/75 to-transparent pb-2.5">
                   <ChevronDown
-                    className="mx-auto h-4 w-4 text-muted-foreground/70"
+                    className="h-4 w-4 text-muted-foreground"
                     strokeWidth={2}
                     aria-hidden
                   />
+                  <p className="text-sm font-medium text-muted-foreground leading-persian">
+                    ادامه خدمات با اسکرول
+                  </p>
                 </div>
               </div>
             </motion.div>
