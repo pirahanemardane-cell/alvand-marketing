@@ -10,7 +10,7 @@ import {
   services,
   servicesOverview,
   serviceHref,
-  getTopLevelServices,
+  type Service,
 } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
 import {
@@ -18,6 +18,7 @@ import {
   getServiceImages,
   serviceImageSrc,
 } from "@/lib/service-images";
+import { getHubCatalogGroups } from "@/lib/mega-menu";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicesHubJsonLd } from "@/lib/seo/jsonld";
 import JsonLd from "@/components/JsonLd";
@@ -52,10 +53,42 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type Props = { searchParams: Promise<{ q?: string }> };
 
+function ServiceCatalogCard({ item }: { item: Service }) {
+  const Icon = getServiceIcon(item.slug);
+  const imgs = getServiceImages(item.slug);
+  const href = serviceHref(item.slug);
+  return (
+    <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-5 hover:border-accent/50 transition-colors duration-300">
+      <Link href={href} className="block min-w-0">
+        {imgs && <ServiceCardImage image={imgs.featured} />}
+        <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">
+          <Icon className="h-5 w-5" strokeWidth={1.75} />
+        </span>
+        <h3 className="text-lg font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
+          {item.title}
+        </h3>
+        <p className="text-caption text-muted-foreground leading-persian mb-4 line-clamp-3">
+          {item.shortDesc}
+        </p>
+      </Link>
+      <div className="mt-auto pt-2">
+        <Link
+          href={href}
+          className="inline-flex items-center gap-1 text-sm font-bold text-accent hover:opacity-80"
+        >
+          {item.title}
+          <span className="text-xs">←</span>
+        </Link>
+      </div>
+    </article>
+  );
+}
+
 export default async function ServicesPage({ searchParams }: Props) {
   const { q } = await searchParams;
   const query = q?.trim() || "";
-  const topLevel = getTopLevelServices();
+  const groups = getHubCatalogGroups();
+  const allCatalog = groups.flatMap((g) => g.items);
   const filtered = query
     ? services.filter(
         (s) =>
@@ -64,13 +97,13 @@ export default async function ServicesPage({ searchParams }: Props) {
           s.fullDesc.includes(query) ||
           s.heroHeading.includes(query)
       )
-    : topLevel;
+    : null;
   const o = servicesOverview;
   const hubImages = getHubImages();
 
   return (
     <main>
-      <JsonLd data={servicesHubJsonLd(o, topLevel)} />
+      <JsonLd data={servicesHubJsonLd(o, allCatalog)} />
       <Navbar />
       <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
         <div className="w-full">
@@ -95,7 +128,7 @@ export default async function ServicesPage({ searchParams }: Props) {
             </div>
             {query && (
               <p className="mt-4 text-sm text-muted-foreground">
-                نتایج جستجو برای «{query}» — {filtered.length} مورد
+                نتایج جستجو برای «{query}» — {filtered?.length ?? 0} مورد
               </p>
             )}
           </div>
@@ -123,41 +156,70 @@ export default async function ServicesPage({ searchParams }: Props) {
           </section>
 
           <section className="mb-6">
-            <h2 className="text-xl font-bold mb-6 leading-persian-tight">
+            <h2 className="text-xl font-bold mb-2 leading-persian-tight">
               {o.outputsHeading}
             </h2>
+            <p className="text-caption text-muted-foreground leading-persian mb-8 max-w-3xl">
+              همه خدمات الوند مارکتینگ به‌صورت دسته‌بندی‌شده. روی عنوان هر خدمت
+              بزنید تا جزئیات همان صفحه را ببینید.
+            </p>
           </section>
 
-          {filtered.length === 0 ? (
-            <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center mb-14">
-              خدمتی با این عبارت پیدا نشد.
-            </p>
+          {filtered ? (
+            filtered.length === 0 ? (
+              <p className="text-muted-foreground rounded-2xl border border-border bg-card p-8 text-center mb-14">
+                خدمتی با این عبارت پیدا نشد.
+              </p>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
+                {filtered.map((item) => (
+                  <ServiceCatalogCard key={item.slug} item={item} />
+                ))}
+              </div>
+            )
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-14">
-              {filtered.map((item) => {
-                const Icon = getServiceIcon(item.slug);
-                const imgs = getServiceImages(item.slug);
+            <div className="space-y-16 mb-16 w-full">
+              {groups.map(({ parent, items }) => {
+                const ParentIcon = getServiceIcon(parent.slug);
                 return (
-                  <Link
-                    key={item.slug}
-                    href={serviceHref(item.slug)}
-                    className="group block rounded-2xl border border-border bg-card p-6 hover:border-accent/50 transition-colors duration-300"
+                  <section
+                    key={parent.slug}
+                    id={`cat-${parent.slug.replace(/\//g, "-")}`}
+                    className="w-full scroll-mt-28"
                   >
-                    {imgs && <ServiceCardImage image={imgs.featured} />}
-                    <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted text-accent">
-                      <Icon className="h-5 w-5" strokeWidth={1.75} />
-                    </span>
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors leading-persian-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-caption text-muted-foreground leading-persian mb-4">
-                      {item.shortDesc}
-                    </p>
-                    <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
-                      {item.title}
-                      <span className="text-xs">←</span>
-                    </span>
-                  </Link>
+                    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-border pb-4">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted text-accent">
+                          <ParentIcon className="h-5 w-5" strokeWidth={1.75} />
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="text-2xl font-bold leading-persian-tight">
+                            <Link
+                              href={serviceHref(parent.slug)}
+                              className="hover:text-accent transition-colors"
+                            >
+                              {parent.title}
+                            </Link>
+                          </h3>
+                          <p className="text-caption text-muted-foreground leading-persian mt-1 line-clamp-2 max-w-2xl">
+                            {parent.shortDesc}
+                          </p>
+                        </div>
+                      </div>
+                      <Link
+                        href={serviceHref(parent.slug)}
+                        className="inline-flex items-center gap-1 text-sm font-bold text-accent hover:opacity-80 shrink-0"
+                      >
+                        {parent.title}
+                        <span className="text-xs">←</span>
+                      </Link>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+                      {items.map((item) => (
+                        <ServiceCatalogCard key={item.slug} item={item} />
+                      ))}
+                    </div>
+                  </section>
                 );
               })}
             </div>

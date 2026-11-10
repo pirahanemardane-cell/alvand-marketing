@@ -1,4 +1,5 @@
 import {
+  getChildServices,
   getServiceBySlug,
   getTopLevelServices,
   type Service,
@@ -83,8 +84,7 @@ export function getMegaMenuFeaturedChildren(parentSlug: string): Service[] {
   return out;
 }
 
-/** Columns for desktop mega-menu + mobile accordion parents. */
-export function getMegaMenuColumns(): MegaMenuColumn[] {
+function orderedTopLevelServices(): Service[] {
   const tops = getTopLevelServices();
   const bySlug = new Map(tops.map((s) => [s.slug, s]));
   const ordered: Service[] = [];
@@ -95,13 +95,36 @@ export function getMegaMenuColumns(): MegaMenuColumn[] {
       bySlug.delete(slug);
     }
   }
-  // Any unexpected new top-level services append at end
   for (const s of bySlug.values()) ordered.push(s);
+  return ordered;
+}
 
-  return ordered.map((parent) => ({
+/** Columns for desktop mega-menu + mobile accordion parents. */
+export function getMegaMenuColumns(): MegaMenuColumn[] {
+  return orderedTopLevelServices().map((parent) => ({
     parent,
     featuredChildren: getMegaMenuFeaturedChildren(parent.slug),
   }));
+}
+
+export type HubCatalogGroup = {
+  parent: Service;
+  /** Parent first, then every nested descendant under that slug. */
+  items: Service[];
+};
+
+/**
+ * Full hub catalog: every top-level PLP with all nested PDPs under it.
+ * Used by `/services` — not capped like the mega-menu.
+ */
+export function getHubCatalogGroups(): HubCatalogGroup[] {
+  return orderedTopLevelServices().map((parent) => {
+    const nested = getChildServices(parent.slug);
+    return {
+      parent,
+      items: [parent, ...nested],
+    };
+  });
 }
 
 export function isServicePathActive(

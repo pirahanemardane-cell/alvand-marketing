@@ -410,15 +410,7 @@ export default function Navbar() {
                                   );
                                 })}
                               </div>
-                              <div className="border-t border-border bg-muted/40 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                <Link
-                                  href="/services"
-                                  onClick={() => setMegaOpen(false)}
-                                  className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:opacity-80 transition-opacity"
-                                >
-                                  <LayoutGrid className="h-4 w-4" />
-                                  مشاهده همه خدمات
-                                </Link>
+                              <div className="border-t border-border bg-muted/40 px-4 py-3 flex flex-col gap-2">
                                 <Link
                                   href="/services"
                                   onClick={() => setMegaOpen(false)}
@@ -427,11 +419,15 @@ export default function Navbar() {
                                       ? "page"
                                       : undefined
                                   }
-                                  className={`text-xs sm:text-sm transition-colors ${
-                                    pathname === "/services"
-                                      ? "text-accent font-bold"
-                                      : "text-muted-foreground hover:text-foreground"
-                                  }`}
+                                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-accent-foreground hover:opacity-90 transition-opacity"
+                                >
+                                  <LayoutGrid className="h-4 w-4" />
+                                  مشاهده همه خدمات
+                                </Link>
+                                <Link
+                                  href="/services"
+                                  onClick={() => setMegaOpen(false)}
+                                  className="block text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
                                 >
                                   {servicesOverview.title}
                                 </Link>
@@ -721,11 +717,16 @@ export default function Navbar() {
                                   );
                                 }
                               )}
-                              <li className="pt-2 px-3 space-y-1">
+                              <li className="pt-3 px-3 pb-1 space-y-2">
                                 <Link
                                   href="/services"
                                   onClick={closeMenu}
-                                  className="inline-flex items-center gap-2 text-sm font-bold text-accent"
+                                  aria-current={
+                                    pathname === "/services"
+                                      ? "page"
+                                      : undefined
+                                  }
+                                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-accent-foreground"
                                 >
                                   <LayoutGrid className="h-4 w-4" />
                                   مشاهده همه خدمات
@@ -733,7 +734,7 @@ export default function Navbar() {
                                 <Link
                                   href="/services"
                                   onClick={closeMenu}
-                                  className="block text-xs text-muted-foreground"
+                                  className="block text-center text-xs text-muted-foreground"
                                 >
                                   {servicesOverview.title}
                                 </Link>
