@@ -356,7 +356,7 @@ export default function Navbar() {
                                         aria-current={
                                           svcActive ? "page" : undefined
                                         }
-                                        className={`flex items-center gap-1.5 px-1.5 py-1 rounded-md text-sm font-bold transition-colors ${
+                                        className={`flex items-center gap-1.5 px-1.5 py-1 rounded-md text-base font-bold transition-colors ${
                                           svcActive
                                             ? "text-accent bg-accent/10"
                                             : "text-foreground hover:text-accent"
@@ -370,7 +370,7 @@ export default function Navbar() {
                                         </span>
                                       </Link>
                                       {featuredChildren.length > 0 && (
-                                        <ul className="mt-0.5 space-y-0 list-none pr-0.5">
+                                        <ul className="mt-1 space-y-0.5 list-none pr-0.5">
                                           {featuredChildren.map((child) => {
                                             const childHref = serviceHref(
                                               child.slug
@@ -393,7 +393,7 @@ export default function Navbar() {
                                                       ? "page"
                                                       : undefined
                                                   }
-                                                  className={`block px-1.5 py-0.5 rounded-md text-xs leading-snug transition-colors ${
+                                                  className={`block px-1.5 py-1 rounded-md text-sm leading-relaxed transition-colors ${
                                                     childActive
                                                       ? "text-accent font-bold bg-accent/10"
                                                       : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
@@ -410,10 +410,10 @@ export default function Navbar() {
                                         href={href}
                                         role="menuitem"
                                         onClick={() => setMegaOpen(false)}
-                                        className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-bold text-accent hover:opacity-80 transition-opacity"
+                                        className="mt-1.5 inline-flex items-center gap-1 px-1.5 py-1 text-sm font-bold text-accent hover:opacity-80 transition-opacity"
                                       >
                                         مشاهده همه
-                                        <span className="text-[0.65rem]">←</span>
+                                        <span className="text-xs">←</span>
                                       </Link>
                                     </div>
                                   );
@@ -635,7 +635,7 @@ export default function Navbar() {
                                           aria-current={
                                             svcActive ? "page" : undefined
                                           }
-                                          className={`flex-1 flex items-center gap-2 py-2.5 px-3 text-sm transition-colors rounded-lg ${
+                                          className={`flex-1 flex items-center gap-2 py-2.5 px-3 text-base transition-colors rounded-lg ${
                                             svcActive
                                               ? "text-accent font-bold bg-accent/10"
                                               : "text-muted-foreground hover:text-accent"
@@ -697,7 +697,7 @@ export default function Navbar() {
                                                         ? "page"
                                                         : undefined
                                                     }
-                                                    className={`block py-1.5 px-3 text-xs transition-colors rounded-md ${
+                                                    className={`block py-2 px-3 text-sm transition-colors rounded-md ${
                                                       childActive
                                                         ? "text-accent font-bold bg-accent/10"
                                                         : "text-muted-foreground hover:text-accent"
@@ -712,10 +712,10 @@ export default function Navbar() {
                                               <Link
                                                 href={href}
                                                 onClick={closeMenu}
-                                                className="inline-flex items-center gap-1 py-1.5 px-3 text-xs font-bold text-accent"
+                                                className="inline-flex items-center gap-1 py-2 px-3 text-sm font-bold text-accent"
                                               >
                                                 مشاهده همه
-                                                <span className="text-[0.65rem]">
+                                                <span className="text-xs">
                                                   ←
                                                 </span>
                                               </Link>
