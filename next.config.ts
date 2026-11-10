@@ -125,6 +125,17 @@ const nextConfig: NextConfig = {
         destination: "/reset-password",
         permanent: true,
       },
+      // Instagram PLP replaced by شبکه‌های اجتماعی
+      {
+        source: `/services/${enc("اینستاگرام")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}`,
+        permanent: true,
+      },
+      {
+        source: `/${enc("خدمات")}/${enc("اینستاگرام")}`,
+        destination: `/services/${enc("شبکه‌های-اجتماعی")}`,
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -136,8 +147,8 @@ const nextConfig: NextConfig = {
         destination: "/services",
       },
       {
-        source: `/${enc("خدمات")}/:slug`,
-        destination: "/services/:slug",
+        source: `/${enc("خدمات")}/:path*`,
+        destination: "/services/:path*",
       },
       {
         source: `/${enc("بلاگ")}`,

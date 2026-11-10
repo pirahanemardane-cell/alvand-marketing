@@ -1,11 +1,19 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  BarChart3,
   BookOpen,
+  Cable,
+  Headphones,
   Instagram,
+  Mail,
   Megaphone,
+  MessageCircle,
   Monitor,
+  Palette,
   PenLine,
   Search,
+  Share2,
+  Smartphone,
   Sparkles,
 } from "lucide-react";
 
@@ -15,11 +23,20 @@ import {
  */
 export const serviceIcons: Record<string, LucideIcon> = {
   "طراحی-سایت": Monitor,
+  "طراحی-سایت/وردپرس": Monitor,
   "تولید-محتوا": PenLine,
   سئو: Search,
   "هوش-مصنوعی": Sparkles,
+  "شبکه‌های-اجتماعی": Share2,
   اینستاگرام: Instagram,
   "تبلیغات-اینترنتی": Megaphone,
+  "پشتیبانی-سایت": Headphones,
+  "اپلیکیشن-و-وب-اپ": Smartphone,
+  آنالیتیکس: BarChart3,
+  "api-و-یکپارچه‌سازی": Cable,
+  "ایمیل-مارکتینگ": Mail,
+  "مشاوره-دیجیتال-مارکتینگ": MessageCircle,
+  برندینگ: Palette,
 };
 
 const blogCategoryIcons: Record<string, LucideIcon> = {
@@ -29,6 +46,7 @@ const blogCategoryIcons: Record<string, LucideIcon> = {
   سئو: Search,
   "هوش مصنوعی": Sparkles,
   اینستاگرام: Instagram,
+  "شبکه‌های اجتماعی": Share2,
   "تبلیغات اینترنتی": Megaphone,
   بازاریابی: Sparkles,
   عمومی: BookOpen,
