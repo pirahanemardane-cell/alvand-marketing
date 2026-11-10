@@ -108,7 +108,7 @@ export default async function ServicesPage({ searchParams }: Props) {
                       {item.shortDesc}
                     </p>
                     <span className="text-sm font-medium text-accent inline-flex items-center gap-1">
-                      جزئیات خدمت
+                      {item.title}
                       <span className="text-xs">←</span>
                     </span>
                   </Link>

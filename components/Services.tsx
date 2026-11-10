@@ -23,7 +23,7 @@ export default function Services() {
               href="/services"
               className="inline-flex items-center gap-1 mt-4 text-sm font-bold text-accent hover:opacity-80 transition-opacity"
             >
-              همه خدمات
+              {servicesOverview.title}
               <span className="text-xs">←</span>
             </Link>
           </div>
@@ -70,7 +70,8 @@ export default function Services() {
                         href={serviceHref(item.slug)}
                         className="text-sm font-medium text-accent hover:opacity-80"
                       >
-                        جزئیات ←
+                        {item.title}
+                        <span className="text-xs ms-1">←</span>
                       </Link>
                     </div>
                   </motion.div>

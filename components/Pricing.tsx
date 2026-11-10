@@ -3,10 +3,11 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import SectionLabel from "./SectionLabel";
+import { getServiceBySlug, serviceHref } from "@/lib/services";
 
 const packages = [
   {
-    name: "پکیج طراحی سایت",
+    slug: "طراحی-سایت",
     suitable: "سایت شرکتی یا فروشگاهی ریسپانسیو با تمرکز بر سرعت و مسیر تماس",
     items: [
       "طراحی UI/UX ریسپانسیو و وایرفریم تأییدشده",
@@ -15,10 +16,9 @@ const packages = [
       "آموزش مدیریت محتوا برای تیم شما",
       "پشتیبانی اولیه پس از تحویل",
     ],
-    href: "/services/طراحی-سایت",
   },
   {
-    name: "پکیج تولید محتوا",
+    slug: "تولید-محتوا",
     suitable: "متن صفحات، مقاله سئوشده و محتوای اینستاگرام که به اقدام ختم شود",
     items: [
       "متن صفحات اصلی سایت",
@@ -27,10 +27,9 @@ const packages = [
       "راهنمای لحن برند",
       "نگارش یا نگارش همراه با انتشار",
     ],
-    href: "/services/تولید-محتوا",
   },
   {
-    name: "پکیج سئو",
+    slug: "سئو",
     suitable: "رتبه پایدار روی کلماتی که مشتری واقعی می‌آورند",
     items: [
       "آدیت فنی و محتوایی",
@@ -39,10 +38,9 @@ const packages = [
       "سئو محلی و گوگل مپ",
       "گزارش ماهانه رتبه و ترافیک",
     ],
-    href: "/services/سئو",
   },
   {
-    name: "پکیج هوش مصنوعی",
+    slug: "هوش-مصنوعی",
     suitable: "کاهش زمان کارهای تکراری با نظارت انسانی",
     items: [
       "طراحی جریان کار با نقطه کنترل انسانی",
@@ -51,10 +49,9 @@ const packages = [
       "راه‌اندازی چت‌بات در صورت نیاز",
       "آموزش استفاده به تیم شما",
     ],
-    href: "/services/هوش-مصنوعی",
   },
   {
-    name: "پکیج شبکه‌های اجتماعی",
+    slug: "شبکه‌های-اجتماعی",
     suitable: "مدیریت کانال با هدف لید و فروش، نه فقط افزایش فالوور",
     items: [
       "تعیین هدف کانال و شاخص قابل اندازه‌گیری",
@@ -63,10 +60,9 @@ const packages = [
       "هماهنگی با کمپین تبلیغاتی در صورت نیاز",
       "انتخاب اینستاگرام، لینکدین یا هر دو",
     ],
-    href: "/services/شبکه‌های-اجتماعی",
   },
   {
-    name: "پکیج تبلیغات اینترنتی",
+    slug: "تبلیغات-اینترنتی",
     suitable: "کمپین با هدف مشخص و گزارش هفتگی هزینه به‌ازای نتیجه",
     items: [
       "طراحی و راه‌اندازی کمپین گوگل و اینستاگرام",
@@ -75,7 +71,6 @@ const packages = [
       "گزارش هزینه به‌ازای نتیجه",
       "تصمیم ادامه یا توقف بر اساس داده",
     ],
-    href: "/services/تبلیغات-اینترنتی",
   },
 ];
 
@@ -116,48 +111,53 @@ export default function Pricing() {
             </p>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {packages.map((pkg, i) => (
-                <motion.div
-                  key={pkg.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.06 }}
-                  className="rounded-2xl border border-border bg-card p-6 flex flex-col"
-                >
-                  <h3 className="text-xl font-bold mb-1">{pkg.name}</h3>
-                  <p className="text-caption text-muted-foreground leading-persian mb-5">
-                    {pkg.suitable}
-                  </p>
-                  <ul className="space-y-2.5 mb-6 flex-1">
-                    {pkg.items.map((item) => (
-                      <li
-                        key={item}
-                        className="text-sm leading-persian flex gap-2"
+              {packages.map((pkg, i) => {
+                const service = getServiceBySlug(pkg.slug);
+                const title = service?.title ?? pkg.slug;
+                const href = serviceHref(pkg.slug);
+                return (
+                  <motion.div
+                    key={pkg.slug}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.06 }}
+                    className="rounded-2xl border border-border bg-card p-6 flex flex-col"
+                  >
+                    <h3 className="text-xl font-bold mb-1">{title}</h3>
+                    <p className="text-caption text-muted-foreground leading-persian mb-5">
+                      {pkg.suitable}
+                    </p>
+                    <ul className="space-y-2.5 mb-6 flex-1">
+                      {pkg.items.map((item) => (
+                        <li
+                          key={item}
+                          className="text-sm leading-persian flex gap-2"
+                        >
+                          <span className="text-accent shrink-0">✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href="/contact"
+                        className="text-sm font-bold text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1"
                       >
-                        <span className="text-accent shrink-0">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-col gap-2">
-                    <Link
-                      href="/contact"
-                      className="text-sm font-bold text-accent hover:opacity-80 transition-opacity inline-flex items-center gap-1"
-                    >
-                      مشاوره و برآورد
-                      <span className="text-xs">←</span>
-                    </Link>
-                    <Link
-                      href={pkg.href}
-                      className="text-caption text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-                    >
-                      جزئیات خدمت
-                      <span className="text-xs">←</span>
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                        مشاوره و برآورد
+                        <span className="text-xs">←</span>
+                      </Link>
+                      <Link
+                        href={href}
+                        className="text-caption text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                      >
+                        {title}
+                        <span className="text-xs">←</span>
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>
