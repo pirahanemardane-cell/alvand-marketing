@@ -393,7 +393,6 @@ export default function Navbar() {
                             aria-label="منوی خدمات"
                           >
                             <div className="w-full max-h-[calc(100vh-5.5rem)] flex flex-col rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
-                              <div className="relative min-h-0 flex-1 flex flex-col">
                               <div
                                 ref={megaScrollRef}
                                 className="mega-scroll-panel min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5"
@@ -481,26 +480,23 @@ export default function Navbar() {
                                   );
                                 })}
                               </div>
-                              <div
-                                className={`pointer-events-none absolute inset-x-0 bottom-0 z-[1] transition-opacity duration-200 ${
-                                  megaMoreBelow
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                }`}
-                                aria-hidden={!megaMoreBelow}
-                              >
-                                <div className="flex h-14 flex-col items-center justify-end gap-0.5 bg-gradient-to-t from-background via-background/75 to-transparent pb-2">
-                                  <ChevronDown
-                                    className="h-4 w-4 text-muted-foreground"
-                                    strokeWidth={2}
-                                    aria-hidden
-                                  />
-                                  <p className="text-sm font-medium text-muted-foreground leading-persian">
-                                    ادامه خدمات با اسکرول
-                                  </p>
+                              {megaMoreBelow && (
+                                <div
+                                  className="shrink-0 border-t border-border/70 bg-background px-3 py-2"
+                                  aria-live="polite"
+                                >
+                                  <div className="flex items-center justify-center gap-1.5 text-foreground/75">
+                                    <ChevronDown
+                                      className="h-4 w-4 shrink-0"
+                                      strokeWidth={2}
+                                      aria-hidden
+                                    />
+                                    <p className="text-sm font-medium leading-persian">
+                                      ادامه خدمات با اسکرول
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                              </div>
+                              )}
                               <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5">
                                 <Link
                                   href="/services"
@@ -892,23 +888,23 @@ export default function Navbar() {
                 </div>
               </div>
               </div>
-              <div
-                className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 transition-opacity duration-200 ${
-                  mobileMoreBelow ? "opacity-100" : "opacity-0"
-                }`}
-                aria-hidden={!mobileMoreBelow}
-              >
-                <div className="flex h-14 flex-col items-center justify-end gap-0.5 bg-gradient-to-t from-background via-background/75 to-transparent pb-2.5">
-                  <ChevronDown
-                    className="h-4 w-4 text-muted-foreground"
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                  <p className="text-sm font-medium text-muted-foreground leading-persian">
-                    ادامه خدمات با اسکرول
-                  </p>
+              {mobileMoreBelow && (
+                <div
+                  className="shrink-0 border-t border-border/70 bg-background px-3 py-2.5"
+                  aria-live="polite"
+                >
+                  <div className="flex items-center justify-center gap-1.5 text-foreground/75">
+                    <ChevronDown
+                      className="h-4 w-4 shrink-0"
+                      strokeWidth={2}
+                      aria-hidden
+                    />
+                    <p className="text-sm font-medium leading-persian">
+                      ادامه خدمات با اسکرول
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           </>
         )}
