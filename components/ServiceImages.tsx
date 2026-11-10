@@ -13,7 +13,9 @@ export function ServiceFeaturedImage({
   className?: string;
 }) {
   return (
-    <figure className={className}>
+    <figure
+      className={`mx-auto flex w-full flex-col items-center ${className ?? ""}`}
+    >
       <div className="relative aspect-[16/9] w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-muted">
         <Image
           src={serviceImageSrc(image)}
@@ -43,7 +45,12 @@ export function ServiceInlineImage({
   className?: string;
 }) {
   return (
-    <figure className={className ?? "mt-5 mb-2 w-full max-w-3xl"}>
+    <figure
+      className={
+        className ??
+        "mx-auto mt-5 mb-2 flex w-full max-w-3xl flex-col items-center"
+      }
+    >
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-muted">
         <Image
           src={serviceImageSrc(image)}
