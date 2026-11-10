@@ -6,8 +6,9 @@
 export const LEGACY_SERVICE_SLUGS: Record<string, string> = {
   // Latin "api" slug → fully Persian (workbook still suggests latin)
   "api-و-یکپارچه‌سازی": "ای‌پی‌آی-و-یکپارچه‌سازی",
-  // Note: /services/اینستاگرام is again a live PLP (مدیریت اینستاگرام).
-  // The prior 301 → شبکه‌های-اجتماعی was removed in the PLP/PDP batch import.
+  // Legacy top-level Instagram / LinkedIn → nested PDPs under social PLP
+  اینستاگرام: "شبکه‌های-اجتماعی/اینستاگرام",
+  لینکدین: "شبکه‌های-اجتماعی/لینکدین",
 };
 
 export function canonicalServiceSlug(slug: string): string | null {

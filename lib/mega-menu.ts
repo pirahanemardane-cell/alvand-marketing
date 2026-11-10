@@ -12,8 +12,7 @@ export const MEGA_MENU_FEATURED_CHILD_LIMIT = 4;
 /**
  * Curated featured child slugs per top-level parent (order = display order).
  * Only these appear under the parent heading — not the full nested inventory.
- * Instagram / LinkedIn stay top-level columns (their own PLPs) and are also
- * featured under شبکه‌های اجتماعی for discovery.
+ * Instagram / LinkedIn are nested PDPs under شبکه‌های اجتماعی.
  */
 export const MEGA_MENU_FEATURED_CHILDREN: Record<string, string[]> = {
   "طراحی-سایت": [
@@ -30,7 +29,10 @@ export const MEGA_MENU_FEATURED_CHILDREN: Record<string, string[]> = {
     "تبلیغات-اینترنتی/شبکه‌های-اجتماعی",
     "تبلیغات-اینترنتی/پوش-نوتیفیکیشن",
   ],
-  "شبکه‌های-اجتماعی": ["اینستاگرام", "لینکدین"],
+  "شبکه‌های-اجتماعی": [
+    "شبکه‌های-اجتماعی/اینستاگرام",
+    "شبکه‌های-اجتماعی/لینکدین",
+  ],
   آنالیتیکس: [
     "آنالیتیکس/گوگل-آنالیتیکس",
     "آنالیتیکس/تگ-منیجر",
@@ -60,8 +62,6 @@ const COLUMN_ORDER: string[] = [
   "تولید-محتوا",
   "تبلیغات-اینترنتی",
   "شبکه‌های-اجتماعی",
-  "اینستاگرام",
-  "لینکدین",
   "هوش-مصنوعی",
   "ایمیل-مارکتینگ",
   "آنالیتیکس",

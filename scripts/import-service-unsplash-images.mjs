@@ -86,6 +86,7 @@ const PHOTOS = {
   // social
   instagramPhone: { id: "1611262588024-d9ba4c1d0b0f", photographer: "ConvertKit", topic: "instagram" },
   socialFeed: { id: "1611162616305-c69b3fa7fbe0", photographer: "Souvik Banerjee", topic: "social" },
+  socialCommunity: { id: "1529156069898-49953e39b3ac", photographer: "Perry Grone", topic: "community" },
   linkedinOffice: { id: "1521737711867-e3b97375f902", photographer: "LinkedIn Sales Solutions", topic: "linkedin" },
   networkPeople: { id: "1522071820081-009f0129c71c", photographer: "LinkedIn Sales Solutions", topic: "network" },
   // support / security / speed
@@ -318,7 +319,7 @@ const PAGES = {
   "شبکه‌های-اجتماعی": {
     folder: "social-media",
     title: "شبکه‌های اجتماعی",
-    keys: ["socialFeed", "networkPeople", "socialPhone", "brainstorm"],
+    keys: ["socialCommunity", "networkPeople", "pwaPhone", "brainstorm"],
   },
   "هوش-مصنوعی": {
     folder: "artificial-intelligence",
@@ -420,12 +421,12 @@ const PAGES = {
     title: "برندینگ و هویت بصری",
     keys: ["brandColors", "identity", "logoDesign", "webDesigner"],
   },
-  اینستاگرام: {
+  "شبکه‌های-اجتماعی/اینستاگرام": {
     folder: "instagram-management",
     title: "مدیریت اینستاگرام",
     keys: ["instagramPhone", "socialFeed", "socialPhone", "contentCreate"],
   },
-  لینکدین: {
+  "شبکه‌های-اجتماعی/لینکدین": {
     folder: "linkedin-management",
     title: "مدیریت لینکدین",
     keys: ["linkedinOffice", "networkPeople", "coworking", "teamMeeting"],
