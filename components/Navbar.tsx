@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -72,11 +72,29 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [megaOpen, setMegaOpen] = useState(false);
+  const [megaMoreBelow, setMegaMoreBelow] = useState(false);
+  const [mobileMoreBelow, setMobileMoreBelow] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileExpandedSlug, setMobileExpandedSlug] = useState<string | null>(
     null
   );
+  const megaScrollRef = useRef<HTMLDivElement>(null);
+  const mobileDrawerRef = useRef<HTMLDivElement>(null);
   const megaColumns = getMegaMenuColumns();
+
+  const syncScrollAffordance = useCallback(
+    (
+      el: HTMLElement | null,
+      setMore: (v: boolean) => void
+    ) => {
+      if (!el) {
+        setMore(false);
+        return;
+      }
+      setMore(el.scrollHeight - el.scrollTop - el.clientHeight > 12);
+    },
+    []
+  );
   const [blogPosts, setBlogPosts] = useState<BlogSearchItem[]>([]);
   const { mode, setMode, theme } = useTheme();
   const router = useRouter();
@@ -103,6 +121,46 @@ export default function Navbar() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [megaOpen]);
+
+  useEffect(() => {
+    if (!megaOpen) {
+      setMegaMoreBelow(false);
+      return;
+    }
+    const el = megaScrollRef.current;
+    if (!el) return;
+    const update = () => syncScrollAffordance(el, setMegaMoreBelow);
+    update();
+    const raf = requestAnimationFrame(update);
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [megaOpen, syncScrollAffordance]);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      setMobileMoreBelow(false);
+      return;
+    }
+    const el = mobileDrawerRef.current;
+    if (!el) return;
+    const update = () => syncScrollAffordance(el, setMobileMoreBelow);
+    update();
+    const raf = requestAnimationFrame(update);
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [menuOpen, mobileServicesOpen, mobileExpandedSlug, syncScrollAffordance]);
 
   const onNavItemClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -335,7 +393,11 @@ export default function Navbar() {
                             aria-label="منوی خدمات"
                           >
                             <div className="w-full max-h-[calc(100vh-5.5rem)] flex flex-col rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
-                              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5">
+                              <div className="relative min-h-0 flex-1 flex flex-col">
+                              <div
+                                ref={megaScrollRef}
+                                className="min-h-0 flex-1 overflow-y-auto overscroll-contain grid grid-cols-3 2xl:grid-cols-4 gap-0.5 p-2.5"
+                              >
                                 {megaColumns.map(({ parent, featuredChildren }) => {
                                   const SIcon = getServiceIcon(parent.slug);
                                   const href = serviceHref(parent.slug);
@@ -418,6 +480,23 @@ export default function Navbar() {
                                     </div>
                                   );
                                 })}
+                              </div>
+                              <div
+                                className={`pointer-events-none absolute inset-x-0 bottom-0 transition-opacity duration-200 ${
+                                  megaMoreBelow
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                }`}
+                                aria-hidden={!megaMoreBelow}
+                              >
+                                <div className="h-10 bg-gradient-to-t from-background via-background/80 to-transparent" />
+                                <div className="flex flex-col items-center gap-0.5 bg-background/95 px-3 pb-2 pt-0.5 backdrop-blur-[2px]">
+                                  <ChevronDown className="h-4 w-4 text-accent animate-bounce" />
+                                  <p className="text-xs text-muted-foreground leading-persian">
+                                    برای دیدن همه خدمات اسکرول کنید
+                                  </p>
+                                </div>
+                              </div>
                               </div>
                               <div className="shrink-0 border-t border-border bg-muted/40 px-4 py-2.5">
                                 <Link
@@ -537,8 +616,12 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
-              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col pt-4 pb-8 px-5 overflow-y-auto overscroll-contain"
+              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col overflow-hidden"
             >
+              <div
+                ref={mobileDrawerRef}
+                className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4 pb-8 px-5"
+              >
               <div className="flex justify-start mb-5">
                 <Link href="/" onClick={closeMenu} aria-label="الوند مارکتینگ">
                   <img
@@ -803,6 +886,21 @@ export default function Navbar() {
                   >
                     واتساپ
                   </a>
+                </div>
+              </div>
+              </div>
+              <div
+                className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 transition-opacity duration-200 ${
+                  mobileMoreBelow ? "opacity-100" : "opacity-0"
+                }`}
+                aria-hidden={!mobileMoreBelow}
+              >
+                <div className="h-10 bg-gradient-to-t from-background via-background/85 to-transparent" />
+                <div className="flex flex-col items-center gap-0.5 bg-background/95 px-3 pb-3 pt-0.5 backdrop-blur-[2px]">
+                  <ChevronDown className="h-4 w-4 text-accent animate-bounce" />
+                  <p className="text-xs text-muted-foreground leading-persian">
+                    برای دیدن همه خدمات اسکرول کنید
+                  </p>
                 </div>
               </div>
             </motion.div>
