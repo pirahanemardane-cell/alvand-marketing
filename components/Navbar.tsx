@@ -24,21 +24,12 @@ import { useTheme } from "./ThemeProvider";
 
 const logoSrc = mediaUrl("ALVAND-bg.webp");
 import AuthButton from "./AuthButton";
-import {
-  services,
-  serviceHref,
-  getTopLevelServices,
-  getChildServices,
-} from "@/lib/services";
+import { services, serviceHref, servicesOverview } from "@/lib/services";
 import { getServiceIcon } from "@/lib/category-icons";
-
-/** Direct children only (one nesting level) for mega-menu grouping. */
-function getDirectChildServices(parentSlug: string) {
-  return getChildServices(parentSlug).filter((s) => {
-    const rest = s.slug.slice(parentSlug.length + 1);
-    return rest.length > 0 && !rest.includes("/");
-  });
-}
+import {
+  getMegaMenuColumns,
+  isServicePathActive,
+} from "@/lib/mega-menu";
 
 const desktopLinkBase =
   "inline-flex items-center gap-1.5 text-sm transition-colors duration-200 whitespace-nowrap px-2 py-1.5 rounded-md";
@@ -82,6 +73,10 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileExpandedSlug, setMobileExpandedSlug] = useState<string | null>(
+    null
+  );
+  const megaColumns = getMegaMenuColumns();
   const [blogPosts, setBlogPosts] = useState<BlogSearchItem[]>([]);
   const { mode, setMode, theme } = useTheme();
   const router = useRouter();
@@ -97,7 +92,17 @@ export default function Navbar() {
   const closeMenu = () => {
     setMenuOpen(false);
     setMobileServicesOpen(false);
+    setMobileExpandedSlug(null);
   };
+
+  useEffect(() => {
+    if (!megaOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMegaOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [megaOpen]);
 
   const onNavItemClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -288,11 +293,23 @@ export default function Navbar() {
                       className="relative z-[70]"
                       onMouseEnter={() => setMegaOpen(true)}
                       onMouseLeave={() => setMegaOpen(false)}
+                      onFocusCapture={() => setMegaOpen(true)}
+                      onBlurCapture={(e) => {
+                        if (
+                          !e.currentTarget.contains(
+                            e.relatedTarget as Node | null
+                          )
+                        ) {
+                          setMegaOpen(false);
+                        }
+                      }}
                     >
                       <Link
                         href={item.href}
                         className={linkCls}
                         aria-current={active ? "page" : undefined}
+                        aria-expanded={megaOpen}
+                        aria-haspopup="true"
                       >
                         <Icon
                           className={`h-4 w-4 shrink-0 ${
@@ -314,68 +331,60 @@ export default function Navbar() {
                             exit={{ opacity: 0, y: 8 }}
                             transition={{ duration: 0.15 }}
                             className="absolute top-full right-0 pt-2 z-[70]"
+                            role="menu"
+                            aria-label="منوی خدمات"
                           >
-                            <div className="w-[min(92vw,36rem)] max-h-[70vh] overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl p-2 ring-1 ring-border/50">
-                              <Link
-                                href="/services"
-                                className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
-                                  pathname === "/services"
-                                    ? "bg-accent/10 text-accent"
-                                    : "hover:bg-accent/10"
-                                }`}
-                                aria-current={
-                                  pathname === "/services" ? "page" : undefined
-                                }
-                                onClick={() => setMegaOpen(false)}
-                              >
-                                <LayoutGrid className="h-4 w-4 text-accent" />
-                                همه خدمات
-                              </Link>
-                              <div className="h-px bg-border my-1" />
-                              <div className="grid sm:grid-cols-2 gap-0.5">
-                                {getTopLevelServices().map((s) => {
-                                  const SIcon = getServiceIcon(s.slug);
-                                  const href = serviceHref(s.slug);
-                                  const svcActive =
-                                    pathname === href ||
-                                    pathname === decodeURIComponent(href) ||
-                                    pathname.startsWith(
-                                      decodeURIComponent(href) + "/"
-                                    );
-                                  const children = getDirectChildServices(s.slug);
+                            <div className="w-[min(96vw,72rem)] rounded-2xl border border-border bg-background shadow-2xl ring-1 ring-border/50 overflow-hidden">
+                              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-1 p-3 max-h-[min(70vh,36rem)] overflow-y-auto">
+                                {megaColumns.map(({ parent, featuredChildren }) => {
+                                  const SIcon = getServiceIcon(parent.slug);
+                                  const href = serviceHref(parent.slug);
+                                  const svcActive = isServicePathActive(
+                                    pathname,
+                                    href,
+                                    { includeDescendants: true }
+                                  );
                                   return (
-                                    <div key={s.slug} className="min-w-0">
+                                    <div
+                                      key={parent.slug}
+                                      className="min-w-0 rounded-xl p-2 hover:bg-accent/5 transition-colors"
+                                    >
                                       <Link
                                         href={href}
+                                        role="menuitem"
                                         onClick={() => setMegaOpen(false)}
                                         aria-current={
                                           svcActive ? "page" : undefined
                                         }
-                                        className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm transition-colors ${
+                                        className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm font-bold transition-colors ${
                                           svcActive
-                                            ? "text-accent font-bold bg-accent/10"
-                                            : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
+                                            ? "text-accent bg-accent/10"
+                                            : "text-foreground hover:text-accent"
                                         }`}
                                       >
                                         <span className="text-accent">
                                           <SIcon className="h-4 w-4 shrink-0" />
                                         </span>
-                                        {s.title}
+                                        <span className="truncate">
+                                          {parent.title}
+                                        </span>
                                       </Link>
-                                      {children.length > 0 && (
-                                        <ul className="pr-8 pb-1 space-y-0.5 list-none">
-                                          {children.map((child) => {
+                                      {featuredChildren.length > 0 && (
+                                        <ul className="mt-1 space-y-0.5 list-none pr-1">
+                                          {featuredChildren.map((child) => {
                                             const childHref = serviceHref(
                                               child.slug
                                             );
                                             const childActive =
-                                              pathname === childHref ||
-                                              pathname ===
-                                                decodeURIComponent(childHref);
+                                              isServicePathActive(
+                                                pathname,
+                                                childHref
+                                              );
                                             return (
                                               <li key={child.slug}>
                                                 <Link
                                                   href={childHref}
+                                                  role="menuitem"
                                                   onClick={() =>
                                                     setMegaOpen(false)
                                                   }
@@ -384,7 +393,7 @@ export default function Navbar() {
                                                       ? "page"
                                                       : undefined
                                                   }
-                                                  className={`block px-2 py-1 rounded-lg text-xs transition-colors ${
+                                                  className={`block px-2 py-1 rounded-md text-xs leading-relaxed transition-colors ${
                                                     childActive
                                                       ? "text-accent font-bold bg-accent/10"
                                                       : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
@@ -400,6 +409,32 @@ export default function Navbar() {
                                     </div>
                                   );
                                 })}
+                              </div>
+                              <div className="border-t border-border bg-muted/40 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <Link
+                                  href="/services"
+                                  onClick={() => setMegaOpen(false)}
+                                  className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:opacity-80 transition-opacity"
+                                >
+                                  <LayoutGrid className="h-4 w-4" />
+                                  مشاهده همه خدمات
+                                </Link>
+                                <Link
+                                  href="/services"
+                                  onClick={() => setMegaOpen(false)}
+                                  aria-current={
+                                    pathname === "/services"
+                                      ? "page"
+                                      : undefined
+                                  }
+                                  className={`text-xs sm:text-sm transition-colors ${
+                                    pathname === "/services"
+                                      ? "text-accent font-bold"
+                                      : "text-muted-foreground hover:text-foreground"
+                                  }`}
+                                >
+                                  {servicesOverview.title}
+                                </Link>
                               </div>
                             </div>
                           </motion.div>
@@ -562,6 +597,7 @@ export default function Navbar() {
                             }
                             className="p-3 rounded-xl hover:bg-accent/10"
                             aria-label="زیرمنوی خدمات"
+                            aria-expanded={mobileServicesOpen}
                           >
                             <ChevronDown
                               className={`h-4 w-4 transition-transform ${
@@ -576,68 +612,132 @@ export default function Navbar() {
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden pr-4 pb-2 list-none"
+                              className="overflow-hidden pr-2 pb-2 list-none"
                             >
-                              {getTopLevelServices().map((s) => {
-                                const SIcon = getServiceIcon(s.slug);
-                                const href = serviceHref(s.slug);
-                                const svcActive =
-                                  pathname === href ||
-                                  pathname === decodeURIComponent(href);
-                                const children = getDirectChildServices(s.slug);
-                                return (
-                                  <li key={s.slug}>
-                                    <Link
-                                      href={href}
-                                      onClick={closeMenu}
-                                      aria-current={
-                                        svcActive ? "page" : undefined
-                                      }
-                                      className={`flex items-center gap-2 py-2 px-3 text-sm transition-colors ${
-                                        svcActive
-                                          ? "text-accent font-bold bg-accent/10 rounded-lg"
-                                          : "text-muted-foreground hover:text-accent"
-                                      }`}
+                              {megaColumns.map(
+                                ({ parent, featuredChildren }) => {
+                                  const SIcon = getServiceIcon(parent.slug);
+                                  const href = serviceHref(parent.slug);
+                                  const svcActive = isServicePathActive(
+                                    pathname,
+                                    href,
+                                    { includeDescendants: true }
+                                  );
+                                  const expanded =
+                                    mobileExpandedSlug === parent.slug;
+                                  const canExpand =
+                                    featuredChildren.length > 0;
+                                  return (
+                                    <li
+                                      key={parent.slug}
+                                      className="border-b border-border/60 last:border-0"
                                     >
-                                      <SIcon className="h-4 w-4 text-accent shrink-0" />
-                                      {s.title}
-                                    </Link>
-                                    {children.length > 0 && (
-                                      <ul className="pr-6 list-none">
-                                        {children.map((child) => {
-                                          const childHref = serviceHref(
-                                            child.slug
-                                          );
-                                          const childActive =
-                                            pathname === childHref ||
-                                            pathname ===
-                                              decodeURIComponent(childHref);
-                                          return (
-                                            <li key={child.slug}>
-                                              <Link
-                                                href={childHref}
-                                                onClick={closeMenu}
-                                                aria-current={
-                                                  childActive
-                                                    ? "page"
-                                                    : undefined
-                                                }
-                                                className={`block py-1.5 px-3 text-xs transition-colors ${
-                                                  childActive
-                                                    ? "text-accent font-bold"
-                                                    : "text-muted-foreground hover:text-accent"
-                                                }`}
-                                              >
-                                                {child.title}
-                                              </Link>
-                                            </li>
-                                          );
-                                        })}
-                                      </ul>
-                                    )}
-                                  </li>
-                                );
-                              })}
+                                      <div className="flex items-center gap-1">
+                                        <Link
+                                          href={href}
+                                          onClick={closeMenu}
+                                          aria-current={
+                                            svcActive ? "page" : undefined
+                                          }
+                                          className={`flex-1 flex items-center gap-2 py-2.5 px-3 text-sm transition-colors rounded-lg ${
+                                            svcActive
+                                              ? "text-accent font-bold bg-accent/10"
+                                              : "text-muted-foreground hover:text-accent"
+                                          }`}
+                                        >
+                                          <SIcon className="h-4 w-4 text-accent shrink-0" />
+                                          <span className="truncate">
+                                            {parent.title}
+                                          </span>
+                                        </Link>
+                                        {canExpand && (
+                                          <button
+                                            type="button"
+                                            className="p-2.5 rounded-lg hover:bg-accent/10"
+                                            aria-label={`زیرخدمات ${parent.title}`}
+                                            aria-expanded={expanded}
+                                            onClick={() =>
+                                              setMobileExpandedSlug(
+                                                expanded ? null : parent.slug
+                                              )
+                                            }
+                                          >
+                                            <ChevronDown
+                                              className={`h-4 w-4 transition-transform ${
+                                                expanded ? "rotate-180" : ""
+                                              }`}
+                                            />
+                                          </button>
+                                        )}
+                                      </div>
+                                      <AnimatePresence>
+                                        {canExpand && expanded && (
+                                          <motion.ul
+                                            initial={{
+                                              height: 0,
+                                              opacity: 0,
+                                            }}
+                                            animate={{
+                                              height: "auto",
+                                              opacity: 1,
+                                            }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            className="overflow-hidden pr-6 pb-2 list-none"
+                                          >
+                                            {featuredChildren.map((child) => {
+                                              const childHref = serviceHref(
+                                                child.slug
+                                              );
+                                              const childActive =
+                                                isServicePathActive(
+                                                  pathname,
+                                                  childHref
+                                                );
+                                              return (
+                                                <li key={child.slug}>
+                                                  <Link
+                                                    href={childHref}
+                                                    onClick={closeMenu}
+                                                    aria-current={
+                                                      childActive
+                                                        ? "page"
+                                                        : undefined
+                                                    }
+                                                    className={`block py-1.5 px-3 text-xs transition-colors rounded-md ${
+                                                      childActive
+                                                        ? "text-accent font-bold bg-accent/10"
+                                                        : "text-muted-foreground hover:text-accent"
+                                                    }`}
+                                                  >
+                                                    {child.title}
+                                                  </Link>
+                                                </li>
+                                              );
+                                            })}
+                                          </motion.ul>
+                                        )}
+                                      </AnimatePresence>
+                                    </li>
+                                  );
+                                }
+                              )}
+                              <li className="pt-2 px-3 space-y-1">
+                                <Link
+                                  href="/services"
+                                  onClick={closeMenu}
+                                  className="inline-flex items-center gap-2 text-sm font-bold text-accent"
+                                >
+                                  <LayoutGrid className="h-4 w-4" />
+                                  مشاهده همه خدمات
+                                </Link>
+                                <Link
+                                  href="/services"
+                                  onClick={closeMenu}
+                                  className="block text-xs text-muted-foreground"
+                                >
+                                  {servicesOverview.title}
+                                </Link>
+                              </li>
                             </motion.ul>
                           )}
                         </AnimatePresence>
