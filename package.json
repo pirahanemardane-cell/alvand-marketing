@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "media:migrate-r2": "node scripts/migrate-images-to-r2.mjs",
-    "media:service-unsplash": "node scripts/upload-service-unsplash-from-assignments.mjs"
+    "media:service-unsplash": "node scripts/upload-service-unsplash-from-assignments.mjs",
+    "media:service-unsplash-light": "node scripts/recompress-service-images.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",

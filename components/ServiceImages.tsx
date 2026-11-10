@@ -2,7 +2,8 @@ import Image from "next/image";
 import type { ServiceImageAsset, ServiceImageSet } from "@/lib/service-images";
 import { serviceImageSrc } from "@/lib/service-images";
 
-function FeaturedImage({
+/** Featured / index image (hero). Eager when priority. */
+export function ServiceFeaturedImage({
   image,
   priority,
   className,
@@ -13,14 +14,14 @@ function FeaturedImage({
 }) {
   return (
     <figure className={className}>
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border bg-muted">
+      <div className="relative aspect-[16/9] w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-muted">
         <Image
           src={serviceImageSrc(image)}
           alt={image.alt}
           title={image.alt}
           width={image.width}
           height={image.height}
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px"
           className="h-full w-full object-cover"
           priority={priority}
         />
@@ -30,44 +31,40 @@ function FeaturedImage({
   );
 }
 
-export function ServiceRelatedGallery({
-  images,
+/**
+ * Single related image placed under a content heading (lazy, light sizes).
+ * Not a gallery strip — one image nested in its section.
+ */
+export function ServiceInlineImage({
+  image,
+  className,
 }: {
-  images: ServiceImageAsset[];
+  image: ServiceImageAsset;
+  className?: string;
 }) {
   return (
-    <section className="mb-14 w-full" aria-label="تصاویر مرتبط">
-      <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-        تصاویر مرتبط
-      </h2>
-      <div className="grid sm:grid-cols-3 gap-4 w-full">
-        {images.map((image) => (
-          <figure key={image.path} className="min-w-0">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-border bg-muted">
-              <Image
-                src={serviceImageSrc(image)}
-                alt={image.alt}
-                title={image.alt}
-                width={image.width}
-                height={image.height}
-                sizes="(max-width: 640px) 100vw, 33vw"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <figcaption className="mt-2 text-caption text-muted-foreground line-clamp-2 leading-persian">
-              {image.alt}
-            </figcaption>
-          </figure>
-        ))}
+    <figure className={className ?? "mt-5 mb-2 w-full max-w-3xl"}>
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-muted">
+        <Image
+          src={serviceImageSrc(image)}
+          alt={image.alt}
+          title={image.alt}
+          width={image.width}
+          height={image.height}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 900px"
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
       </div>
-    </section>
+      <figcaption className="sr-only">{image.alt}</figcaption>
+    </figure>
   );
 }
 
 /** Hub page hero featured image. */
 export function ServiceHubHeroImage({ images }: { images: ServiceImageSet }) {
   return (
-    <FeaturedImage
+    <ServiceFeaturedImage
       image={images.featured}
       priority
       className="mb-10 w-full"
@@ -87,6 +84,7 @@ export function ServiceCardImage({ image }: { image: ServiceImageAsset }) {
         height={image.height}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        loading="lazy"
       />
     </div>
   );
@@ -95,20 +93,10 @@ export function ServiceCardImage({ image }: { image: ServiceImageAsset }) {
 /** PDP featured (تصویر شاخص) only. */
 export function ServicePdpFeatured({ images }: { images: ServiceImageSet }) {
   return (
-    <FeaturedImage
+    <ServiceFeaturedImage
       image={images.featured}
       priority
       className="mb-12 w-full"
     />
-  );
-}
-
-/** PDP featured + related gallery (single block). */
-export function ServicePdpImages({ images }: { images: ServiceImageSet }) {
-  return (
-    <>
-      <ServicePdpFeatured images={images} />
-      <ServiceRelatedGallery images={[...images.related]} />
-    </>
   );
 }

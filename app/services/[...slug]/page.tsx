@@ -23,8 +23,8 @@ import { metadataForPageKey } from "@/lib/seo/pages";
 import { servicePdpJsonLd } from "@/lib/seo/jsonld";
 import { canonicalServiceSlug } from "@/lib/seo/service-redirects";
 import {
+  ServiceInlineImage,
   ServicePdpFeatured,
-  ServiceRelatedGallery,
 } from "@/components/ServiceImages";
 
 type Props = { params: Promise<{ slug: string[] }> };
@@ -175,6 +175,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
+              {pageImages?.related[0] && (
+                <ServiceInlineImage image={pageImages.related[0]} />
+              )}
             </section>
 
             <section>
@@ -192,10 +195,20 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
+              {pageImages?.related[1] && (
+                <ServiceInlineImage image={pageImages.related[1]} />
+              )}
             </section>
           </div>
 
-          <ServiceContentBlocks blocks={service.beforeProcess} />
+          <ServiceContentBlocks
+            blocks={service.beforeProcess}
+            inlineImageAfterFirst={
+              service.process.length === 0
+                ? pageImages?.related[2]
+                : undefined
+            }
+          />
 
           {service.process.length > 0 && (
             <section className="mb-12 w-full">
@@ -217,14 +230,21 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </li>
                 ))}
               </ol>
+              {pageImages?.related[2] && (
+                <ServiceInlineImage image={pageImages.related[2]} />
+              )}
             </section>
           )}
 
-          <ServiceContentBlocks blocks={service.afterProcess} />
-
-          {pageImages && (
-            <ServiceRelatedGallery images={[...pageImages.related]} />
-          )}
+          <ServiceContentBlocks
+            blocks={service.afterProcess}
+            inlineImageAfterFirst={
+              service.process.length === 0 &&
+              service.beforeProcess.every((b) => !b.heading)
+                ? pageImages?.related[2]
+                : undefined
+            }
+          />
 
           {service.faq.length > 0 && (
             <section className="mb-14 w-full">
