@@ -71,17 +71,31 @@ const COLUMN_ORDER: string[] = [
   "برندینگ",
 ];
 
+/** Direct children only (one nesting level under parent). */
+function getDirectChildServices(parentSlug: string): Service[] {
+  const prefix = parentSlug.endsWith("/") ? parentSlug : `${parentSlug}/`;
+  return getChildServices(parentSlug).filter((s) => {
+    const rest = s.slug.slice(prefix.length);
+    return rest.length > 0 && !rest.includes("/");
+  });
+}
+
+/**
+ * Featured sample PDPs under a PLP (≤4).
+ * Prefer curated list; if empty but nested PDPs exist, fall back to first direct children.
+ */
 export function getMegaMenuFeaturedChildren(parentSlug: string): Service[] {
-  const slugs = (MEGA_MENU_FEATURED_CHILDREN[parentSlug] || []).slice(
-    0,
-    MEGA_MENU_FEATURED_CHILD_LIMIT
-  );
+  const curated = MEGA_MENU_FEATURED_CHILDREN[parentSlug] || [];
   const out: Service[] = [];
-  for (const slug of slugs) {
+  for (const slug of curated.slice(0, MEGA_MENU_FEATURED_CHILD_LIMIT)) {
     const svc = getServiceBySlug(slug);
     if (svc) out.push(svc);
   }
-  return out;
+  if (out.length > 0) return out;
+  return getDirectChildServices(parentSlug).slice(
+    0,
+    MEGA_MENU_FEATURED_CHILD_LIMIT
+  );
 }
 
 function orderedTopLevelServices(): Service[] {

@@ -406,6 +406,15 @@ export default function Navbar() {
                                           })}
                                         </ul>
                                       )}
+                                      <Link
+                                        href={href}
+                                        role="menuitem"
+                                        onClick={() => setMegaOpen(false)}
+                                        className="mt-1.5 inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-accent hover:opacity-80 transition-opacity"
+                                      >
+                                        مشاهده همه
+                                        <span className="text-[0.65rem]">←</span>
+                                      </Link>
                                     </div>
                                   );
                                 })}
@@ -621,8 +630,6 @@ export default function Navbar() {
                                   );
                                   const expanded =
                                     mobileExpandedSlug === parent.slug;
-                                  const canExpand =
-                                    featuredChildren.length > 0;
                                   return (
                                     <li
                                       key={parent.slug}
@@ -646,28 +653,26 @@ export default function Navbar() {
                                             {parent.title}
                                           </span>
                                         </Link>
-                                        {canExpand && (
-                                          <button
-                                            type="button"
-                                            className="p-2.5 rounded-lg hover:bg-accent/10"
-                                            aria-label={`زیرخدمات ${parent.title}`}
-                                            aria-expanded={expanded}
-                                            onClick={() =>
-                                              setMobileExpandedSlug(
-                                                expanded ? null : parent.slug
-                                              )
-                                            }
-                                          >
-                                            <ChevronDown
-                                              className={`h-4 w-4 transition-transform ${
-                                                expanded ? "rotate-180" : ""
-                                              }`}
-                                            />
-                                          </button>
-                                        )}
+                                        <button
+                                          type="button"
+                                          className="p-2.5 rounded-lg hover:bg-accent/10"
+                                          aria-label={`جزئیات منوی ${parent.title}`}
+                                          aria-expanded={expanded}
+                                          onClick={() =>
+                                            setMobileExpandedSlug(
+                                              expanded ? null : parent.slug
+                                            )
+                                          }
+                                        >
+                                          <ChevronDown
+                                            className={`h-4 w-4 transition-transform ${
+                                              expanded ? "rotate-180" : ""
+                                            }`}
+                                          />
+                                        </button>
                                       </div>
                                       <AnimatePresence>
-                                        {canExpand && expanded && (
+                                        {expanded && (
                                           <motion.ul
                                             initial={{
                                               height: 0,
@@ -710,6 +715,18 @@ export default function Navbar() {
                                                 </li>
                                               );
                                             })}
+                                            <li>
+                                              <Link
+                                                href={href}
+                                                onClick={closeMenu}
+                                                className="inline-flex items-center gap-1 py-1.5 px-3 text-xs font-bold text-accent"
+                                              >
+                                                مشاهده همه
+                                                <span className="text-[0.65rem]">
+                                                  ←
+                                                </span>
+                                              </Link>
+                                            </li>
                                           </motion.ul>
                                         )}
                                       </AnimatePresence>
