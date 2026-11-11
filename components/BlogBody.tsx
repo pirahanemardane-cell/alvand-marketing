@@ -12,12 +12,12 @@ type InlineBlock =
   | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "table"; headers: string[]; rows: string[][] };
 
-/** Package PLP assets live on R2 under media/; bodies keep /images/plp/… paths. */
+/** Package PLP/PDP assets live on R2 under media/; bodies keep /images/{plp|pdp}/… paths. */
 function resolveBodyImageSrc(src: string): string {
-  if (src.startsWith("/images/plp/")) {
+  if (src.startsWith("/images/plp/") || src.startsWith("/images/pdp/")) {
     return mediaUrl(src.replace(/^\//, ""));
   }
-  if (src.startsWith("images/plp/")) {
+  if (src.startsWith("images/plp/") || src.startsWith("images/pdp/")) {
     return mediaUrl(src);
   }
   return src;
@@ -289,7 +289,7 @@ export default function BlogBody({
   showFeatured?: boolean;
 }) {
   const sections = parseSections(body);
-  const hasPackagePlpImages = /\/images\/plp\//.test(body);
+  const hasPackageImages = /\/images\/(?:plp|pdp)\//.test(body);
   let headedIdx = 0;
 
   return (
@@ -300,10 +300,10 @@ export default function BlogBody({
       {sections.map((section, idx) => {
         const isHeaded = !!section.heading;
         if (isHeaded) headedIdx += 1;
-        // Package PLP markdown already places unique images under headings —
+        // Package PLP/PDP markdown already places unique images under headings —
         // do not also inject Unsplash/related stock (would duplicate).
         const inline =
-          !hasPackagePlpImages &&
+          !hasPackageImages &&
           images &&
           isHeaded &&
           headedIdx >= 1 &&
