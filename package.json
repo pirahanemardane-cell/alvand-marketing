@@ -14,6 +14,7 @@
     "blog:seed-package": "node scripts/seed-blog-from-package.mjs",
     "content:apply-package": "node scripts/apply-content-package.mjs",
     "blog:images": "node scripts/import-blog-and-plp-images.mjs",
+    "media:import-plp-package": "node scripts/import-plp-package-images.mjs",
     "media:dedupe-unique": "node scripts/dedupe-unique-images.mjs",
     "seo:sync-pages": "node scripts/sync-seo-pages-from-code.mjs",
     "links:check": "node tools/link-check.mjs --base http://127.0.0.1:3000 --old data/live-urls-2026-11-11.json"

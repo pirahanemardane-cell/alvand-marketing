@@ -2,14 +2,26 @@ import { ServiceInlineImage, ServiceFeaturedImage } from "@/components/ServiceIm
 import { ServiceTableView } from "@/components/ServiceContentBlocks";
 import { richTextNodes } from "@/components/RichText";
 import type { ServiceImageSet } from "@/lib/service-images";
+import { mediaUrl } from "@/lib/media";
 
 type InlineBlock =
   | { type: "h3"; text: string; id: string }
   | { type: "p"; text: string }
   | { type: "ul" | "ol"; items: string[] }
   | { type: "checklist"; items: { checked: boolean; text: string }[] }
-  | { type: "image"; src: string; alt: string }
+  | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "table"; headers: string[]; rows: string[][] };
+
+/** Package PLP assets live on R2 under media/; bodies keep /images/plp/… paths. */
+function resolveBodyImageSrc(src: string): string {
+  if (src.startsWith("/images/plp/")) {
+    return mediaUrl(src.replace(/^\//, ""));
+  }
+  if (src.startsWith("images/plp/")) {
+    return mediaUrl(src);
+  }
+  return src;
+}
 
 type Section = {
   heading?: string;
@@ -93,7 +105,21 @@ function parseSections(body: string): Section[] {
     }
     const img = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
     if (img) {
-      current.blocks.push({ type: "image", alt: img[1], src: img[2] });
+      let caption: string | undefined;
+      if (i + 1 < lines.length) {
+        const next = lines[i + 1].trim();
+        const cap = next.match(/^\*(.+)\*$/);
+        if (cap) {
+          caption = cap[1].trim();
+          i += 1;
+        }
+      }
+      current.blocks.push({
+        type: "image",
+        alt: img[1],
+        src: img[2],
+        caption,
+      });
       i++;
       continue;
     }
@@ -219,18 +245,22 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
       );
     }
     if (block.type === "image") {
+      const caption = block.caption || block.alt;
       return (
-        <figure key={`img-${idx}`} className="my-6">
+        <figure
+          key={`img-${idx}`}
+          className="my-6 mx-auto flex w-full max-w-3xl flex-col items-center"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={block.src}
+            src={resolveBodyImageSrc(block.src)}
             alt={block.alt}
-            className="mx-auto w-full max-w-3xl h-auto"
+            className="mx-auto h-auto w-full object-contain"
             loading="lazy"
           />
-          {block.alt ? (
-            <figcaption className="mt-2 text-center text-sm text-muted-foreground">
-              {block.alt}
+          {caption ? (
+            <figcaption className="mt-2 text-center text-sm text-muted-foreground leading-persian">
+              {caption}
             </figcaption>
           ) : null}
         </figure>
@@ -251,23 +281,33 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
 export default function BlogBody({
   body,
   images,
+  showFeatured = true,
 }: {
   body: string;
   images?: ServiceImageSet;
+  /** When false, parent already rendered ServicePdpFeatured / hub hero. */
+  showFeatured?: boolean;
 }) {
   const sections = parseSections(body);
+  const hasPackagePlpImages = /\/images\/plp\//.test(body);
   let headedIdx = 0;
 
   return (
     <div className="space-y-10">
-      {images?.featured && (
+      {showFeatured && images?.featured && (
         <ServiceFeaturedImage image={images.featured} priority className="mb-2" />
       )}
       {sections.map((section, idx) => {
         const isHeaded = !!section.heading;
         if (isHeaded) headedIdx += 1;
+        // Package PLP markdown already places unique images under headings —
+        // do not also inject Unsplash/related stock (would duplicate).
         const inline =
-          images && isHeaded && headedIdx >= 1 && headedIdx <= 3
+          !hasPackagePlpImages &&
+          images &&
+          isHeaded &&
+          headedIdx >= 1 &&
+          headedIdx <= images.related.length
             ? images.related[headedIdx - 1]
             : undefined;
         return (
