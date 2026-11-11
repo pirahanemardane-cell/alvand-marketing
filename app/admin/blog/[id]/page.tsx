@@ -238,13 +238,21 @@ export default function AdminBlogEditPage({
         <SeoAnalysisPanel
           pageName={title}
           slug={`بلاگ/${slug}`}
-          shortDescription={excerpt}
+          shortDescription={excerpt || seo.metaDescription}
           body={body}
           imageUrl={coverUrl}
           value={seo}
           onChange={setSeo}
           siteName="الوند مارکتینگ"
           siteUrl="https://alvandmarketing.ir"
+          effectiveCanonical={
+            seo.canonicalUrl ||
+            (slug
+              ? `https://alvandmarketing.ir/بلاگ/${encodeURIComponent(slug)}`
+              : 'https://alvandmarketing.ir/blog')
+          }
+          schemaTypes={['BlogPosting', 'WebPage', 'BreadcrumbList', 'Organization']}
+          schemaSummary="BlogPosting + WebPage + BreadcrumbList + Organization روی صفحه مقاله"
         />
 
         <div className="mt-6 flex flex-wrap items-center gap-3">

@@ -51,6 +51,11 @@ type Props = {
   imageUrl?: string;
   siteName?: string;
   siteUrl?: string;
+  /** Effective public canonical (DB override or default path). */
+  effectiveCanonical?: string;
+  /** Schema.org types emitted on the public page. */
+  schemaTypes?: string[];
+  schemaSummary?: string;
   value: SeoPanelValue;
   onChange: (next: SeoPanelValue) => void;
 };
@@ -82,6 +87,9 @@ export default function SeoAnalysisPanel({
   imageUrl = "",
   siteName = "الوند مارکتینگ",
   siteUrl = "https://alvandmarketing.ir",
+  effectiveCanonical = "",
+  schemaTypes = [],
+  schemaSummary = "",
   value,
   onChange,
 }: Props) {
@@ -118,6 +126,10 @@ export default function SeoAnalysisPanel({
   );
 
   const displayUrl = `${siteUrl.replace(/\/$/, "")}/${slug.replace(/^\//, "")}`;
+  const canonicalShown =
+    value.canonicalUrl.trim() ||
+    effectiveCanonical.trim() ||
+    displayUrl;
   const titlePx = measurePixelWidth(effectiveTitle);
   const descPx = measurePixelWidth(effectiveDesc);
   const serpTitle = truncateToPixels(effectiveTitle, PIXEL_LIMITS.titleDesktop);
@@ -387,9 +399,42 @@ export default function SeoAnalysisPanel({
           dir="ltr"
           value={value.canonicalUrl}
           onChange={(e) => patch({ canonicalUrl: e.target.value })}
-          placeholder={displayUrl}
+          placeholder={effectiveCanonical || displayUrl}
         />
       </label>
+
+      <div className="rounded-xl border border-border bg-background p-4 text-sm space-y-2">
+        <p className="font-bold">Canonical و Schema (نمای ادمین)</p>
+        <p className="text-muted-foreground">
+          Canonical مؤثر:{" "}
+          <span className="font-mono text-foreground" dir="ltr">
+            {canonicalShown}
+          </span>
+        </p>
+        {schemaTypes.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {schemaTypes.map((t) => (
+              <span
+                key={t}
+                className="rounded-lg bg-muted px-2 py-1 text-xs font-medium"
+                dir="ltr"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        ) : null}
+        {schemaSummary ? (
+          <p className="text-muted-foreground text-xs leading-persian">
+            {schemaSummary}
+          </p>
+        ) : (
+          <p className="text-muted-foreground text-xs">
+            برای صفحات خدمات: Service + WebPage + BreadcrumbList؛ برای بلاگ:
+            BlogPosting + WebPage.
+          </p>
+        )}
+      </div>
 
       <button
         type="button"
