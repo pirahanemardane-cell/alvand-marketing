@@ -2,23 +2,13 @@ import type { Service, ServicesOverview } from "@/lib/services";
 import { serviceHref } from "@/lib/services";
 import type { BlogPost } from "@/lib/blog";
 import { blogHref } from "@/lib/blog";
-import { siteUrl } from "@/lib/seo/site";
+import { absoluteUrl } from "@/lib/seo/site";
+import { authorPersonNode, organizationNode, SITE_ORG } from "@/lib/seo/organization";
 
-export function absoluteUrl(path: string): string {
-  const base = siteUrl().replace(/\/$/, "");
-  if (/^https?:\/\//i.test(path)) return path;
-  const p = path.startsWith("/") ? path : `/${path}`;
-  return `${base}${p}`;
-}
+export { absoluteUrl };
 
 export function organizationJsonLd() {
-  return {
-    "@type": "Organization",
-    "@id": `${absoluteUrl("/")}/#organization`,
-    name: "الوند مارکتینگ",
-    url: absoluteUrl("/"),
-    logo: absoluteUrl("/icon.png"),
-  };
+  return organizationNode();
 }
 
 export function breadcrumbJsonLd(
@@ -35,12 +25,32 @@ export function breadcrumbJsonLd(
   };
 }
 
+function faqPageNode(
+  pageUrl: string,
+  faq: { q: string; a: string }[]
+) {
+  if (!faq.length) return null;
+  return {
+    "@type": "FAQPage",
+    "@id": `${pageUrl}#faq`,
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+}
+
 /** Hub `/services` — CollectionPage + ItemList + BreadcrumbList + Organization */
 export function servicesHubJsonLd(
   overview: ServicesOverview,
   serviceList: Service[]
 ) {
   const pageUrl = absoluteUrl("/services");
+  const faq = faqPageNode(pageUrl, overview.faq || []);
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -51,8 +61,8 @@ export function servicesHubJsonLd(
         url: pageUrl,
         name: overview.seoTitle,
         description: overview.seoDescription,
-        isPartOf: { "@id": `${absoluteUrl("/")}/#website` },
-        about: { "@id": `${absoluteUrl("/")}/#organization` },
+        isPartOf: { "@id": "https://alvandmarketing.ir/#website" },
+        about: { "@id": "https://alvandmarketing.ir/#organization" },
         inLanguage: "fa-IR",
         breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
       },
@@ -77,34 +87,37 @@ export function servicesHubJsonLd(
       },
       {
         "@type": "WebSite",
-        "@id": `${absoluteUrl("/")}/#website`,
+        "@id": "https://alvandmarketing.ir/#website",
         url: absoluteUrl("/"),
         name: "الوند مارکتینگ",
         inLanguage: "fa-IR",
-        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+        publisher: { "@id": "https://alvandmarketing.ir/#organization" },
       },
+      ...(faq ? [faq] : []),
     ],
   };
 }
 
-/** Blog article — BlogPosting + WebPage + BreadcrumbList. */
+/** Blog article — BlogPosting + Person author + WebPage + BreadcrumbList. */
 export function blogArticleJsonLd(
   post: BlogPost,
   crumbs: { name: string; path: string }[],
   imageUrl?: string
 ) {
   const pageUrl = absoluteUrl(blogHref(post.slug));
+  const authorId = `https://alvandmarketing.ir/#author-${SITE_ORG.authorId}`;
   return {
     "@context": "https://schema.org",
     "@graph": [
       organizationJsonLd(),
+      authorPersonNode(),
       {
         "@type": "WebPage",
         "@id": `${pageUrl}#webpage`,
         url: pageUrl,
         name: post.meta_title || post.title,
         description: post.meta_description || post.excerpt,
-        isPartOf: { "@id": `${absoluteUrl("/")}/#website` },
+        isPartOf: { "@id": "https://alvandmarketing.ir/#website" },
         inLanguage: "fa-IR",
         breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
         ...(imageUrl
@@ -119,8 +132,8 @@ export function blogArticleJsonLd(
         url: pageUrl,
         inLanguage: "fa-IR",
         datePublished: post.date || undefined,
-        author: { "@id": `${absoluteUrl("/")}/#organization` },
-        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+        author: { "@id": authorId },
+        publisher: { "@id": "https://alvandmarketing.ir/#organization" },
         mainEntityOfPage: { "@id": `${pageUrl}#webpage` },
         ...(imageUrl ? { image: imageUrl } : {}),
       },
@@ -130,23 +143,24 @@ export function blogArticleJsonLd(
       },
       {
         "@type": "WebSite",
-        "@id": `${absoluteUrl("/")}/#website`,
+        "@id": "https://alvandmarketing.ir/#website",
         url: absoluteUrl("/"),
         name: "الوند مارکتینگ",
         inLanguage: "fa-IR",
-        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+        publisher: { "@id": "https://alvandmarketing.ir/#organization" },
       },
     ],
   };
 }
 
-/** Service PDP — Service + WebPage + BreadcrumbList (no Offer/price). */
+/** Service PDP — Service + WebPage + FAQPage + BreadcrumbList (no Offer/price). */
 export function servicePdpJsonLd(
   service: Service,
   crumbs: { name: string; path: string }[],
   imageUrl?: string
 ) {
   const pageUrl = absoluteUrl(serviceHref(service.slug));
+  const faq = faqPageNode(pageUrl, service.faq || []);
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -157,7 +171,7 @@ export function servicePdpJsonLd(
         url: pageUrl,
         name: service.seoTitle,
         description: service.seoDescription,
-        isPartOf: { "@id": `${absoluteUrl("/")}/#website` },
+        isPartOf: { "@id": "https://alvandmarketing.ir/#website" },
         about: { "@id": `${pageUrl}#service` },
         inLanguage: "fa-IR",
         breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
@@ -170,13 +184,12 @@ export function servicePdpJsonLd(
         description: service.seoDescription || service.shortDesc,
         url: pageUrl,
         serviceType: service.title,
-        provider: { "@id": `${absoluteUrl("/")}/#organization` },
+        provider: { "@id": "https://alvandmarketing.ir/#organization" },
         areaServed: {
           "@type": "Country",
           name: "Iran",
         },
         ...(imageUrl ? { image: imageUrl } : {}),
-        // No Offer / price — consultation only
       },
       {
         ...breadcrumbJsonLd(crumbs),
@@ -184,12 +197,13 @@ export function servicePdpJsonLd(
       },
       {
         "@type": "WebSite",
-        "@id": `${absoluteUrl("/")}/#website`,
+        "@id": "https://alvandmarketing.ir/#website",
         url: absoluteUrl("/"),
         name: "الوند مارکتینگ",
         inLanguage: "fa-IR",
-        publisher: { "@id": `${absoluteUrl("/")}/#organization` },
+        publisher: { "@id": "https://alvandmarketing.ir/#organization" },
       },
+      ...(faq ? [faq] : []),
     ],
   };
 }

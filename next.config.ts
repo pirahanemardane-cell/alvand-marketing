@@ -1,8 +1,52 @@
 import type { NextConfig } from "next";
+import packageRedirects from "./lib/content/package-redirects.json";
 
 /** Percent-encoded sources so rewrites match what the HTTP server receives. */
 function enc(segment: string): string {
   return encodeURIComponent(segment);
+}
+
+function encPath(pathname: string): string {
+  return pathname
+    .split("/")
+    .map((seg, idx) => (idx === 0 || seg === "" ? seg : encodeURIComponent(seg)))
+    .join("/");
+}
+
+function packageRedirectEntries() {
+  const out: {
+    source: string;
+    destination: string;
+    statusCode: number;
+  }[] = [];
+  for (const r of packageRedirects as {
+    source: string;
+    destination: string;
+    statusCode: number;
+  }[]) {
+    const dest = encPath(r.destination);
+    out.push({
+      source: encPath(r.source),
+      destination: dest,
+      statusCode: r.statusCode || 301,
+    });
+    // Persian root aliases for service/blog redirects
+    if (r.source.startsWith("/services/")) {
+      out.push({
+        source: encPath(`/خدمات/${r.source.slice("/services/".length)}`),
+        destination: dest,
+        statusCode: r.statusCode || 301,
+      });
+    }
+    if (r.source.startsWith("/blog/")) {
+      out.push({
+        source: encPath(`/بلاگ/${r.source.slice("/blog/".length)}`),
+        destination: dest,
+        statusCode: r.statusCode || 301,
+      });
+    }
+  }
+  return out;
 }
 
 function r2PublicHostname(): string | null {
@@ -31,6 +75,13 @@ if (r2Host && r2Host !== "cdn.alvandmarketing.ir") {
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
+  // Content package SSG is memory-heavy (66 PLP/PDP + 50 blog); one worker, larger pages/batch.
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationMinPagesPerWorker: 20,
+  },
   // Avoid noisy webpack PackFileCacheStrategy warnings on large assets during CI/prod builds.
   webpack: (config, { dev }) => {
     if (!dev) {
@@ -129,38 +180,8 @@ const nextConfig: NextConfig = {
       { source: "/faq", destination: "/", permanent: true },
       { source: "/process", destination: "/", permanent: true },
       { source: "/cases", destination: "/", permanent: true },
-      // Latin api slug → fully Persian
-      {
-        source: `/services/${enc("api-و-یکپارچه‌سازی")}`,
-        destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
-        statusCode: 301,
-      },
-      {
-        source: `/${enc("خدمات")}/${enc("api-و-یکپارچه‌سازی")}`,
-        destination: `/services/${enc("ای‌پی‌آی-و-یکپارچه‌سازی")}`,
-        statusCode: 301,
-      },
-      // Legacy top-level Instagram / LinkedIn → nested under social PLP
-      {
-        source: `/services/${enc("اینستاگرام")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("اینستاگرام")}`,
-        statusCode: 301,
-      },
-      {
-        source: `/${enc("خدمات")}/${enc("اینستاگرام")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("اینستاگرام")}`,
-        statusCode: 301,
-      },
-      {
-        source: `/services/${enc("لینکدین")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("لینکدین")}`,
-        statusCode: 301,
-      },
-      {
-        source: `/${enc("خدمات")}/${enc("لینکدین")}`,
-        destination: `/services/${enc("شبکه‌های-اجتماعی")}/${enc("لینکدین")}`,
-        statusCode: 301,
-      },
+      // Content-package redirects (ZWNJ→hyphen, legacy paths) — 301
+      ...packageRedirectEntries(),
     ];
   },
   async rewrites() {
@@ -180,8 +201,8 @@ const nextConfig: NextConfig = {
         destination: "/blog",
       },
       {
-        source: `/${enc("بلاگ")}/:slug`,
-        destination: "/blog/:slug",
+        source: `/${enc("بلاگ")}/:path*`,
+        destination: "/blog/:path*",
       },
       {
         source: `/${enc("تماس")}`,

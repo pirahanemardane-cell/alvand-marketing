@@ -6,3 +6,4 @@ node_modules
 .DS_Store
 .r2-staging
 __pycache__/
+content-package/

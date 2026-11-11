@@ -21,7 +21,7 @@ const footerServices: { label: string; slug: string }[] = [
   { label: "سئو و بهینه‌سازی", slug: "سئو" },
   { label: "هوش مصنوعی", slug: "هوش-مصنوعی" },
   { label: "تولید محتوا", slug: "تولید-محتوا" },
-  { label: "شبکه‌های اجتماعی", slug: "شبکه‌های-اجتماعی" },
+  { label: "شبکه‌های اجتماعی", slug: "شبکه-های-اجتماعی" },
 ];
 
 function FooterLink({

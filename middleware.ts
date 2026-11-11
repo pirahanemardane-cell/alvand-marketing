@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { resolveIsAdmin } from "@/lib/admin";
-import { LEGACY_SERVICE_SLUGS } from "@/lib/seo/service-redirects";
+import { lookupPathRedirect } from "@/lib/seo/service-redirects";
 
 /**
  * Legacy Persian pathnames (and their percent-encoded forms) rewrite to
@@ -31,28 +31,18 @@ function decodePathname(pathname: string): string {
   }
 }
 
-/** 301 old service slugs → canonical (avoids catch-all soft-nav 404). */
-function legacyServiceRedirect(request: NextRequest): NextResponse | null {
+/** 301 package redirects (ZWNJ→hyphen, legacy blog/service URLs). Exact 301. */
+function legacyPathRedirect(request: NextRequest): NextResponse | null {
   const decoded = decodePathname(request.nextUrl.pathname);
-  const segments = decoded.split("/").filter(Boolean);
-  if (segments.length < 2) return null;
-
-  let root = segments[0];
-  const rest = segments.slice(1);
-  if (PERSIAN_ROOT[root]) root = PERSIAN_ROOT[root];
-  if (root !== "services" || rest.length === 0) return null;
-
-  const joined = rest.join("/");
-  const canonical =
-    LEGACY_SERVICE_SLUGS[joined] ??
-    (rest.length === 1 ? LEGACY_SERVICE_SLUGS[rest[0]] : undefined);
-  if (!canonical) return null;
+  const hit = lookupPathRedirect(decoded);
+  if (!hit) return null;
 
   const dest = request.nextUrl.clone();
-  dest.pathname = `/services/${canonical
+  // Encode each path segment (Persian slugs) while keeping leading slash.
+  dest.pathname = hit.destination
     .split("/")
-    .map((part) => encodeURIComponent(part))
-    .join("/")}`;
+    .map((seg, idx) => (idx === 0 || seg === "" ? seg : encodeURIComponent(seg)))
+    .join("/");
   return NextResponse.redirect(dest, 301);
 }
 
@@ -80,7 +70,7 @@ function panelGate(pathname: string): "dashboard" | "admin" | null {
 }
 
 export async function middleware(request: NextRequest) {
-  const legacy = legacyServiceRedirect(request);
+  const legacy = legacyPathRedirect(request);
   if (legacy) return legacy;
 
   const rewritten = applyPersianRewrite(request);
