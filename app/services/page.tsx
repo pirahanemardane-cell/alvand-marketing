@@ -180,7 +180,11 @@ export default async function ServicesPage({ searchParams }: Props) {
 
           {usePackageBody ? (
             <div className="mb-14 w-full max-w-4xl">
-              <BlogBody body={o.contentMd!} images={hubImages} />
+              <BlogBody
+                body={o.contentMd!}
+                images={hubImages}
+                showFeatured={false}
+              />
             </div>
           ) : null}
 
