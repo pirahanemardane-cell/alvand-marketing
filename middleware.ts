@@ -16,6 +16,7 @@ const PERSIAN_ROOT: Record<string, string> = {
   خدمات: "services",
   بلاگ: "blog",
   تماس: "contact",
+  "درباره-ما": "about",
   ورود: "login",
   "ثبت-نام": "register",
   "فراموشی-رمز": "forgot-password",

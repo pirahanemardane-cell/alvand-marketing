@@ -35,6 +35,13 @@ type Props = { params: Promise<{ slug: string[] }> };
 /** Keep PLP/PDP SEO in sync with admin `seo_pages` without a full redeploy. */
 export const revalidate = 60;
 
+/**
+ * All service slugs come from `lib/services.ts` via generateStaticParams.
+ * Unknown paths must hard-404 at routing — otherwise root `loading.tsx`
+ * streams HTTP 200 before `notFound()` (soft 404).
+ */
+export const dynamicParams = false;
+
 function joinSlug(segments: string[]): string {
   return segments.map((s) => {
     try {

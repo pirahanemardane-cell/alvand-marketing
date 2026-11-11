@@ -52,7 +52,7 @@ const navItems = [
   { href: "/#process", label: "فرآیند", icon: ListOrdered },
   { href: "/#cases", label: "پروژه‌ها", icon: FolderKanban },
   { href: "/#pricing", label: "برآورد", icon: Wallet },
-  { href: "/#about", label: "درباره ما", icon: Info },
+  { href: "/about", label: "درباره ما", icon: Info },
   { href: "/#faq", label: "سؤالات", icon: HelpCircle },
   { href: "/blog", label: "بلاگ", icon: Newspaper },
   { href: "/contact", label: "تماس", icon: Phone },
