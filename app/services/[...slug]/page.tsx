@@ -32,6 +32,9 @@ import { richTextNodes } from "@/components/RichText";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
+/** Keep PLP/PDP SEO in sync with admin `seo_pages` without a full redeploy. */
+export const revalidate = 60;
+
 function joinSlug(segments: string[]): string {
   return segments.map((s) => {
     try {

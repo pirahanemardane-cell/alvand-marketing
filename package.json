@@ -12,7 +12,8 @@
     "blog:extract": "python3 scripts/import-blog-docx.py",
     "blog:seed": "node scripts/seed-blog-posts.mjs",
     "blog:images": "node scripts/import-blog-and-plp-images.mjs",
-    "media:dedupe-unique": "node scripts/dedupe-unique-images.mjs"
+    "media:dedupe-unique": "node scripts/dedupe-unique-images.mjs",
+    "seo:sync-pages": "node scripts/sync-seo-pages-from-code.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",
