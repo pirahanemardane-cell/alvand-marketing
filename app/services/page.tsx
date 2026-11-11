@@ -5,13 +5,14 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
-import { ServiceTableView } from "@/components/ServiceContentBlocks";
+import BlogBody from "@/components/BlogBody";
 import {
   servicesOverview,
   serviceHref,
   getTopLevelServices,
   type Service,
 } from "@/lib/services";
+import { getServicesOverviewWithBody } from "@/lib/services-body";
 import { getServiceIcon } from "@/lib/category-icons";
 import {
   getHubImages,
@@ -24,8 +25,8 @@ import JsonLd from "@/components/JsonLd";
 import {
   ServiceCardImage,
   ServiceHubHeroImage,
-  ServiceInlineImage,
 } from "@/components/ServiceImages";
+import { richTextNodes } from "@/components/RichText";
 
 /** Keep hub SEO in sync with admin `seo_pages` without a full redeploy. */
 export const revalidate = 60;
@@ -36,6 +37,9 @@ export async function generateMetadata(): Promise<Metadata> {
     fallbackTitle: servicesOverview.seoTitle,
     fallbackDescription: servicesOverview.seoDescription,
   });
+  if (servicesOverview.seoTitle) {
+    meta.title = { absolute: servicesOverview.seoTitle };
+  }
   const hub = getHubImages();
   const og = serviceImageSrc(hub.featured);
   meta.openGraph = {
@@ -50,6 +54,12 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
   };
   meta.twitter = { ...meta.twitter, images: [og] };
+  if (servicesOverview.canonicalUrl) {
+    meta.alternates = {
+      ...(meta.alternates || {}),
+      canonical: servicesOverview.canonicalUrl,
+    };
+  }
   return meta;
 }
 
@@ -100,14 +110,19 @@ export default async function ServicesPage({ searchParams }: Props) {
           s.heroHeading.includes(query)
       )
     : topLevel;
-  const o = servicesOverview;
+  const o = getServicesOverviewWithBody();
   const hubImages = getHubImages();
+  const usePackageBody = Boolean(o.contentMd?.trim());
 
   return (
     <main>
       <JsonLd data={servicesHubJsonLd(o, topLevel)} />
       <Navbar />
-      <section className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
+      <section
+        dir="rtl"
+        lang="fa"
+        className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full"
+      >
         <div className="w-full">
           <PageBreadcrumb items={[{ label: o.title }]} />
 
@@ -115,19 +130,23 @@ export default async function ServicesPage({ searchParams }: Props) {
             <h1 className="text-3xl md:text-5xl font-bold leading-persian-tight mb-4">
               {o.title}
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
-              {o.heroHeading}
-            </h2>
-            <div className="space-y-3 max-w-4xl">
-              {o.intro.map((p) => (
-                <p
-                  key={p.slice(0, 40)}
-                  className="text-muted-foreground leading-persian"
-                >
-                  {p}
-                </p>
-              ))}
-            </div>
+            {!usePackageBody && (
+              <>
+                <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
+                  {o.heroHeading}
+                </h2>
+                <div className="space-y-3 max-w-4xl">
+                  {o.intro.map((p) => (
+                    <p
+                      key={p.slice(0, 40)}
+                      className="text-muted-foreground leading-persian"
+                    >
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </>
+            )}
             {query && (
               <p className="mt-4 text-sm text-muted-foreground">
                 نتایج جستجو برای «{query}» — {filtered.length} مورد
@@ -136,26 +155,6 @@ export default async function ServicesPage({ searchParams }: Props) {
           </div>
 
           <ServiceHubHeroImage images={hubImages} />
-
-          <section className="mb-14">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              {o.criteriaHeading}
-            </h2>
-            <ul className="space-y-3 max-w-4xl">
-              {o.criteria.map((item) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
-                >
-                  <span className="text-accent shrink-0">●</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            {hubImages.related[0] && (
-              <ServiceInlineImage image={hubImages.related[0]} />
-            )}
-          </section>
 
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-2 leading-persian-tight">
@@ -179,83 +178,32 @@ export default async function ServicesPage({ searchParams }: Props) {
             </div>
           )}
 
-          <section className="mb-14 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              {o.comparisonHeading}
-            </h2>
-            <ServiceTableView table={o.comparisonTable} />
-            {hubImages.related[1] && (
-              <ServiceInlineImage image={hubImages.related[1]} />
-            )}
-          </section>
-
-          <section className="mb-14 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              {o.guideHeading}
-            </h2>
-            <ServiceTableView table={o.guideTable} />
-          </section>
-
-          <section className="mb-14 w-full">
-            <h3 className="text-lg font-bold mb-4 leading-persian-tight">
-              {o.budgetOrderHeading}
-            </h3>
-            <ol className="space-y-3 max-w-4xl mb-4">
-              {o.budgetOrder.map((item, i) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
-                    {i + 1}
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ol>
-            <p className="text-caption text-muted-foreground leading-persian max-w-4xl">
-              {o.budgetNote}
-            </p>
-          </section>
-
-          <section className="mb-14 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              {o.tipsHeading}
-            </h2>
-            <ul className="space-y-3 max-w-4xl">
-              {o.tips.map((item) => (
-                <li
-                  key={item}
-                  className="flex gap-3 text-caption text-muted-foreground leading-persian"
-                >
-                  <span className="text-accent shrink-0">●</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            {hubImages.related[2] && (
-              <ServiceInlineImage image={hubImages.related[2]} />
-            )}
-          </section>
-
-          <section className="mb-14 w-full">
-            <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-              سؤالات متداول
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-4 w-full">
-              {o.faq.map((item) => (
-                <div
-                  key={item.q}
-                  className="rounded-xl border border-border bg-card p-5"
-                >
-                  <h3 className="font-bold mb-2">{item.q}</h3>
-                  <p className="text-caption text-muted-foreground leading-persian">
-                    {item.a}
-                  </p>
-                </div>
-              ))}
+          {usePackageBody ? (
+            <div className="mb-14 w-full max-w-4xl">
+              <BlogBody body={o.contentMd!} images={hubImages} />
             </div>
-          </section>
+          ) : null}
+
+          {o.faq.length > 0 && (
+            <section className="mb-14 w-full">
+              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                سؤالات متداول
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4 w-full">
+                {o.faq.map((item) => (
+                  <div
+                    key={item.q}
+                    className="rounded-xl border border-border bg-card p-5"
+                  >
+                    <h3 className="font-bold mb-2">{item.q}</h3>
+                    <p className="text-caption text-muted-foreground leading-persian">
+                      {richTextNodes(item.a)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           <div className="mt-4 rounded-2xl border border-border bg-card p-8 text-center w-full">
             <h2 className="text-xl font-bold mb-2">نمی‌دانید از کجا شروع کنید؟</h2>

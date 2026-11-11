@@ -7,6 +7,8 @@ type InlineBlock =
   | { type: "h3"; text: string; id: string }
   | { type: "p"; text: string }
   | { type: "ul" | "ol"; items: string[] }
+  | { type: "checklist"; items: { checked: boolean; text: string }[] }
+  | { type: "image"; src: string; alt: string }
   | { type: "table"; headers: string[]; rows: string[][] };
 
 type Section = {
@@ -89,6 +91,24 @@ function parseSections(body: string): Section[] {
       }
       continue;
     }
+    const img = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (img) {
+      current.blocks.push({ type: "image", alt: img[1], src: img[2] });
+      i++;
+      continue;
+    }
+    if (/^[-*] \[[ xX]\] /.test(trimmed)) {
+      const items: { checked: boolean; text: string }[] = [];
+      while (i < lines.length) {
+        const t = lines[i].trim();
+        const m = t.match(/^[-*] \[([ xX])\] (.+)$/);
+        if (!m) break;
+        items.push({ checked: m[1].toLowerCase() === "x", text: m[2] });
+        i++;
+      }
+      current.blocks.push({ type: "checklist", items });
+      continue;
+    }
     if (/^[-*] /.test(trimmed) || /^\d+\. /.test(trimmed)) {
       const ordered = /^\d+\. /.test(trimmed);
       const items: string[] = [];
@@ -100,7 +120,10 @@ function parseSections(body: string): Section[] {
           i++;
           continue;
         }
-        if (!ordered && /^[-*] /.test(t)) {
+        // Checklist items (`- [ ]` / `- [x]`) are handled above. Markdown
+        // link bullets (`- [label](/path)`) must still count as list items —
+        // excluding `^[-*] \[` here caused an infinite loop (i never advanced).
+        if (!ordered && /^[-*] /.test(t) && !/^[-*] \[[ xX]\] /.test(t)) {
           items.push(t.replace(/^[-*]\s+/, ""));
           i++;
           continue;
@@ -176,6 +199,41 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
             <li key={`${idx}-${j}`}>{richTextNodes(item)}</li>
           ))}
         </Tag>
+      );
+    }
+    if (block.type === "checklist") {
+      return (
+        <ul
+          key={`check-${idx}`}
+          className="space-y-2 text-muted-foreground leading-persian mb-3 list-none"
+        >
+          {block.items.map((item, j) => (
+            <li key={`${idx}-${j}`} className="flex gap-2">
+              <span aria-hidden className="text-accent shrink-0">
+                {item.checked ? "✓" : "○"}
+              </span>
+              <span>{richTextNodes(item.text)}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    if (block.type === "image") {
+      return (
+        <figure key={`img-${idx}`} className="my-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={block.src}
+            alt={block.alt}
+            className="mx-auto w-full max-w-3xl h-auto"
+            loading="lazy"
+          />
+          {block.alt ? (
+            <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+              {block.alt}
+            </figcaption>
+          ) : null}
+        </figure>
       );
     }
     if (block.type === "table") {

@@ -1,0 +1,497 @@
+[
+ {
+  "full_path": "/services",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-01-khadamat-digital-marketing-diagram-1.svg",
+  "png": "assets/diagrams/plp-01-khadamat-digital-marketing-diagram-1.png",
+  "mermaid_sha1": "63881de3dd99ff12c986120320fecc992daeded8",
+  "alt_fa": "نمودار خدمات دیجیتال مارکتینگ"
+ },
+ {
+  "full_path": "/services/طراحی-سایت",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-02-tarahi-site-diagram-1.svg",
+  "png": "assets/diagrams/plp-02-tarahi-site-diagram-1.png",
+  "mermaid_sha1": "415e646ea858d6ce05ce779c5e82b266316e37c8",
+  "alt_fa": "نمودار طراحی سایت"
+ },
+ {
+  "full_path": "/services/تولید-محتوا",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-04-tolid-mohtava-diagram-1.svg",
+  "png": "assets/diagrams/plp-04-tolid-mohtava-diagram-1.png",
+  "mermaid_sha1": "fc7cacfd8e24991ca11f10a5d208f4d532c51485",
+  "alt_fa": "نمودار تولید محتوا"
+ },
+ {
+  "full_path": "/services/تبلیغات-اینترنتی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-06-tablighat-interneti-diagram-1.svg",
+  "png": "assets/diagrams/plp-06-tablighat-interneti-diagram-1.png",
+  "mermaid_sha1": "631aa390ef47ae63c1304e62c6e1c8a2e6b3886f",
+  "alt_fa": "نمودار تبلیغات اینترنتی"
+ },
+ {
+  "full_path": "/services/پشتیبانی-سایت",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-08-poshtibani-site-diagram-1.svg",
+  "png": "assets/diagrams/plp-08-poshtibani-site-diagram-1.png",
+  "mermaid_sha1": "96e573138c707eab958205cd09a80beadf9284c8",
+  "alt_fa": "نمودار پشتیبانی سایت"
+ },
+ {
+  "full_path": "/services/اپلیکیشن-و-وب-اپ",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-09-tarahi-sakht-application-diagram-1.svg",
+  "png": "assets/diagrams/plp-09-tarahi-sakht-application-diagram-1.png",
+  "mermaid_sha1": "3259d30c204812fba80dfd24f5590ddff7f12e01",
+  "alt_fa": "نمودار طراحی و ساخت اپلیکیشن"
+ },
+ {
+  "full_path": "/services/آنالیتیکس",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-10-abzarhaye-analytics-diagram-1.svg",
+  "png": "assets/diagrams/plp-10-abzarhaye-analytics-diagram-1.png",
+  "mermaid_sha1": "ca39de626aff01cc38279dbdc68c74b89c75a400",
+  "alt_fa": "نمودار ابزارهای آنالیتیکس"
+ },
+ {
+  "full_path": "/services/ای-پی-آی-و-یکپارچه-سازی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-11-api-yekparche-sazi-diagram-1.svg",
+  "png": "assets/diagrams/plp-11-api-yekparche-sazi-diagram-1.png",
+  "mermaid_sha1": "2d20049d3f3b935f9c9f6798d231257f96f3a506",
+  "alt_fa": "نمودار طراحی API و یکپارچه‌سازی"
+ },
+ {
+  "full_path": "/services/ایمیل-مارکتینگ",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-12-email-marketing-diagram-1.svg",
+  "png": "assets/diagrams/plp-12-email-marketing-diagram-1.png",
+  "mermaid_sha1": "eb8bc78153c8ffd25dae7db8d85fdf08ef051754",
+  "alt_fa": "نمودار ایمیل مارکتینگ"
+ },
+ {
+  "full_path": "/services/مشاوره-دیجیتال-مارکتینگ",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-13-moshavere-digital-marketing-diagram-1.svg",
+  "png": "assets/diagrams/plp-13-moshavere-digital-marketing-diagram-1.png",
+  "mermaid_sha1": "ed40850cf27ca2ed30eb8f28c518b0d52f53e5b0",
+  "alt_fa": "نمودار مشاوره دیجیتال مارکتینگ"
+ },
+ {
+  "full_path": "/services/برندینگ",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-14-branding-diagram-1.svg",
+  "png": "assets/diagrams/plp-14-branding-diagram-1.png",
+  "mermaid_sha1": "aba6d1bc82dd68ffedde41a37bdb48802f03405b",
+  "alt_fa": "نمودار برندینگ و هویت بصری"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/کدنویسی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-16-tarahi-site-kodnevisi-diagram-1.svg",
+  "png": "assets/diagrams/plp-16-tarahi-site-kodnevisi-diagram-1.png",
+  "mermaid_sha1": "8542d366d24aebd12afcfb643c55553cd946b3df",
+  "alt_fa": "نمودار طراحی سایت کدنویسی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/شرکتی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-20-tarahi-site-sherkati-diagram-1.svg",
+  "png": "assets/diagrams/plp-20-tarahi-site-sherkati-diagram-1.png",
+  "mermaid_sha1": "0683d0029eb169b31c5e1cfd4d2f100d8ada9e0d",
+  "alt_fa": "نمودار طراحی سایت شرکتی"
+ },
+ {
+  "full_path": "/services/سئو/خارجی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-23-seo-khareji-diagram-1.svg",
+  "png": "assets/diagrams/plp-23-seo-khareji-diagram-1.png",
+  "mermaid_sha1": "bb83f09446d2d886c5c2ac67e615db0b7a6ac0e1",
+  "alt_fa": "نمودار سئو خارجی"
+ },
+ {
+  "full_path": "/services/سئو/محلی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-24-seo-mahalli-diagram-1.svg",
+  "png": "assets/diagrams/plp-24-seo-mahalli-diagram-1.png",
+  "mermaid_sha1": "e663adc9cf48fb30f6d678c6b8545d4bc7a2a93e",
+  "alt_fa": "نمودار سئو محلی"
+ },
+ {
+  "full_path": "/services/هوش-مصنوعی/چت-بات",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-27-chatbot-diagram-1.svg",
+  "png": "assets/diagrams/plp-27-chatbot-diagram-1.png",
+  "mermaid_sha1": "b43783dd06d559d6528c809f2c438db609870e27",
+  "alt_fa": "نمودار چت‌بات"
+ },
+ {
+  "full_path": "/services/هوش-مصنوعی/اتوماسیون-بازاریابی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-28-automation-bazaryabi-diagram-1.svg",
+  "png": "assets/diagrams/plp-28-automation-bazaryabi-diagram-1.png",
+  "mermaid_sha1": "a113499e194f459dc8bf43cb8c50c6efb9549e5f",
+  "alt_fa": "نمودار اتوماسیون بازاریابی"
+ },
+ {
+  "full_path": "/services/تبلیغات-اینترنتی/کلیکی",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-30-tablighat-keliki-diagram-1.svg",
+  "png": "assets/diagrams/plp-30-tablighat-keliki-diagram-1.png",
+  "mermaid_sha1": "26ed0ae697e415efd912d33735e96915b1fdf136",
+  "alt_fa": "نمودار تبلیغات کلیکی"
+ },
+ {
+  "full_path": "/services/تبلیغات-اینترنتی/پوش-نوتیفیکیشن",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-33-push-notification-diagram-1.svg",
+  "png": "assets/diagrams/plp-33-push-notification-diagram-1.png",
+  "mermaid_sha1": "466394f09e0d067eac299f0dc337e1fbe2463d90",
+  "alt_fa": "نمودار پوش نوتیفیکیشن"
+ },
+ {
+  "full_path": "/services/پشتیبانی-سایت/مانیتورینگ",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-39-monitoring-site-diagram-1.svg",
+  "png": "assets/diagrams/plp-39-monitoring-site-diagram-1.png",
+  "mermaid_sha1": "c16668daa3da4276c0c1eb96df07c48580cd1f2f",
+  "alt_fa": "نمودار مانیتورینگ سایت"
+ },
+ {
+  "full_path": "/services/پشتیبانی-سایت/رفع-ارور",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-41-rafe-error-site-diagram-1.svg",
+  "png": "assets/diagrams/plp-41-rafe-error-site-diagram-1.png",
+  "mermaid_sha1": "8f2e76ec1d63e3b6da9436d599c6c5208f29c37d",
+  "alt_fa": "نمودار رفع ارور سایت"
+ },
+ {
+  "full_path": "/services/اپلیکیشن-و-وب-اپ/وب-اپلیکیشن",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-42-web-application-diagram-1.svg",
+  "png": "assets/diagrams/plp-42-web-application-diagram-1.png",
+  "mermaid_sha1": "634f53056e31f49c61933e458473a1fa4dcd543b",
+  "alt_fa": "نمودار وب اپلیکیشن"
+ },
+ {
+  "full_path": "/services/آنالیتیکس/تگ-منیجر",
+  "page_type": "plp",
+  "block_index": 1,
+  "svg": "assets/diagrams/plp-44-google-tag-manager-diagram-1.svg",
+  "png": "assets/diagrams/plp-44-google-tag-manager-diagram-1.png",
+  "mermaid_sha1": "ee739b290921756414cb7bb485fc6929feb2c5e3",
+  "alt_fa": "نمودار گوگل تگ منیجر"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/پزشکی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-01-tarahi-site-pezeshki-diagram-1.svg",
+  "png": "assets/diagrams/pdp-01-tarahi-site-pezeshki-diagram-1.png",
+  "mermaid_sha1": "9042bb02b782693f0368a86d0521277b79f8fa97",
+  "alt_fa": "نمودار طراحی سایت پزشکی"
+ },
+ {
+  "full_path": "/services/سئو/فروشگاهی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-03-seo-site-foroushgahi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-03-seo-site-foroushgahi-diagram-1.png",
+  "mermaid_sha1": "0eb38caa05c6bccf6bbfeea88df8414cef2c7ff2",
+  "alt_fa": "نمودار سئو سایت فروشگاهی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/رستوران",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-04-tarahi-site-restaurant-diagram-1.svg",
+  "png": "assets/diagrams/pdp-04-tarahi-site-restaurant-diagram-1.png",
+  "mermaid_sha1": "6acc58ae0d8bc049c12864fd98e3093f7fe166d9",
+  "alt_fa": "نمودار طراحی سایت رستوران"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/املاک",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-05-tarahi-site-amlak-diagram-1.svg",
+  "png": "assets/diagrams/pdp-05-tarahi-site-amlak-diagram-1.png",
+  "mermaid_sha1": "3f654cdbfba0f1739376dfc33127dcfa95669571",
+  "alt_fa": "نمودار طراحی سایت املاک"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/آموزشی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-06-tarahi-site-amoozeshi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-06-tarahi-site-amoozeshi-diagram-1.png",
+  "mermaid_sha1": "a0751ceba8ec68ce2c284b41714f268b378325aa",
+  "alt_fa": "نمودار طراحی سایت آموزشی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/صنعتی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-07-tarahi-site-sanati-diagram-1.svg",
+  "png": "assets/diagrams/pdp-07-tarahi-site-sanati-diagram-1.png",
+  "mermaid_sha1": "d9a3e296c24d36d2160250a57cb46421ee31be80",
+  "alt_fa": "نمودار طراحی سایت صنعتی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/کلینیک-زیبایی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-09-tarahi-site-clinic-zibayi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-09-tarahi-site-clinic-zibayi-diagram-1.png",
+  "mermaid_sha1": "bf92d62b4335307f641dc677674a292f93b236c3",
+  "alt_fa": "نمودار طراحی سایت کلینیک زیبایی"
+ },
+ {
+  "full_path": "/services/اپلیکیشن-و-وب-اپ/فروشگاهی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-11-tarahi-application-foroushgahi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-11-tarahi-application-foroushgahi-diagram-1.png",
+  "mermaid_sha1": "d6bc003fa89d380949d64c21d8603a560286f5ce",
+  "alt_fa": "نمودار طراحی اپلیکیشن فروشگاهی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/خدماتی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-12-tarahi-site-khadamati-diagram-1.svg",
+  "png": "assets/diagrams/pdp-12-tarahi-site-khadamati-diagram-1.png",
+  "mermaid_sha1": "56a4dc51a6e24a26d743720fa1c33789acb5293f",
+  "alt_fa": "نمودار طراحی سایت خدماتی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/گردشگری",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-13-tarahi-site-gardeshgari-diagram-1.svg",
+  "png": "assets/diagrams/pdp-13-tarahi-site-gardeshgari-diagram-1.png",
+  "mermaid_sha1": "2bed0ec5c24c844de2127463224dfdcc69a7e682",
+  "alt_fa": "نمودار طراحی سایت گردشگری"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/نوبت-دهی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-18-tarahi-site-nobat-dehi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-18-tarahi-site-nobat-dehi-diagram-1.png",
+  "mermaid_sha1": "18e119af04e8989bb5dac771cd643f9c9fa5ae0a",
+  "alt_fa": "نمودار طراحی سایت نوبت‌دهی"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/خبری",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-19-tarahi-site-khabari-diagram-1.svg",
+  "png": "assets/diagrams/pdp-19-tarahi-site-khabari-diagram-1.png",
+  "mermaid_sha1": "cda436d10692c5ceb729ea91077890ac5e264aff",
+  "alt_fa": "نمودار طراحی سایت خبری"
+ },
+ {
+  "full_path": "/services/طراحی-سایت/حقوقی",
+  "page_type": "pdp",
+  "block_index": 1,
+  "svg": "assets/diagrams/pdp-22-tarahi-site-hoghooghi-diagram-1.svg",
+  "png": "assets/diagrams/pdp-22-tarahi-site-hoghooghi-diagram-1.png",
+  "mermaid_sha1": "9652199d1ccdba68769d1e35b1b50621e3b3b0cf",
+  "alt_fa": "نمودار طراحی سایت حقوقی"
+ },
+ {
+  "full_path": "/blog/سئو/سئو-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-01-seo-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-01-seo-chist-diagram-1.png",
+  "mermaid_sha1": "0012252be048e20b0cbf5eb76f7e0aa2eaf9fe94",
+  "alt_fa": "نمودار سئو چیست و چه کاربردی دارد"
+ },
+ {
+  "full_path": "/blog/سئو/سئو-داخلی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-03-seo-dakheli-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-03-seo-dakheli-chist-diagram-1.png",
+  "mermaid_sha1": "9942a4ef665a14177a650481ae6b7fd258c8a9b8",
+  "alt_fa": "نمودار سئو داخلی چیست"
+ },
+ {
+  "full_path": "/blog/سئو/سئو-خارجی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-04-seo-khareji-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-04-seo-khareji-chist-diagram-1.png",
+  "mermaid_sha1": "086ea516c86f6725707f5221109ca5475d178d3d",
+  "alt_fa": "نمودار سئو خارجی چیست"
+ },
+ {
+  "full_path": "/blog/سئو/سئو-تکنیکال-و-محتوایی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-07-seo-technical-va-mohtavayi-diagram-1.svg",
+  "png": "assets/diagrams/blog-07-seo-technical-va-mohtavayi-diagram-1.png",
+  "mermaid_sha1": "18c063231900f242746af304b5f2245fd0724f0e",
+  "alt_fa": "نمودار سئو تکنیکال و محتوایی چیست و اول کدام را اصلاح کنیم"
+ },
+ {
+  "full_path": "/blog/سئو/سئو-چقدر-طول-می-کشد",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-08-seo-cheghadr-tool-mikeshad-diagram-1.svg",
+  "png": "assets/diagrams/blog-08-seo-cheghadr-tool-mikeshad-diagram-1.png",
+  "mermaid_sha1": "58be482bf42435beaec4aa431543eca29fbbfd58",
+  "alt_fa": "نمودار سئو چقدر طول می‌کشد تا نتیجه بدهد"
+ },
+ {
+  "full_path": "/blog/سئو/چگونه-سئو-کار-شویم",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-09-chegone-seo-kar-shavim-diagram-1.svg",
+  "png": "assets/diagrams/blog-09-chegone-seo-kar-shavim-diagram-1.png",
+  "mermaid_sha1": "ad011b1e4b8668d4c1d5710b04ae4d844170e862",
+  "alt_fa": "نمودار چگونه سئو کار شویم"
+ },
+ {
+  "full_path": "/blog/طراحی-سایت/تفاوت-طراحی-سایت-وردپرس-با-کدنویسی",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-12-tafavot-wordpress-kodnevisi-diagram-1.svg",
+  "png": "assets/diagrams/blog-12-tafavot-wordpress-kodnevisi-diagram-1.png",
+  "mermaid_sha1": "0259c7ec08b2de70467455050193899f51c80254",
+  "alt_fa": "نمودار تفاوت طراحی سایت وردپرس با کدنویسی"
+ },
+ {
+  "full_path": "/blog/طراحی-سایت/طراحی-سایت-چقدر-طول-می-کشد",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-14-tarahi-site-chghadr-tool-mikeshad-diagram-1.svg",
+  "png": "assets/diagrams/blog-14-tarahi-site-chghadr-tool-mikeshad-diagram-1.png",
+  "mermaid_sha1": "6bdd88e244989561759995e94e3050bba0cb7ade",
+  "alt_fa": "نمودار طراحی سایت چقدر طول می‌کشد"
+ },
+ {
+  "full_path": "/blog/اپلیکیشن-و-api/وب-اپلیکیشن-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-15-web-application-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-15-web-application-chist-diagram-1.png",
+  "mermaid_sha1": "92db00ebe77088e98aff2033b4ba14735d319c4c",
+  "alt_fa": "نمودار وب اپلیکیشن چیست و چه زمانی کسب‌وکار به آن نیاز دارد"
+ },
+ {
+  "full_path": "/blog/اپلیکیشن-و-api/ای-پی-آی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-19-api-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-19-api-chist-diagram-1.png",
+  "mermaid_sha1": "e85aeba18b939c37d8e5e19b8fc2243e729c4f3b",
+  "alt_fa": "نمودار API چیست و چه کاربردی دارد"
+ },
+ {
+  "full_path": "/blog/تبلیغات-اینترنتی/تبلیغات-اینترنتی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-22-tablighat-interneti-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-22-tablighat-interneti-chist-diagram-1.png",
+  "mermaid_sha1": "d7c3bb26be61bc37158b3e55aa6d1b98560c574c",
+  "alt_fa": "نمودار تبلیغات اینترنتی چیست"
+ },
+ {
+  "full_path": "/blog/محتوا-و-شبکه-های-اجتماعی/هوش-مصنوعی-تولید-متن",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-32-hoosh-masnooi-tolid-matn-diagram-1.svg",
+  "png": "assets/diagrams/blog-32-hoosh-masnooi-tolid-matn-diagram-1.png",
+  "mermaid_sha1": "48fb598772d6bc54f2eac2ef147f03fde8d18370",
+  "alt_fa": "نمودار بهترین هوش مصنوعی تولید متن فارسی را چطور انتخاب کنیم"
+ },
+ {
+  "full_path": "/blog/محتوا-و-شبکه-های-اجتماعی/اتوماسیون-بازاریابی-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-34-automation-bazaryabi-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-34-automation-bazaryabi-chist-diagram-1.png",
+  "mermaid_sha1": "66d0718218a0b335a542dc7b001224d0730a3bf8",
+  "alt_fa": "نمودار اتوماسیون بازاریابی چیست"
+ },
+ {
+  "full_path": "/blog/دیجیتال-مارکتینگ/برندینگ-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-40-branding-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-40-branding-chist-diagram-1.png",
+  "mermaid_sha1": "892cc42f3c17245755c61da75a338ab4abfac24f",
+  "alt_fa": "نمودار برندینگ چیست"
+ },
+ {
+  "full_path": "/blog/دیجیتال-مارکتینگ/ایمیل-مارکتینگ-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-41-email-marketing-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-41-email-marketing-chist-diagram-1.png",
+  "mermaid_sha1": "1ce7a38d27dce0a4d8e499c8f5f9e980b3ab1b80",
+  "alt_fa": "نمودار ایمیل مارکتینگ چیست"
+ },
+ {
+  "full_path": "/blog/پشتیبانی-سایت/امنیت-سایت-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-44-amniat-site-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-44-amniat-site-chist-diagram-1.png",
+  "mermaid_sha1": "59be28e2be932831662aebeaff62163fddc57c8b",
+  "alt_fa": "نمودار امنیت سایت چیست"
+ },
+ {
+  "full_path": "/blog/پشتیبانی-سایت/مانیتورینگ-سایت-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-45-monitoring-site-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-45-monitoring-site-chist-diagram-1.png",
+  "mermaid_sha1": "5aa33599c5613160d91d495b00d6e6fabd5a3f3d",
+  "alt_fa": "نمودار مانیتورینگ سایت چیست"
+ },
+ {
+  "full_path": "/blog/آنالیتیکس/گوگل-تگ-منیجر-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-48-google-tag-manager-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-48-google-tag-manager-chist-diagram-1.png",
+  "mermaid_sha1": "17634f20edc8f730f0b1f656c57958c8e2f645a0",
+  "alt_fa": "نمودار گوگل تگ منیجر چیست"
+ },
+ {
+  "full_path": "/blog/آنالیتیکس/گوگل-تگ-چیست",
+  "page_type": "blog",
+  "block_index": 1,
+  "svg": "assets/diagrams/blog-49-google-tag-chist-diagram-1.svg",
+  "png": "assets/diagrams/blog-49-google-tag-chist-diagram-1.png",
+  "mermaid_sha1": "c2a7f730c4644f309fb3415ffa6aea8689c8fc5a",
+  "alt_fa": "نمودار گوگل تگ چیست و چه فرقی با گوگل تگ منیجر دارد"
+ }
+]

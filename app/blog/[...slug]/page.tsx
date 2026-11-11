@@ -24,6 +24,7 @@ import { getBlogImages, blogImageSrc } from "@/lib/blog-images";
 import { requireAdminUser } from "@/lib/supabase/admin";
 import { publicRobots } from "@/lib/seo/site";
 import { blogArticleJsonLd } from "@/lib/seo/jsonld";
+import { SITE_ORG } from "@/lib/seo/organization";
 
 export const dynamic = "force-dynamic";
 
@@ -180,6 +181,10 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
           </h1>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-caption text-muted-foreground mb-8">
+            <span>{SITE_ORG.authorName}</span>
+            <span className="text-border" aria-hidden>
+              |
+            </span>
             {post.date && <time>{post.date}</time>}
             <span className="text-border" aria-hidden>
               |

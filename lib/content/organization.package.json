@@ -1,0 +1,41 @@
+{
+  "_README": "Single source for the Organization / LocalBusiness JSON-LD node. Every TODO value MUST be copied from the Next.js project source (header/footer logo component, Contact Us page, footer social links, site config). Do not invent values. 'observed_on_live_site' fields are only hints found on https://alvandmarketing.ir on 2026-11-11 to help locate the source; the project source wins if they differ.",
+  "@id": "https://alvandmarketing.ir/#organization",
+  "@type": ["Organization", "ProfessionalService"],
+  "name": "الوند مارکتینگ",
+  "alternateName": "Alvand Marketing",
+  "url": "https://alvandmarketing.ir/",
+  "logo": {
+    "value": null,
+    "TODO": "Absolute URL of the logo used in the project (search public/ and the header/footer Logo component). Prefer a square PNG/SVG >= 112x112.",
+    "observed_on_live_site": "https://alvandmarketing.ir/icon.png (current live JSON-LD)"
+  },
+  "telephone": {
+    "value": [],
+    "TODO": "Phone numbers exactly as shown on the Contact Us page (e.g. app/contact/page.tsx or a site config file), in E.164 format.",
+    "observed_on_live_site": ["+982186095954", "+989921863063"]
+  },
+  "email": {
+    "value": null,
+    "TODO": "Email from the Contact Us page.",
+    "observed_on_live_site": "info@alvandmarketing.ir"
+  },
+  "address": {
+    "value": null,
+    "TODO": "PostalAddress (streetAddress, addressLocality: تهران, addressRegion, postalCode, addressCountry: IR) copied from the Contact Us page. If the project has no street address, omit 'address' and the LocalBusiness type, keep Organization only.",
+    "observed_on_live_site": null
+  },
+  "geo": { "value": null, "TODO": "Only if the project already contains coordinates/map embed for the office." },
+  "openingHours": { "value": null, "TODO": "Only if shown in the project (office hours). Support content says 'ساعات اداری'; do not guess exact hours." },
+  "sameAs": {
+    "value": [],
+    "TODO": "Official social profile URLs from the project footer/contact page (Instagram, LinkedIn, Telegram channel, ...). Messaging deep links such as wa.me are contactPoint, not sameAs.",
+    "observed_on_live_site": ["https://t.me/alvandmarketing"]
+  },
+  "contactPoint": {
+    "value": [],
+    "TODO": "ContactPoint entries (contactType 'sales' / 'customer support', telephone, availableLanguage ['fa']) from the Contact Us page."
+  },
+  "areaServed": { "@type": "Country", "name": "Iran", "identifier": "IR" },
+  "known_live_bug": "Live JSON-LD currently uses \"@id\": \"https://alvandmarketing.ir//#organization\" (double slash). Use exactly https://alvandmarketing.ir/#organization so it matches the @id referenced by every page's schema_jsonld."
+}

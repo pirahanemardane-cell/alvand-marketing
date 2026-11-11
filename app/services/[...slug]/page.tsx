@@ -7,6 +7,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageBreadcrumb from "@/components/Breadcrumb";
 import { ServiceContentBlocks } from "@/components/ServiceContentBlocks";
+import BlogBody from "@/components/BlogBody";
 import JsonLd from "@/components/JsonLd";
 import {
   services,
@@ -18,6 +19,7 @@ import {
   getTopLevelServices,
   serviceHref,
 } from "@/lib/services";
+import { getServiceBySlugWithBody } from "@/lib/services-body";
 import { getServiceIcon } from "@/lib/category-icons";
 import { getServiceImages, serviceImageSrc } from "@/lib/service-images";
 import { metadataForPageKey } from "@/lib/seo/pages";
@@ -32,13 +34,12 @@ import { richTextNodes } from "@/components/RichText";
 
 type Props = { params: Promise<{ slug: string[] }> };
 
-/** Keep PLP/PDP SEO in sync with admin `seo_pages` without a full redeploy. */
+/** ISR — package bodies are markdown; revalidate keeps SEO fields fresh. */
 export const revalidate = 60;
 
 /**
- * All service slugs come from `lib/services.ts` via generateStaticParams.
- * Unknown paths must hard-404 at routing — otherwise root `loading.tsx`
- * streams HTTP 200 before `notFound()` (soft 404).
+ * All package service slugs via generateStaticParams.
+ * Unknown paths hard-404. Redirects run in middleware first.
  */
 export const dynamicParams = false;
 
@@ -74,6 +75,9 @@ export async function generateMetadata({
     fallbackTitle: service?.seoTitle,
     fallbackDescription: service?.seoDescription,
   });
+  if (service?.seoTitle) {
+    meta.title = { absolute: service.seoTitle };
+  }
   if (imgs) {
     const og = serviceImageSrc(imgs.featured);
     meta.openGraph = {
@@ -84,6 +88,9 @@ export async function generateMetadata({
       ...meta.twitter,
       images: [og],
     };
+  }
+  if (service?.canonicalUrl) {
+    meta.alternates = { ...(meta.alternates || {}), canonical: service.canonicalUrl };
   }
   return meta;
 }
@@ -96,9 +103,10 @@ export default async function ServiceDetailPage({ params }: Props) {
     permanentRedirect(serviceHref(redirected));
   }
   const slug = raw;
-  const service = getServiceBySlug(slug);
+  const service = getServiceBySlugWithBody(slug);
   if (!service) notFound();
   const pageImages = getServiceImages(service.slug);
+  const usePackageBody = Boolean(service.contentMd?.trim());
 
   const ancestors = getServiceAncestors(service.slug);
   const parent = ancestors[ancestors.length - 1];
@@ -157,7 +165,11 @@ export default async function ServiceDetailPage({ params }: Props) {
         )}
       />
       <Navbar />
-      <article className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full">
+      <article
+        dir="rtl"
+        lang="fa"
+        className="pt-28 pb-24 px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 bg-background min-h-screen w-full"
+      >
         <div className="w-full">
           <PageBreadcrumb
             items={breadcrumb.map((b, i) =>
@@ -175,19 +187,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               {service.title}
             </h1>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
-            {service.heroHeading}
-          </h2>
-          <div className="mb-8 space-y-3">
-            {service.intro.map((p) => (
-              <p
-                key={p.slice(0, 40)}
-                className="text-lg text-muted-foreground leading-persian"
-              >
-                {richTextNodes(p)}
-              </p>
-            ))}
-          </div>
+
           {pageImages && <ServicePdpFeatured images={pageImages} />}
 
           {childCards.length > 0 && (
@@ -197,92 +197,114 @@ export default async function ServiceDetailPage({ params }: Props) {
             />
           )}
 
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 w-full mb-14">
-            <section>
-              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-                {service.forWhoHeading}
+          {usePackageBody ? (
+            <div className="mb-14 w-full max-w-4xl">
+              <BlogBody body={service.contentMd!} images={pageImages} />
+            </div>
+          ) : (
+            <>
+              <h2 className="text-xl md:text-2xl font-bold leading-persian-tight mb-6 text-foreground/90">
+                {service.heroHeading}
               </h2>
-              <ul className="space-y-3">
-                {service.forWho.map((item) => (
-                  <li
-                    key={item}
-                    className="flex gap-3 text-caption text-muted-foreground leading-persian"
+              <div className="mb-8 space-y-3">
+                {service.intro.map((p) => (
+                  <p
+                    key={p.slice(0, 40)}
+                    className="text-lg text-muted-foreground leading-persian"
                   >
-                    <span className="text-accent shrink-0">●</span>
-                    <span>{richTextNodes(item)}</span>
-                  </li>
+                    {richTextNodes(p)}
+                  </p>
                 ))}
-              </ul>
-              {pageImages?.related[0] && (
-                <ServiceInlineImage image={pageImages.related[0]} />
-              )}
-            </section>
+              </div>
 
-            <section>
-              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-                {service.deliverablesHeading}
-              </h2>
-              <ul className="space-y-3">
-                {service.deliverables.map((item) => (
-                  <li
-                    key={item}
-                    className="flex gap-3 text-caption text-muted-foreground leading-persian"
-                  >
-                    <span className="text-accent shrink-0">✓</span>
-                    <span>{richTextNodes(item)}</span>
-                  </li>
-                ))}
-              </ul>
-              {pageImages?.related[1] && (
-                <ServiceInlineImage image={pageImages.related[1]} />
-              )}
-            </section>
-          </div>
+              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 w-full mb-14">
+                <section>
+                  <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                    {service.forWhoHeading}
+                  </h2>
+                  <ul className="space-y-3">
+                    {service.forWho.map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                      >
+                        <span className="text-accent shrink-0">●</span>
+                        <span>{richTextNodes(item)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {pageImages?.related[0] && (
+                    <ServiceInlineImage image={pageImages.related[0]} />
+                  )}
+                </section>
 
-          <ServiceContentBlocks
-            blocks={service.beforeProcess}
-            inlineImageAfterFirst={
-              service.process.length === 0
-                ? pageImages?.related[2]
-                : undefined
-            }
-          />
+                <section>
+                  <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                    {service.deliverablesHeading}
+                  </h2>
+                  <ul className="space-y-3">
+                    {service.deliverables.map((item) => (
+                      <li
+                        key={item}
+                        className="flex gap-3 text-caption text-muted-foreground leading-persian"
+                      >
+                        <span className="text-accent shrink-0">✓</span>
+                        <span>{richTextNodes(item)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {pageImages?.related[1] && (
+                    <ServiceInlineImage image={pageImages.related[1]} />
+                  )}
+                </section>
+              </div>
 
-          {service.process.length > 0 && (
-            <section className="mb-12 w-full">
-              <h2 className="text-xl font-bold mb-4 leading-persian-tight">
-                {service.processHeading}
-              </h2>
-              <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-                {service.process.map((step, i) => (
-                  <li
-                    key={step}
-                    className="flex gap-4 rounded-xl border border-border p-4"
-                  >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
-                      {i + 1}
-                    </span>
-                    <span className="pt-1 text-caption text-muted-foreground leading-persian">
-                      {richTextNodes(step)}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-              {pageImages?.related[2] && (
-                <ServiceInlineImage image={pageImages.related[2]} />
+              <ServiceContentBlocks
+                blocks={service.beforeProcess}
+                inlineImageAfterFirst={
+                  service.process.length === 0
+                    ? pageImages?.related[2]
+                    : undefined
+                }
+              />
+
+              {service.process.length > 0 && (
+                <section className="mb-12 w-full">
+                  <h2 className="text-xl font-bold mb-4 leading-persian-tight">
+                    {service.processHeading}
+                  </h2>
+                  <ol className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                    {service.process.map((step, i) => (
+                      <li
+                        key={step}
+                        className="flex gap-4 rounded-xl border border-border p-4"
+                      >
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-sm font-bold">
+                          {i + 1}
+                        </span>
+                        <span className="pt-1 text-caption text-muted-foreground leading-persian">
+                          {richTextNodes(step)}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                  {pageImages?.related[2] && (
+                    <ServiceInlineImage image={pageImages.related[2]} />
+                  )}
+                </section>
               )}
-            </section>
+
+              <ServiceContentBlocks
+                blocks={service.afterProcess}
+                inlineImageAfterFirst={
+                  service.process.length === 0 &&
+                  service.beforeProcess.every((b) => !b.heading)
+                    ? pageImages?.related[2]
+                    : undefined
+                }
+              />
+            </>
           )}
-
-          <ServiceContentBlocks
-            blocks={service.afterProcess}
-            inlineImageAfterFirst={
-              service.process.length === 0 &&
-              service.beforeProcess.every((b) => !b.heading)
-                ? pageImages?.related[2]
-                : undefined
-            }
-          />
 
           {service.faq.length > 0 && (
             <section className="mb-14 w-full">

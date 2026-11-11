@@ -9,6 +9,14 @@ export function siteUrl(): string {
   );
 }
 
+/** Absolute URL without introducing a double slash after the origin. */
+export function absoluteUrl(path: string): string {
+  const base = siteUrl().replace(/\/$/, "");
+  if (/^https?:\/\//i.test(path)) return path;
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${p}`;
+}
+
 /** Auth / panel routes — never offer these to search engines. */
 export const privateRobots: NonNullable<Metadata["robots"]> = {
   index: false,

@@ -1,0 +1,758 @@
+[
+ {
+  "path": "/",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": null,
+  "action": "keep (app route outside package: /, /blog, /contact, /about)"
+ },
+ {
+  "path": "/services",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": null,
+  "action": "keep (app route outside package: /, /blog, /contact, /about)"
+ },
+ {
+  "path": "/contact",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": null,
+  "action": "keep (app route outside package: /, /blog, /contact, /about)"
+ },
+ {
+  "path": "/about",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": null,
+  "action": "keep (app route outside package: /, /blog, /contact, /about)"
+ },
+ {
+  "path": "/services/طراحی-سایت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/کدنویسی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/وردپرس",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/پزشکی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/لندینگ-پیج",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/رستوران",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/املاک",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/آموزشی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/صنعتی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/دندانپزشکی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/کلینیک-زیبایی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/خدماتی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/گردشگری",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/وردپرس/مهاجرت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/چندزبانه",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/نوبت-دهی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/خبری",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/طراحی-سایت/حقوقی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/سئو",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/سئو/فروشگاهی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/سئو/پزشکی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/سئو/بین-المللی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تولید-محتوا",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تولید-محتوا/ویدیویی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی/گوگل-ادز",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی/بنری",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی/رپورتاژ-آگهی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی/پوش-نوتیفیکیشن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/تبلیغات-اینترنتی/شبکه‌های-اجتماعی",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": "/services/تبلیغات-اینترنتی/شبکه-های-اجتماعی",
+  "action": "301 -> /services/تبلیغات-اینترنتی/شبکه-های-اجتماعی"
+ },
+ {
+  "path": "/services/شبکه‌های-اجتماعی",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": "/services/شبکه-های-اجتماعی",
+  "action": "301 -> /services/شبکه-های-اجتماعی"
+ },
+ {
+  "path": "/services/هوش-مصنوعی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/ایمیل-مارکتینگ",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/آنالیتیکس",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/آنالیتیکس/گوگل-آنالیتیکس",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/آنالیتیکس/تگ-منیجر",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/آنالیتیکس/سرچ-کنسول",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/افزایش-سرعت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/امنیت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/مانیتورینگ",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/نصب-قالب-و-افزونه",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/رفع-ارور",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/امنیت/پاکسازی-هک",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/پشتیبانی-سایت/فروشگاهی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/اپلیکیشن-و-وب-اپ",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/اپلیکیشن-و-وب-اپ/وب-اپلیکیشن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/اپلیکیشن-و-وب-اپ/فروشگاهی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/ای‌پی‌آی-و-یکپارچه‌سازی",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": "/services/ای-پی-آی-و-یکپارچه-سازی",
+  "action": "301 -> /services/ای-پی-آی-و-یکپارچه-سازی"
+ },
+ {
+  "path": "/services/مشاوره-دیجیتال-مارکتینگ",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/برندینگ",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/services/شبکه‌های-اجتماعی/اینستاگرام",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": "/services/شبکه-های-اجتماعی/اینستاگرام",
+  "action": "301 -> /services/شبکه-های-اجتماعی/اینستاگرام"
+ },
+ {
+  "path": "/services/شبکه‌های-اجتماعی/لینکدین",
+  "live_status": "200",
+  "in_package": false,
+  "redirect_to": "/services/شبکه-های-اجتماعی/لینکدین",
+  "action": "301 -> /services/شبکه-های-اجتماعی/لینکدین"
+ },
+ {
+  "path": "/blog/آنالیتیکس/گوگل-سرچ-کنسول-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/آنالیتیکس/گوگل-تگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/آنالیتیکس/گوگل-تگ-منیجر-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/آنالیتیکس/گوگل-آنالیتیکس-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/پشتیبانی-سایت/افزونه-افزایش-سرعت-سایت-وردپرس",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/پشتیبانی-سایت/مانیتورینگ-سایت-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/پشتیبانی-سایت/امنیت-سایت-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/پشتیبانی-سایت/انتخاب-پشتیبانی-سایت",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/پشتیبانی-سایت/پشتیبانی-فنی-سایت-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/دیجیتال-مارکتینگ/ایمیل-مارکتینگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/دیجیتال-مارکتینگ/برندینگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/دیجیتال-مارکتینگ/مشاوره-دیجیتال-مارکتینگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/دیجیتال-مارکتینگ/شرکت-دیجیتال-مارکتینگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/دیجیتال-مارکتینگ/دیجیتال-مارکتینگ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/شبکه-های-اجتماعی-برای-تبلیغات",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/شبکه-های-اجتماعی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/اتوماسیون-بازاریابی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/چت-بات-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/هوش-مصنوعی-تولید-متن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/محتوا-و-شبکه-های-اجتماعی/تولید-محتوا-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/پوش-نوتیفیکیشن-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/ریپورتاژ-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/تفاوت-سئو-و-گوگل-ادز",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/انتخاب-شرکت-گوگل-ادز",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/گوگل-ادز-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/سایت-های-مناسب-تبلیغات-بنری",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/تبلیغات-بنری-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/تبلیغات-کلیکی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/تبلیغات-اینترنتی/تبلیغات-اینترنتی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/کاربرد-api-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/رست-ای-پی-آی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/ای-پی-آی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/نرم-افزار-ساخت-اپلیکیشن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/انتخاب-شرکت-طراحی-اپلیکیشن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/تفاوت-اپلیکیشن-و-وب-اپلیکیشن",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/اپلیکیشن-و-api/وب-اپلیکیشن-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/طراحی-سایت/طراحی-سایت-چقدر-طول-می-کشد",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/طراحی-سایت/هزینه-طراحی-سایت-چقدر-است",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/طراحی-سایت/تفاوت-طراحی-سایت-وردپرس-با-کدنویسی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/طراحی-سایت/خدمات-طراحی-سایت-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/شغل-سئو-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/چگونه-سئو-کار-شویم",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-چقدر-طول-می-کشد",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-تکنیکال-و-محتوایی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/تفاوت-سئو-داخلی-و-خارجی",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-محلی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-خارجی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-داخلی-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-تکنیکال-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ },
+ {
+  "path": "/blog/سئو/سئو-چیست",
+  "live_status": "200",
+  "in_package": true,
+  "redirect_to": null,
+  "action": "keep (page in package, update in place)"
+ }
+]

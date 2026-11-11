@@ -1,0 +1,266 @@
+[
+  {
+    "source": "/services/شبکه‌های-اجتماعی",
+    "destination": "/services/شبکه-های-اجتماعی",
+    "statusCode": 301,
+    "reason": "ZWNJ in slug replaced by hyphen (live URL)"
+  },
+  {
+    "source": "/services/تبلیغات-اینترنتی/شبکه‌های-اجتماعی",
+    "destination": "/services/تبلیغات-اینترنتی/شبکه-های-اجتماعی",
+    "statusCode": 301,
+    "reason": "ZWNJ in slug replaced by hyphen (live URL)"
+  },
+  {
+    "source": "/services/ای‌پی‌آی-و-یکپارچه‌سازی",
+    "destination": "/services/ای-پی-آی-و-یکپارچه-سازی",
+    "statusCode": 301,
+    "reason": "ZWNJ in slug replaced by hyphen (live URL)"
+  },
+  {
+    "source": "/services/شبکه‌های-اجتماعی/اینستاگرام",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "ZWNJ in parent slug replaced by hyphen (live URL)"
+  },
+  {
+    "source": "/services/شبکه‌های-اجتماعی/لینکدین",
+    "destination": "/services/شبکه-های-اجتماعی/لینکدین",
+    "statusCode": 301,
+    "reason": "ZWNJ in parent slug replaced by hyphen (live URL)"
+  },
+  {
+    "source": "/services/اینستاگرام",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "older URL (live site already 301s it; target now hyphenated, avoids a chain)"
+  },
+  {
+    "source": "/services/لینکدین",
+    "destination": "/services/شبکه-های-اجتماعی/لینکدین",
+    "statusCode": 301,
+    "reason": "older URL (live site already 301s it; target now hyphenated, avoids a chain)"
+  },
+  {
+    "source": "/services/api-و-یکپارچه‌سازی",
+    "destination": "/services/ای-پی-آی-و-یکپارچه-سازی",
+    "statusCode": 301,
+    "reason": "content-plan URL (live site already 301s it; target now hyphenated, avoids a chain)"
+  },
+  {
+    "source": "/services/api-و-یکپارچه-سازی",
+    "destination": "/services/ای-پی-آی-و-یکپارچه-سازی",
+    "statusCode": 301,
+    "reason": "interim URL in package v1 (never live)"
+  },
+  {
+    "source": "/services/اینستاگرام/تهران",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "city landing was linked in an earlier draft; city pages will not be built"
+  },
+  {
+    "source": "/services/اینستاگرام/مشهد",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "city landing was linked in an earlier draft; city pages will not be built"
+  },
+  {
+    "source": "/services/اینستاگرام/اصفهان",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "city landing was linked in an earlier draft; city pages will not be built"
+  },
+  {
+    "source": "/services/اینستاگرام/شیراز",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "city landing was linked in an earlier draft; city pages will not be built"
+  },
+  {
+    "source": "/services/اینستاگرام/تبریز",
+    "destination": "/services/شبکه-های-اجتماعی/اینستاگرام",
+    "statusCode": 301,
+    "reason": "city landing was linked in an earlier draft; city pages will not be built"
+  },
+  {
+    "source": "/blog/تفاوت-طراحی-سایت-وردپرس-با-کدنویسی",
+    "destination": "/blog/طراحی-سایت/تفاوت-طراحی-سایت-وردپرس-با-کدنویسی",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/تفاوت-سئو-و-گوگل-ادز",
+    "destination": "/blog/تبلیغات-اینترنتی/تفاوت-سئو-و-گوگل-ادز",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/نرم‌افزارهای-ساخت-اپلیکیشن؛-آیا-برای-کسب‌وکار-کافی‌اند",
+    "destination": "/blog/اپلیکیشن-و-api/نرم-افزار-ساخت-اپلیکیشن",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/API-چیست-و-چه-کاربردی-دارد",
+    "destination": "/blog/اپلیکیشن-و-api/ای-پی-آی-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/ایمیل-مارکتینگ-چیست",
+    "destination": "/blog/دیجیتال-مارکتینگ/ایمیل-مارکتینگ-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/برندینگ-چیست",
+    "destination": "/blog/دیجیتال-مارکتینگ/برندینگ-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/services/طراحی-سایت/مهاجرت-به-وردپرس",
+    "destination": "/services/طراحی-سایت/وردپرس/مهاجرت",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/انواع-تبلیغات-اینترنتی",
+    "destination": "/blog/تبلیغات-اینترنتی/تبلیغات-اینترنتی-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/شبکه‌های-اجتماعی-چیست",
+    "destination": "/blog/محتوا-و-شبکه-های-اجتماعی/شبکه-های-اجتماعی-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/پشتیبانی-فنی-سایت-چیست-و-چگونه-آن-را-انتخاب-کنیم",
+    "destination": "/blog/پشتیبانی-سایت/پشتیبانی-فنی-سایت-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/چگونه-شرکت-طراحی-اپلیکیشن-را-انتخاب-کنیم",
+    "destination": "/blog/اپلیکیشن-و-api/انتخاب-شرکت-طراحی-اپلیکیشن",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/دیجیتال-مارکتینگ-چیست-و-چه-کاربردی-دارد",
+    "destination": "/blog/دیجیتال-مارکتینگ/دیجیتال-مارکتینگ-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/خدمات-طراحی-سایت-چیست",
+    "destination": "/blog/طراحی-سایت/خدمات-طراحی-سایت-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/تفاوت-سئو-داخلی-و-خارجی",
+    "destination": "/blog/سئو/تفاوت-سئو-داخلی-و-خارجی",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/سئو-چیست-و-چه-کاربردی-دارد",
+    "destination": "/blog/سئو/سئو-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/تولید-محتوا-چیست-و-چه-کاربردی-دارد",
+    "destination": "/blog/محتوا-و-شبکه-های-اجتماعی/تولید-محتوا-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/انواع-تولید-محتوا",
+    "destination": "/blog/محتوا-و-شبکه-های-اجتماعی/تولید-محتوا-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/تبلیغات-اینترنتی-چیست",
+    "destination": "/blog/تبلیغات-اینترنتی/تبلیغات-اینترنتی-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/مشاوره-دیجیتال-مارکتینگ-چیست",
+    "destination": "/blog/دیجیتال-مارکتینگ/مشاوره-دیجیتال-مارکتینگ-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/تبلیغات-بنری-چیست-و-چه-نمونه‌هایی-دارد",
+    "destination": "/blog/تبلیغات-اینترنتی/تبلیغات-بنری-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/رپورتاژ-آگهی-چیست-و-چه-تأثیری-بر-سئو-دارد",
+    "destination": "/blog/تبلیغات-اینترنتی/ریپورتاژ-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/پوش-نوتیفیکیشن-چیست",
+    "destination": "/blog/تبلیغات-اینترنتی/پوش-نوتیفیکیشن-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/انواع-تبلیغات-در-شبکه‌های-اجتماعی",
+    "destination": "/blog/محتوا-و-شبکه-های-اجتماعی/شبکه-های-اجتماعی-برای-تبلیغات",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/چک‌لیست-افزایش-سرعت-سایت-وردپرس",
+    "destination": "/blog/پشتیبانی-سایت/افزونه-افزایش-سرعت-سایت-وردپرس",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/امنیت-سایت-چیست",
+    "destination": "/blog/پشتیبانی-سایت/امنیت-سایت-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/مانیتورینگ-سایت-چیست",
+    "destination": "/blog/پشتیبانی-سایت/مانیتورینگ-سایت-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/وب-اپلیکیشن-چیست-و-چه-تفاوتی-با-اپلیکیشن-دارد",
+    "destination": "/blog/اپلیکیشن-و-api/تفاوت-اپلیکیشن-و-وب-اپلیکیشن",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/گوگل-آنالیتیکس-چیست",
+    "destination": "/blog/آنالیتیکس/گوگل-آنالیتیکس-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/گوگل-تگ-منیجر-چیست",
+    "destination": "/blog/آنالیتیکس/گوگل-تگ-منیجر-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  },
+  {
+    "source": "/blog/گوگل-سرچ-کنسول-چیست-و-کجاست",
+    "destination": "/blog/آنالیتیکس/گوگل-سرچ-کنسول-چیست",
+    "statusCode": 301,
+    "reason": "URL used in an earlier content draft, mapped to the final page"
+  }
+]

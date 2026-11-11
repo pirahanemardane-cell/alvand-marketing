@@ -547,7 +547,9 @@ export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
   "تبلیغات-اینترنتی/رپورتاژ-آگهی": img_sponsored_content,
   "تبلیغات-اینترنتی/پوش-نوتیفیکیشن": img_push_notifications,
   "تبلیغات-اینترنتی/شبکه‌های-اجتماعی": img_social_ads,
+  "تبلیغات-اینترنتی/شبکه-های-اجتماعی": img_social_ads,
   "شبکه‌های-اجتماعی": img_social_media,
+  "شبکه-های-اجتماعی": img_social_media,
   "هوش-مصنوعی": img_artificial_intelligence,
   "ایمیل-مارکتینگ": img_email_marketing,
   "آنالیتیکس": img_analytics,
@@ -566,10 +568,13 @@ export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
   "اپلیکیشن-و-وب-اپ/وب-اپلیکیشن": img_web_application,
   "اپلیکیشن-و-وب-اپ/فروشگاهی": img_ecommerce_app,
   "ای‌پی‌آی-و-یکپارچه‌سازی": img_api_integration,
+  "ای-پی-آی-و-یکپارچه-سازی": img_api_integration,
   "مشاوره-دیجیتال-مارکتینگ": img_digital_consulting,
   "برندینگ": img_branding,
   "شبکه‌های-اجتماعی/اینستاگرام": img_instagram_management,
+  "شبکه-های-اجتماعی/اینستاگرام": img_instagram_management,
   "شبکه‌های-اجتماعی/لینکدین": img_linkedin_management,
+  "شبکه-های-اجتماعی/لینکدین": img_linkedin_management,
 };
 
 export function getServiceImages(slug: string): ServiceImageSet | undefined {
