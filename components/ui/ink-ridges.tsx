@@ -850,9 +850,16 @@ export default function InkRidges({
     const onVisibility = () => kick()
     document.addEventListener('visibilitychange', onVisibility)
     reducedMq.addEventListener('change', onVisibility)
+    // Defer a frame so CSS variables / background-color have settled (avoids
+    // sampling the previous theme when callers animate color transitions).
+    let themeRaf = 0
     const onTheme = () => {
-      theme()
-      kick()
+      if (themeRaf) cancelAnimationFrame(themeRaf)
+      themeRaf = requestAnimationFrame(() => {
+        themeRaf = 0
+        theme()
+        kick()
+      })
     }
     const mo = new MutationObserver(onTheme)
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme', 'style'] })
@@ -874,6 +881,8 @@ export default function InkRidges({
     return () => {
       if (raf) cancelAnimationFrame(raf)
       raf = 0
+      if (themeRaf) cancelAnimationFrame(themeRaf)
+      themeRaf = 0
       clearTimeout(flightTimer)
       ctl.current = { kick: () => {}, repaint: () => {}, retheme: () => {} }
       resize.disconnect()

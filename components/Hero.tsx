@@ -2,11 +2,22 @@
 
 import { motion } from "framer-motion";
 import InkRidges from "@/components/ui/ink-ridges";
+import { useTheme } from "./ThemeProvider";
 
 export default function Hero() {
+  const { mode } = useTheme();
+  const isMorning = mode === "morning";
+
   return (
     <InkRidges
-      className="min-h-[100svh] w-full max-w-[100vw] bg-background text-foreground transition-colors duration-600"
+      // Explicit day/night paper + ink (no transition-colors): InkRidges moon:auto
+      // samples backgroundColor/color; a color transition left luminance on the
+      // previous theme and inverted sun/moon relative to the صبح/شب toggle.
+      className={
+        isMorning
+          ? "min-h-[100svh] w-full max-w-[100vw] bg-[#fafafa] text-[#18181b]"
+          : "min-h-[100svh] w-full max-w-[100vw] bg-[#0a0a0b] text-[#f4f4f5]"
+      }
       label="نقاشی جوهر رشته‌کوه الوند"
       seed={11}
       layers={4}
@@ -19,7 +30,7 @@ export default function Hero() {
       sunColor="#c8372d"
       sunSize={0.065}
       sunPosition={[0.78, 0.72]}
-      moon="auto"
+      moon={isMorning ? false : true}
       scrollDepth={0.3}
       grain={0.28}
       clouds={0.3}
