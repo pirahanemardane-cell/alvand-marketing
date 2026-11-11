@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -13,6 +13,10 @@ import SeoAnalysisPanel, {
   type SeoPanelValue,
 } from '@/components/admin/SeoAnalysisPanel';
 import { services } from '@/lib/services';
+import {
+  absoluteCanonical,
+  defaultsForPageKey,
+} from '@/lib/seo/admin-defaults';
 import { Search } from 'lucide-react';
 
 const TABS: { key: string; label: string; slug: string }[] = [
@@ -37,6 +41,10 @@ export default function AdminSeoPage() {
   const [title, setTitle] = useState('');
   const [bodyPreview, setBodyPreview] = useState('');
   const [seo, setSeo] = useState<SeoPanelValue>(emptySeoValue());
+  const defaults = useMemo(() => defaultsForPageKey(tab), [tab]);
+  const effectiveCanonical = defaults
+    ? absoluteCanonical(defaults.canonicalPath)
+    : '';
 
   useEffect(() => {
     async function init() {
@@ -70,14 +78,16 @@ export default function AdminSeoPage() {
       try {
         const res = await fetch(`/api/admin/seo?key=${encodeURIComponent(tab)}`);
         const json = await res.json();
+        const fb = defaultsForPageKey(tab);
         if (res.ok && json.row) {
           const r = json.row;
-          setTitle(String(r.title ?? ''));
+          setTitle(String(r.title ?? fb?.title ?? ''));
           setBodyPreview(String(r.body_preview ?? ''));
           setSeo(
             emptySeoValue({
-              metaTitle: String(r.meta_title ?? ''),
-              metaDescription: String(r.meta_description ?? ''),
+              metaTitle: String(r.meta_title ?? '') || fb?.metaTitle || '',
+              metaDescription:
+                String(r.meta_description ?? '') || fb?.metaDescription || '',
               focusKeyphrases: Array.isArray(r.focus_keyphrases)
                 ? r.focus_keyphrases
                 : [],
@@ -90,10 +100,14 @@ export default function AdminSeoPage() {
             })
           );
         } else {
-          const label = TABS.find((t) => t.key === tab)?.label || tab;
-          setTitle(label);
+          setTitle(fb?.title || TABS.find((t) => t.key === tab)?.label || tab);
           setBodyPreview('');
-          setSeo(emptySeoValue());
+          setSeo(
+            emptySeoValue({
+              metaTitle: fb?.metaTitle || '',
+              metaDescription: fb?.metaDescription || '',
+            })
+          );
         }
       } catch {
         setMsg('خطا در بارگذاری');
@@ -219,12 +233,17 @@ export default function AdminSeoPage() {
             <SeoAnalysisPanel
               pageName={title}
               slug={slug}
-              shortDescription={seo.metaDescription || bodyPreview}
+              shortDescription={
+                seo.metaDescription || bodyPreview || defaults?.metaDescription || ''
+              }
               body={bodyPreview}
               value={seo}
               onChange={setSeo}
               siteName="الوند مارکتینگ"
               siteUrl="https://alvandmarketing.ir"
+              effectiveCanonical={effectiveCanonical}
+              schemaTypes={defaults?.schemaTypes}
+              schemaSummary={defaults?.schemaSummary}
             />
 
             {msg && <p className="text-sm text-muted-foreground">{msg}</p>}

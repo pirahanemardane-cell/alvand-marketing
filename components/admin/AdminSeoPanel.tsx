@@ -1,8 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SeoAnalysisPanel, { emptySeoValue, type SeoPanelValue } from '@/components/admin/SeoAnalysisPanel';
 import { services } from '@/lib/services';
+import {
+  absoluteCanonical,
+  defaultsForPageKey,
+} from '@/lib/seo/admin-defaults';
 
 const PAGE_TABS: { key: string; label: string; slug: string }[] = [
   { key: 'home', label: 'صفحه اصلی', slug: '' },
@@ -25,6 +29,11 @@ export default function AdminSeoPanel() {
   const [bodyPreview, setBodyPreview] = useState('');
   const [seo, setSeo] = useState<SeoPanelValue>(emptySeoValue());
 
+  const defaults = useMemo(() => defaultsForPageKey(tab), [tab]);
+  const effectiveCanonical = defaults
+    ? absoluteCanonical(defaults.canonicalPath)
+    : '';
+
   useEffect(() => {
     setLoading(true);
     setMsg('');
@@ -32,13 +41,14 @@ export default function AdminSeoPanel() {
       try {
         const res = await fetch(`/api/admin/seo?key=${encodeURIComponent(tab)}`);
         const json = await res.json();
+        const fb = defaultsForPageKey(tab);
         if (res.ok && json.row) {
           const r = json.row;
-          setTitle(String(r.title ?? ''));
+          setTitle(String(r.title ?? fb?.title ?? ''));
           setBodyPreview(String(r.body_preview ?? ''));
           setSeo(emptySeoValue({
-            metaTitle: String(r.meta_title ?? ''),
-            metaDescription: String(r.meta_description ?? ''),
+            metaTitle: String(r.meta_title ?? '') || fb?.metaTitle || '',
+            metaDescription: String(r.meta_description ?? '') || fb?.metaDescription || '',
             focusKeyphrases: Array.isArray(r.focus_keyphrases) ? r.focus_keyphrases : [],
             ogTitle: String(r.og_title ?? ''),
             ogDescription: String(r.og_description ?? ''),
@@ -48,9 +58,12 @@ export default function AdminSeoPanel() {
             canonicalUrl: String(r.canonical_url ?? ''),
           }));
         } else {
-          setTitle(PAGE_TABS.find((t) => t.key === tab)?.label || tab);
+          setTitle(fb?.title || PAGE_TABS.find((t) => t.key === tab)?.label || tab);
           setBodyPreview('');
-          setSeo(emptySeoValue());
+          setSeo(emptySeoValue({
+            metaTitle: fb?.metaTitle || '',
+            metaDescription: fb?.metaDescription || '',
+          }));
         }
       } catch {
         setMsg('خطا در بارگذاری');
@@ -108,9 +121,19 @@ export default function AdminSeoPanel() {
             <textarea className="min-h-[80px] w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
               value={bodyPreview} onChange={(e) => setBodyPreview(e.target.value)} />
           </label>
-          <SeoAnalysisPanel pageName={title} slug={slug}
-            shortDescription={seo.metaDescription || bodyPreview} body={bodyPreview}
-            value={seo} onChange={setSeo} siteName="الوند مارکتینگ" siteUrl="https://alvandmarketing.ir" />
+          <SeoAnalysisPanel
+            pageName={title}
+            slug={slug}
+            shortDescription={seo.metaDescription || bodyPreview || defaults?.metaDescription || ''}
+            body={bodyPreview}
+            value={seo}
+            onChange={setSeo}
+            siteName="الوند مارکتینگ"
+            siteUrl="https://alvandmarketing.ir"
+            effectiveCanonical={effectiveCanonical}
+            schemaTypes={defaults?.schemaTypes}
+            schemaSummary={defaults?.schemaSummary}
+          />
           {msg && <p className="text-sm text-muted-foreground">{msg}</p>}
           <button type="button" disabled={busy} onClick={() => void save()}
             className="rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-accent-foreground disabled:opacity-50">
