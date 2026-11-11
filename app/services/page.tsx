@@ -179,7 +179,7 @@ export default async function ServicesPage({ searchParams }: Props) {
           )}
 
           {usePackageBody ? (
-            <div className="mb-14 w-full max-w-4xl">
+            <div className="mb-14 w-full">
               <BlogBody
                 body={o.contentMd!}
                 images={hubImages}
