@@ -40,7 +40,13 @@ export default function Hero() {
     >
       <div className="flex h-full min-h-[100svh] flex-col items-center justify-center px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 pt-24 pb-16 text-center w-full">
         {/* Static above-the-fold copy avoids motion-driven LCP render delay. */}
-        <p className="mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify">
+        <p
+          className={
+            isMorning
+              ? "mb-4 text-sm sm:text-base font-thin tracking-wide text-[#000000] text-center text-no-justify"
+              : "mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify"
+          }
+        >
           الوند مارکتینگ
         </p>
 
@@ -68,7 +74,11 @@ export default function Hero() {
           </a>
           <a
             href="#process"
-            className="inline-flex items-center justify-center rounded-full border border-border px-7 py-3 text-sm font-bold transition-colors hover:bg-white/5"
+            className={
+              isMorning
+                ? "inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-7 py-3 text-sm font-bold text-[#18181b] transition-colors hover:bg-white/90"
+                : "inline-flex items-center justify-center rounded-full border border-border px-7 py-3 text-sm font-bold transition-colors hover:bg-white/5"
+            }
           >
             چطور کار می‌کنیم؟
           </a>
