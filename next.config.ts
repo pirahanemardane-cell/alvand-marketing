@@ -124,6 +124,11 @@ const nextConfig: NextConfig = {
         destination: "/reset-password",
         permanent: true,
       },
+      // Mistaken Latin section paths → home (sections live on `/#…`)
+      { source: "/pricing", destination: "/", permanent: true },
+      { source: "/faq", destination: "/", permanent: true },
+      { source: "/process", destination: "/", permanent: true },
+      { source: "/cases", destination: "/", permanent: true },
       // Latin api slug → fully Persian
       {
         source: `/services/${enc("api-و-یکپارچه‌سازی")}`,
@@ -181,6 +186,10 @@ const nextConfig: NextConfig = {
       {
         source: `/${enc("تماس")}`,
         destination: "/contact",
+      },
+      {
+        source: `/${enc("درباره-ما")}`,
+        destination: "/about",
       },
     ];
   },

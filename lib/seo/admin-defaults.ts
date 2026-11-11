@@ -46,6 +46,15 @@ const STATIC: Record<string, SeoPageDefaults> = {
     schemaTypes: ["ContactPage", "BreadcrumbList", "Organization"],
     schemaSummary: "ContactPage + BreadcrumbList + Organization",
   },
+  about: {
+    title: "درباره ما",
+    metaTitle: "درباره ما | الوند مارکتینگ",
+    metaDescription:
+      "آشنایی با الوند مارکتینگ: تیم، رویکرد اندازه‌پذیر و هفت سال فعالیت در دیجیتال مارکتینگ ایران.",
+    canonicalPath: "/about",
+    schemaTypes: ["AboutPage", "BreadcrumbList", "Organization"],
+    schemaSummary: "AboutPage + BreadcrumbList + Organization",
+  },
 };
 
 export function defaultsForPageKey(pageKey: string): SeoPageDefaults | null {

@@ -111,6 +111,11 @@ export default function Footer() {
                 </FooterLink>
               </li>
               <li>
+                <FooterLink href="/about" pathname={pathname} exact>
+                  درباره ما
+                </FooterLink>
+              </li>
+              <li>
                 <FooterLink href="/contact" pathname={pathname}>
                   مشاوره رایگان
                 </FooterLink>

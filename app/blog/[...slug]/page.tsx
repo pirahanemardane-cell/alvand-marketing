@@ -75,7 +75,10 @@ export async function generateMetadata({
   const { preview } = await searchParams;
   const slug = joinSlug(segments);
   const resolved = await resolvePost(slug, preview);
-  if (!resolved) return { title: "مقاله یافت نشد", robots: { index: false } };
+  if (!resolved) {
+    // Match page `notFound()` so crawlers never see a soft-200 "یافت نشد" title.
+    notFound();
+  }
   const { post, isPreview } = resolved;
   const title = post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`;
   const description = post.meta_description || post.excerpt;
