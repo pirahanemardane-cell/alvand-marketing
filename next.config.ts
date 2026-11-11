@@ -20,7 +20,6 @@ const r2Host = r2PublicHostname();
 const remotePatterns: NonNullable<
   NonNullable<NextConfig["images"]>["remotePatterns"]
 > = [
-  { protocol: "https", hostname: "hirael.com" },
   // Always allow the production R2 custom domain (images served via mediaUrl).
   { protocol: "https", hostname: "cdn.alvandmarketing.ir" },
 ];
