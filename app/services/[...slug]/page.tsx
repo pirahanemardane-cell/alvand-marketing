@@ -198,7 +198,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           )}
 
           {usePackageBody ? (
-            <div className="mb-14 w-full max-w-4xl">
+            <div className="mb-14 w-full">
               <BlogBody
                 body={service.contentMd!}
                 images={pageImages}
