@@ -7,6 +7,9 @@ import PageBreadcrumb from "@/components/Breadcrumb";
 import ContactForm from "@/components/ContactForm";
 import { metadataForPageKey } from "@/lib/seo/pages";
 
+/** Keep contact SEO in sync with admin `seo_pages` without a full redeploy. */
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   return metadataForPageKey("contact", { path: "/contact" });
 }

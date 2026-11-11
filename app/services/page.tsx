@@ -27,6 +27,9 @@ import {
   ServiceInlineImage,
 } from "@/components/ServiceImages";
 
+/** Keep hub SEO in sync with admin `seo_pages` without a full redeploy. */
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const meta = await metadataForPageKey("services", {
     path: "/services",
