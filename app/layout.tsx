@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SentryInit from "@/components/SentryInit";
-import { mediaPublicHostname, mediaUrl } from "@/lib/media";
+import { mediaPublicHostname } from "@/lib/media";
 import { publicRobots, siteUrl } from "@/lib/seo/site";
 import "./globals.css";
 
@@ -56,14 +56,6 @@ export default function RootLayout({
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
-        />
-        {/* Default theme is night/dark — only preload LCP hero; morning loads on theme toggle. */}
-        <link
-          rel="preload"
-          href={mediaUrl("images/hero-night.webp")}
-          as="image"
-          type="image/webp"
-          fetchPriority="high"
         />
       </head>
 
