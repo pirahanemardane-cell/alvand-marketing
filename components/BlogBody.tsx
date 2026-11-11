@@ -1,5 +1,6 @@
 import { ServiceInlineImage, ServiceFeaturedImage } from "@/components/ServiceImages";
 import { ServiceTableView } from "@/components/ServiceContentBlocks";
+import ContentBodyFigure from "@/components/ContentBodyFigure";
 import { richTextNodes } from "@/components/RichText";
 import type { ServiceImageSet } from "@/lib/service-images";
 import { mediaUrl } from "@/lib/media";
@@ -247,23 +248,12 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
     if (block.type === "image") {
       const caption = block.caption || block.alt;
       return (
-        <figure
+        <ContentBodyFigure
           key={`img-${idx}`}
-          className="my-6 mx-auto flex w-full max-w-3xl flex-col items-center"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={resolveBodyImageSrc(block.src)}
-            alt={block.alt}
-            className="mx-auto h-auto w-full object-contain"
-            loading="lazy"
-          />
-          {caption ? (
-            <figcaption className="mt-2 text-center text-sm text-muted-foreground leading-persian">
-              {caption}
-            </figcaption>
-          ) : null}
-        </figure>
+          src={resolveBodyImageSrc(block.src)}
+          alt={block.alt}
+          caption={caption}
+        />
       );
     }
     if (block.type === "table") {
