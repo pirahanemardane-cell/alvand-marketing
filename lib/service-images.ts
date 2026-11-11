@@ -44,180 +44,17 @@ export { hubServiceImages };
 
 
 
-const img_medical_website: ServiceImageSet = {
-  featured: asset("images/services/medical-website/featured-1576091160399-1.webp", "تصویر شاخص طراحی سایت پزشکی — الوند مارکتینگ", 1200, 800, "National Cancer Institute", "1576091160399-112ba8d25d1d"),
-  related: [
-    asset("images/services/medical-website/related-1-1519494026892-8.webp", "تصویر مرتبط 1 برای طراحی سایت پزشکی — الوند مارکتینگ", 900, 613, "Martha Dominguez de Gouveia", "1519494026892-80bbd2d6fd0d"),
-    asset("images/services/medical-website/related-2-1579684385127-1.webp", "تصویر مرتبط 2 برای طراحی سایت پزشکی — الوند مارکتینگ", 900, 900, "Online Marketing", "1579684385127-1ef15d508118"),
-    asset("images/services/medical-website/related-3-1666214280557-f.webp", "تصویر مرتبط 3 برای طراحی سایت پزشکی — الوند مارکتینگ", 900, 600, "Julian Myles", "1666214280557-f1b5022eb634"),
-  ],
-};
-
-const img_landing_page: ServiceImageSet = {
-  featured: asset("images/services/landing-page/featured-1557804506-669a.webp", "تصویر شاخص طراحی لندینگ پیج — الوند مارکتینگ", 1200, 900, "Austin Distel", "1557804506-669a67965ba0"),
-  related: [
-    asset("images/services/landing-page/related-1-1533750349088-c.webp", "تصویر مرتبط 1 برای طراحی لندینگ پیج — الوند مارکتینگ", 900, 600, "Stephen Dawson", "1533750349088-cd871a92f312"),
-    asset("images/services/landing-page/related-2-1531482615713-2.webp", "تصویر مرتبط 2 برای طراحی لندینگ پیج — الوند مارکتینگ", 900, 600, "Unsplash", "1531482615713-2afd69097998"),
-    asset("images/services/landing-page/related-3-1542744173-8e7e.webp", "تصویر مرتبط 3 برای طراحی لندینگ پیج — الوند مارکتینگ", 900, 600, "Unsplash", "1542744173-8e7e53415bb0"),
-  ],
-};
-
-const img_restaurant_website: ServiceImageSet = {
-  featured: asset("images/services/restaurant-website/featured-1517248135467-4.webp", "تصویر شاخص طراحی سایت رستوران — الوند مارکتینگ", 1200, 800, "Jay Wennington", "1517248135467-4c7edcad34c4"),
-  related: [
-    asset("images/services/restaurant-website/related-1-1556910103-1c02.webp", "تصویر مرتبط 1 برای طراحی سایت رستوران — الوند مارکتینگ", 900, 600, "Louis Hansel", "1556910103-1c02745aae4d"),
-    asset("images/services/restaurant-website/related-2-1414235077428-3.webp", "تصویر مرتبط 2 برای طراحی سایت رستوران — الوند مارکتینگ", 900, 600, "Brooke Lark", "1414235077428-338989a2e8c0"),
-    asset("images/services/restaurant-website/related-3-1521017432531-f.webp", "تصویر مرتبط 3 برای طراحی سایت رستوران — الوند مارکتینگ", 900, 600, "Toa Heftiba", "1521017432531-fbd92d768814"),
-  ],
-};
-
-const img_real_estate_website: ServiceImageSet = {
-  featured: asset("images/services/real-estate-website/featured-1560518883-ce09.webp", "تصویر شاخص طراحی سایت املاک — الوند مارکتینگ", 1200, 901, "Tierra Mallorca", "1560518883-ce09059eeffa"),
-  related: [
-    asset("images/services/real-estate-website/related-1-1560448204-e02f.webp", "تصویر مرتبط 1 برای طراحی سایت املاک — الوند مارکتینگ", 900, 600, "Tina Floersch", "1560448204-e02f11c3d0e2"),
-    asset("images/services/real-estate-website/related-2-1502672260266-1.webp", "تصویر مرتبط 2 برای طراحی سایت املاک — الوند مارکتینگ", 900, 670, "R Architecture", "1502672260266-1c1ef2d93688"),
-    asset("images/services/real-estate-website/related-3-1600596542815-f.webp", "تصویر مرتبط 3 برای طراحی سایت املاک — الوند مارکتینگ", 900, 597, "Spacejoy", "1600596542815-ffad4c1539a9"),
-  ],
-};
-
-const img_education_website: ServiceImageSet = {
-  featured: asset("images/services/education-website/featured-1522202176988-6.webp", "تصویر شاخص طراحی سایت آموزشی — الوند مارکتینگ", 1200, 800, "Brooke Cagle", "1522202176988-66273c2fd55f"),
-  related: [
-    asset("images/services/education-website/related-1-1509062522246-3.webp", "تصویر مرتبط 1 برای طراحی سایت آموزشی — الوند مارکتینگ", 900, 560, "Kenny Eliason", "1509062522246-3755977927d7"),
-    asset("images/services/education-website/related-2-1455390582262-0.webp", "تصویر مرتبط 2 برای طراحی سایت آموزشی — الوند مارکتینگ", 900, 676, "Aaron Burden", "1455390582262-044cdead277a"),
-    asset("images/services/education-website/related-3-1553877522-4326.webp", "تصویر مرتبط 3 برای طراحی سایت آموزشی — الوند مارکتینگ", 900, 600, "Unsplash", "1553877522-43269d4ea984"),
-  ],
-};
-
-const img_industrial_website: ServiceImageSet = {
-  featured: asset("images/services/industrial-website/featured-1586528116311-a.webp", "تصویر شاخص طراحی سایت صنعتی — الوند مارکتینگ", 1200, 800, "CHUTTERSNAP", "1586528116311-ad8dd3c8310d"),
-  related: [
-    asset("images/services/industrial-website/related-1-1581092160562-4.webp", "تصویر مرتبط 1 برای طراحی سایت صنعتی — الوند مارکتینگ", 900, 600, "ThisisEngineering", "1581092160562-40aa08e78837"),
-    asset("images/services/industrial-website/related-2-1558494949-ef01.webp", "تصویر مرتبط 2 برای طراحی سایت صنعتی — الوند مارکتینگ", 900, 505, "Taylor Vick", "1558494949-ef010cbdcc31"),
-    asset("images/services/industrial-website/related-3-1516321318423-f.webp", "تصویر مرتبط 3 برای طراحی سایت صنعتی — الوند مارکتینگ", 900, 600, "Christin Hume", "1516321318423-f06f85e504b3"),
-  ],
-};
-
-const img_dental_website: ServiceImageSet = {
-  featured: asset("images/services/dental-website/featured-1606811841689-2.webp", "تصویر شاخص طراحی سایت دندانپزشکی — الوند مارکتینگ", 1200, 900, "Enrique", "1606811841689-23dfddce3e95"),
-  related: [
-    asset("images/services/dental-website/related-1-1573164713714-d.webp", "تصویر مرتبط 1 برای طراحی سایت دندانپزشکی — الوند مارکتینگ", 900, 601, "Unsplash", "1573164713714-d95e436ab8d6"),
-    asset("images/services/dental-website/related-2-1551836022-d5d8.webp", "تصویر مرتبط 2 برای طراحی سایت دندانپزشکی — الوند مارکتینگ", 900, 600, "Unsplash", "1551836022-d5d88e9218df"),
-    asset("images/services/dental-website/related-3-1504384308090-c.webp", "تصویر مرتبط 3 برای طراحی سایت دندانپزشکی — الوند مارکتینگ", 900, 600, "Unsplash", "1504384308090-c894fdcc538d"),
-  ],
-};
-
-const img_beauty_clinic_website: ServiceImageSet = {
-  featured: asset("images/services/beauty-clinic-website/featured-1540555700478-4.webp", "تصویر شاخص طراحی سایت کلینیک زیبایی — الوند مارکتینگ", 1200, 800, "Toa Heftiba", "1540555700478-4be289fbecef"),
-  related: [
-    asset("images/services/beauty-clinic-website/related-1-1550751827-4bd3.webp", "تصویر مرتبط 1 برای طراحی سایت کلینیک زیبایی — الوند مارکتینگ", 900, 601, "Unsplash", "1550751827-4bd374c3f58b"),
-    asset("images/services/beauty-clinic-website/related-2-1518770660439-4.webp", "تصویر مرتبط 2 برای طراحی سایت کلینیک زیبایی — الوند مارکتینگ", 900, 600, "Unsplash", "1518770660439-4636190af475"),
-    asset("images/services/beauty-clinic-website/related-3-1600880292203-7.webp", "تصویر مرتبط 3 برای طراحی سایت کلینیک زیبایی — الوند مارکتینگ", 900, 600, "Austin Distel", "1600880292203-757bb62b4baf"),
-  ],
-};
-
-const img_services_website: ServiceImageSet = {
-  featured: asset("images/services/services-website/featured-1467232004584-a.webp", "تصویر شاخص طراحی سایت خدماتی — الوند مارکتینگ", 1200, 801, "Unsplash", "1467232004584-a241de8bcf5d"),
-  related: [
-    asset("images/services/services-website/related-1-1497366216548-3.webp", "تصویر مرتبط 1 برای طراحی سایت خدماتی — الوند مارکتینگ", 900, 601, "Nastuh Abootalebi", "1497366216548-37526070297c"),
-    asset("images/services/services-website/related-2-1556761175-5973.webp", "تصویر مرتبط 2 برای طراحی سایت خدماتی — الوند مارکتینگ", 900, 506, "Austin Distel", "1556761175-5973dc0f32e7"),
-    asset("images/services/services-website/related-3-1522071820081-0.webp", "تصویر مرتبط 3 برای طراحی سایت خدماتی — الوند مارکتینگ", 900, 600, "LinkedIn Sales Solutions", "1522071820081-009f0129c71c"),
-  ],
-};
-
-const img_tourism_website: ServiceImageSet = {
-  featured: asset("images/services/tourism-website/featured-1488646953014-8.webp", "تصویر شاخص طراحی سایت گردشگری — الوند مارکتینگ", 1200, 948, "Josh Hild", "1488646953014-85cb44e25828"),
-  related: [
-    asset("images/services/tourism-website/related-1-1566073771259-6.webp", "تصویر مرتبط 1 برای طراحی سایت گردشگری — الوند مارکتینگ", 900, 600, "Roberto Nickson", "1566073771259-6a8506099945"),
-    asset("images/services/tourism-website/related-2-1488085061387-4.webp", "تصویر مرتبط 2 برای طراحی سایت گردشگری — الوند مارکتینگ", 900, 507, "Josh Hild", "1488085061387-422e29b40080"),
-    asset("images/services/tourism-website/related-3-1451187580459-4.webp", "تصویر مرتبط 3 برای طراحی سایت گردشگری — الوند مارکتینگ", 900, 599, "NASA", "1451187580459-43490279c0fa"),
-  ],
-};
-
-const img_wordpress_migration: ServiceImageSet = {
-  featured: asset("images/services/wordpress-migration/featured-1483058712412-4.webp", "تصویر شاخص مهاجرت سایت به وردپرس — الوند مارکتینگ", 1200, 800, "Unsplash", "1483058712412-4245e9b90334"),
-  related: [
-    asset("images/services/wordpress-migration/related-1-1499750310107-5.webp", "تصویر مرتبط 1 برای مهاجرت سایت به وردپرس — الوند مارکتینگ", 900, 600, "Unsplash", "1499750310107-5fef28a66643"),
-    asset("images/services/wordpress-migration/related-2-1488590528505-9.webp", "تصویر مرتبط 2 برای مهاجرت سایت به وردپرس — الوند مارکتینگ", 900, 600, "Unsplash", "1488590528505-98d2b5aba04b"),
-    asset("images/services/wordpress-migration/related-3-1517430816045-d.webp", "تصویر مرتبط 3 برای مهاجرت سایت به وردپرس — الوند مارکتینگ", 900, 600, "Unsplash", "1517430816045-df4b7de11d1d"),
-  ],
-};
-
-const img_multilingual_website: ServiceImageSet = {
-  featured: asset("images/services/multilingual-website/featured-1504639725590-3.webp", "تصویر شاخص طراحی سایت چندزبانه — الوند مارکتینگ", 1200, 900, "Unsplash", "1504639725590-34d0984388bd"),
-  related: [
-    asset("images/services/multilingual-website/related-1-1555949963-ff9f.webp", "تصویر مرتبط 1 برای طراحی سایت چندزبانه — الوند مارکتینگ", 900, 600, "Unsplash", "1555949963-ff9fe0c870eb"),
-    asset("images/services/multilingual-website/related-2-1563013544-824a.webp", "تصویر مرتبط 2 برای طراحی سایت چندزبانه — الوند مارکتینگ", 900, 600, "Unsplash", "1563013544-824ae1b704d3"),
-    asset("images/services/multilingual-website/related-3-1556740758-90de.webp", "تصویر مرتبط 3 برای طراحی سایت چندزبانه — الوند مارکتینگ", 900, 600, "Unsplash", "1556740758-90de374c12ad"),
-  ],
-};
 
-const img_booking_website: ServiceImageSet = {
-  featured: asset("images/services/booking-website/featured-1600880292089-9.webp", "تصویر شاخص طراحی سایت نوبت‌دهی — الوند مارکتینگ", 1200, 1800, "Unsplash", "1600880292089-90a7e086ee0c"),
-  related: [
-    asset("images/services/booking-website/related-1-1573496359142-b.webp", "تصویر مرتبط 1 برای طراحی سایت نوبت‌دهی — الوند مارکتینگ", 900, 1348, "Unsplash", "1573496359142-b8d87734a5a2"),
-    asset("images/services/booking-website/related-2-1453928582365-b.webp", "تصویر مرتبط 2 برای طراحی سایت نوبت‌دهی — الوند مارکتینگ", 900, 599, "Unsplash", "1453928582365-b6ad33cbcf64"),
-    asset("images/services/booking-website/related-3-1511707171634-5.webp", "تصویر مرتبط 3 برای طراحی سایت نوبت‌دهی — الوند مارکتینگ", 900, 900, "William Iven", "1511707171634-5f897ff02aa9"),
-  ],
-};
 
-const img_news_website: ServiceImageSet = {
-  featured: asset("images/services/news-website/featured-1504711434969-e.webp", "تصویر شاخص طراحی سایت خبری — الوند مارکتینگ", 1200, 800, "AbsolutVision", "1504711434969-e33886168f5c"),
-  related: [
-    asset("images/services/news-website/related-1-1556761175-4b46.webp", "تصویر مرتبط 1 برای طراحی سایت خبری — الوند مارکتینگ", 900, 675, "Unsplash", "1556761175-4b46a572b786"),
-    asset("images/services/news-website/related-2-1478737270239-2.webp", "تصویر مرتبط 2 برای طراحی سایت خبری — الوند مارکتینگ", 900, 600, "Jonathan Velasquez", "1478737270239-2f02b77fc618"),
-    asset("images/services/news-website/related-3-1531297484001-8.webp", "تصویر مرتبط 3 برای طراحی سایت خبری — الوند مارکتینگ", 900, 637, "Unsplash", "1531297484001-80022131f5a1"),
-  ],
-};
 
-const img_legal_website: ServiceImageSet = {
-  featured: asset("images/services/legal-website/featured-1589829085413-5.webp", "تصویر شاخص طراحی سایت حقوقی — الوند مارکتینگ", 1200, 764, "Tingey Injury Law Firm", "1589829085413-56de8ae18c73"),
-  related: [
-    asset("images/services/legal-website/related-1-1542744173-0533.webp", "تصویر مرتبط 1 برای طراحی سایت حقوقی — الوند مارکتینگ", 900, 651, "Unsplash", "1542744173-05336fcc7ad4"),
-    asset("images/services/legal-website/related-2-1485827404703-8.webp", "تصویر مرتبط 2 برای طراحی سایت حقوقی — الوند مارکتینگ", 900, 600, "Unsplash", "1485827404703-89b55fcc595e"),
-    asset("images/services/legal-website/related-3-1484788984921-0.webp", "تصویر مرتبط 3 برای طراحی سایت حقوقی — الوند مارکتینگ", 900, 560, "Unsplash", "1484788984921-03950022c9ef"),
-  ],
-};
 
 
 
-const img_ecommerce_seo: ServiceImageSet = {
-  featured: asset("images/services/ecommerce-seo/featured-1556742049-0cfe.webp", "تصویر شاخص سئو سایت فروشگاهی — الوند مارکتینگ", 1200, 801, "CardMapr.nl", "1556742049-0cfed4f6a45d"),
-  related: [
-    asset("images/services/ecommerce-seo/related-1-p0.webp", "تصویر مرتبط 1 برای سئو سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-0"),
-    asset("images/services/ecommerce-seo/related-2-p1.webp", "تصویر مرتبط 2 برای سئو سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-1"),
-    asset("images/services/ecommerce-seo/related-3-p2.webp", "تصویر مرتبط 3 برای سئو سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-2"),
-  ],
-};
 
-const img_medical_seo: ServiceImageSet = {
-  featured: asset("images/services/medical-seo/featured-p3.webp", "تصویر شاخص سئو پزشکی — الوند مارکتینگ", 1200, 804, "Alejandro Escamilla", "picsum-3"),
-  related: [
-    asset("images/services/medical-seo/related-1-p4.webp", "تصویر مرتبط 1 برای سئو پزشکی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-4"),
-    asset("images/services/medical-seo/related-2-p5.webp", "تصویر مرتبط 2 برای سئو پزشکی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-5"),
-    asset("images/services/medical-seo/related-3-p6.webp", "تصویر مرتبط 3 برای سئو پزشکی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-6"),
-  ],
-};
 
-const img_international_seo: ServiceImageSet = {
-  featured: asset("images/services/international-seo/featured-p7.webp", "تصویر شاخص سئو بین‌المللی — الوند مارکتینگ", 1200, 804, "Alejandro Escamilla", "picsum-7"),
-  related: [
-    asset("images/services/international-seo/related-1-p8.webp", "تصویر مرتبط 1 برای سئو بین‌المللی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-8"),
-    asset("images/services/international-seo/related-2-p9.webp", "تصویر مرتبط 2 برای سئو بین‌المللی — الوند مارکتینگ", 900, 603, "Alejandro Escamilla", "picsum-9"),
-    asset("images/services/international-seo/related-3-p10.webp", "تصویر مرتبط 3 برای سئو بین‌المللی — الوند مارکتینگ", 900, 603, "Paul Jarvis", "picsum-10"),
-  ],
-};
 
 
 
-const img_video_content: ServiceImageSet = {
-  featured: asset("images/services/video-content/featured-1574717024653-6.webp", "تصویر شاخص تولید محتوا ویدیویی — الوند مارکتینگ", 1200, 800, "Jakob Owens", "1574717024653-61fd2cf4d44d"),
-  related: [
-    asset("images/services/video-content/related-1-p14.webp", "تصویر مرتبط 1 برای تولید محتوا ویدیویی — الوند مارکتینگ", 900, 603, "Paul Jarvis", "picsum-14"),
-    asset("images/services/video-content/related-2-1611162616305-c.webp", "تصویر مرتبط 2 برای تولید محتوا ویدیویی — الوند مارکتینگ", 900, 675, "Souvik Banerjee", "1611162616305-c69b3fa7fbe0"),
-    asset("images/services/video-content/related-3-p15.webp", "تصویر مرتبط 3 برای تولید محتوا ویدیویی — الوند مارکتینگ", 900, 603, "Paul Jarvis", "picsum-15"),
-  ],
-};
 
 
 
@@ -255,36 +92,45 @@ const img_video_content: ServiceImageSet = {
 
 
 
-const img_malware_cleanup: ServiceImageSet = {
-  featured: asset("images/services/malware-cleanup/featured-p81.webp", "تصویر شاخص پاکسازی سایت هک‌شده — الوند مارکتینگ", 1200, 804, "Sander Weeteling", "picsum-81"),
-  related: [
-    asset("images/services/malware-cleanup/related-1-p82.webp", "تصویر مرتبط 1 برای پاکسازی سایت هک‌شده — الوند مارکتینگ", 900, 603, "Rula Sibai", "picsum-82"),
-    asset("images/services/malware-cleanup/related-2-p83.webp", "تصویر مرتبط 2 برای پاکسازی سایت هک‌شده — الوند مارکتینگ", 900, 603, "Julie Geiger", "picsum-83"),
-    asset("images/services/malware-cleanup/related-3-p84.webp", "تصویر مرتبط 3 برای پاکسازی سایت هک‌شده — الوند مارکتینگ", 900, 603, "Johnny Lam", "picsum-84"),
-  ],
-};
 
-const img_ecommerce_support: ServiceImageSet = {
-  featured: asset("images/services/ecommerce-support/featured-p85.webp", "تصویر شاخص پشتیبانی سایت فروشگاهی — الوند مارکتینگ", 1200, 804, "Gozha Net", "picsum-85"),
-  related: [
-    asset("images/services/ecommerce-support/related-1-p87.webp", "تصویر مرتبط 1 برای پشتیبانی سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Barcelona", "picsum-87"),
-    asset("images/services/ecommerce-support/related-2-p88.webp", "تصویر مرتبط 2 برای پشتیبانی سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Barcelona", "picsum-88"),
-    asset("images/services/ecommerce-support/related-3-p89.webp", "تصویر مرتبط 3 برای پشتیبانی سایت فروشگاهی — الوند مارکتینگ", 900, 603, "Vectorbeast", "picsum-89"),
-  ],
-};
 
 
 
 
 
-const img_ecommerce_app: ServiceImageSet = {
-  featured: asset("images/services/ecommerce-app/featured-p99.webp", "تصویر شاخص طراحی اپلیکیشن فروشگاهی — الوند مارکتینگ", 1200, 804, "Jon Toney", "picsum-99"),
-  related: [
-    asset("images/services/ecommerce-app/related-1-p100.webp", "تصویر مرتبط 1 برای طراحی اپلیکیشن فروشگاهی — الوند مارکتینگ", 900, 603, "Tina Rataj", "picsum-100"),
-    asset("images/services/ecommerce-app/related-2-p101.webp", "تصویر مرتبط 2 برای طراحی اپلیکیشن فروشگاهی — الوند مارکتینگ", 900, 603, "Christian Bardenhorst", "picsum-101"),
-    asset("images/services/ecommerce-app/related-3-p102.webp", "تصویر مرتبط 3 برای طراحی اپلیکیشن فروشگاهی — الوند مارکتینگ", 900, 603, "Ben Moore", "picsum-102"),
-  ],
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -651,6 +497,190 @@ const img_plp_45: ServiceImageSet = {
   ],
 };
 
+const img_pdp_01: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-01-tarahi-site-pezeshki-medical-site-versions.webp", "اینفوگرافیک چهار نسخه طراحی سایت پزشکی: مطب تک‌پزشک، کلینیک چندتخصصی، بیمارستان و درمانگاه، آزمایشگاه و مرکز تصویربرداری با نیاز اصلی و ماژول‌های کلیدی هرکدام", 1400, 547, "الوند مارکتینگ", "4442ea47ce38d88c"),
+  related: [
+    asset("images/pdp/pdp-01-tarahi-site-pezeshki-medical-site-compliance-rules.webp", "اینفوگرافیک ضوابط نظام پزشکی در طراحی سایت مطب: مشخصات و شماره نظام پزشکی، عنوان تخصص، نشانی و تلفن ثابت، کد QR مجوز، نام‌گذاری مطب، تصویر بیمار و برند تجهیزات", 1400, 723, "الوند مارکتینگ", "bb3a17dc0a59d202"),
+    asset("images/pdp/pdp-01-tarahi-site-pezeshki-medical-site-design-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت پزشکی از جلسه شناخت و بررسی ضوابط تا تست نوبت‌گیری با گوشی و آموزش پنل منشی", 1400, 855, "الوند مارکتینگ", "1bf96f6eaa32c647"),
+  ],
+};
+
+const img_pdp_02: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-02-tarahi-landing-page-landing-page-deliverables.webp", "اینفوگرافیک اجزای لندینگ پیج: بخش اول منطبق با آگهی، نگارش صفحه فرود، فرم کوتاه یا دکمه تماس و واتساپ، عناصر اعتمادساز، سرعت موبایل، ردیابی تبدیل و صفحه تشکر", 1400, 703, "الوند مارکتینگ", "b244a10c03403edd"),
+  related: [
+    asset("images/pdp/pdp-02-tarahi-landing-page-ga4-landing-key-events.webp", "نمای بازسازی‌شده بخش Key events در گوگل آنالیتیکس ۴ با داده نمونه؛ ارسال فرم صفحه فرود، کلیک تماس و کلیک واتساپ به‌عنوان رویداد کلیدی", 1440, 620, "الوند مارکتینگ", "9b6d9d6976093b68"),
+    asset("images/pdp/pdp-02-tarahi-landing-page-landing-page-by-channel.webp", "اینفوگرافیک نیاز لندینگ پیج در هر کانال ورودی: گوگل ادز، تبلیغات اینستاگرام، پیامک و ایمیل، رویداد و وبینار", 1400, 538, "الوند مارکتینگ", "a2b0b100277967ad"),
+    asset("images/pdp/pdp-02-tarahi-landing-page-landing-vs-site-page-vs-template.webp", "جدول مقایسه لندینگ پیج اختصاصی با صفحه معمولی داخل سایت و قالب آماده صفحه‌ساز از نظر تمرکز روی یک اقدام، هم‌خوانی با آگهی، سرعت موبایل و ردیابی تبدیل", 1400, 597, "الوند مارکتینگ", "58380ddd5e3ef77c"),
+  ],
+};
+
+const img_pdp_03: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-03-seo-site-foroushgahi-woocommerce-product-categories.webp", "تصویر واقعی صفحه دسته‌های محصولات ووکامرس با نام دسته، نامک، دسته مادر و متن توضیح دسته؛ پایه معماری دسته و زیردسته در سئو فروشگاهی", 1440, 900, "الوند مارکتینگ", "8e0e7ace2ef74e6b"),
+  related: [
+    asset("images/pdp/pdp-03-seo-site-foroushgahi-store-technical-seo-problems.webp", "اینفوگرافیک مشکلات سئو تکنیکال فروشگاه اینترنتی: آدرس‌های ترکیبی فیلتر، محصول ناموجود، صفحه‌بندی دسته‌ها، نتایج جست‌وجوی داخلی و سرعت کاتالوگ بزرگ همراه با اثر و اقدام", 1400, 650, "الوند مارکتینگ", "cbbf5cc8b7afe085"),
+    asset("images/pdp/pdp-03-seo-site-foroushgahi-gsc-product-snippets.webp", "نمای بازسازی‌شده گزارش Product snippets در سرچ کنسول با داده نمونه؛ محصولات با داده ساختاریافته نامعتبر، دلیل خطا و هشدار نبود نظر خریداران", 1440, 900, "الوند مارکتینگ", "c7db209e534ff700"),
+    asset("images/pdp/pdp-03-seo-site-foroushgahi-store-seo-process.webp", "اینفوگرافیک هفت گام سئو سایت فروشگاهی: ممیزی فروشگاه، نقشه کلمات دسته و محصول، اصلاحات فنی، بهینه‌سازی دسته‌های پرسود، محتوا و لینک داخلی، لینک‌سازی و گزارش ماهانه", 1400, 645, "الوند مارکتینگ", "0eedd70e5947c5bd"),
+  ],
+};
+
+const img_pdp_04: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-04-tarahi-site-restaurant-restaurant-site-versions.webp", "اینفوگرافیک نسخه‌های طراحی سایت رستوران: رستوران و فست‌فود با سفارش بیرون‌بر، رستوران و کافی‌شاپ با رزرو، کافه و رستوران زنجیره‌ای با منوی هر شعبه", 1400, 537, "الوند مارکتینگ", "42cde95bc54dfb26"),
+  related: [
+    asset("images/pdp/pdp-04-tarahi-site-restaurant-restaurant-qr-menu-features.webp", "اینفوگرافیک امکانات منوی دیجیتال QR رستوران: منوی HTML به‌جای PDF، دسته‌بندی و عکس هر غذا، ناموجود کردن موقت آیتم، QR اختصاصی هر میز و منوی دوزبانه", 1400, 522, "الوند مارکتینگ", "26a0b5dd6ee8667d"),
+    asset("images/pdp/pdp-04-tarahi-site-restaurant-restaurant-site-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت رستوران از جلسه شناخت و ساختار منو تا تست سفارش واقعی با اسکن QR و آموزش تغییر منو", 1600, 466, "الوند مارکتینگ", "cee768b22c47dc32"),
+  ],
+};
+
+const img_pdp_05: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-05-tarahi-site-amlak-real-estate-site-versions.webp", "اینفوگرافیک سه نسخه طراحی سایت املاک: دفتر مشاور املاک، گروه چنددفتری و سازنده و انبوه‌ساز با نیاز اصلی و ماژول‌های کلیدی", 1400, 507, "الوند مارکتینگ", "8e6015c99766e184"),
+  related: [
+    asset("images/pdp/pdp-05-tarahi-site-amlak-real-estate-listing-fields.webp", "اینفوگرافیک امکانات ثبت آگهی املاک: فیلدهای تخصصی ملک، ودیعه و اجاره جدا از قیمت فروش، فیلتر محله، گالری با واترمارک، کد فایل و فایل‌های ویژه", 1400, 605, "الوند مارکتینگ", "54d6fb6201951138"),
+    asset("images/pdp/pdp-05-tarahi-site-amlak-real-estate-site-comparison.webp", "جدول مقایسه سایت املاک اختصاصی با پلتفرم‌های عمومی آگهی و قالب آماده املاک از نظر رقابت در صفحه، فیلدها، پنل مشاور، مالکیت داده و جذب ترافیک", 1400, 597, "الوند مارکتینگ", "90a9f4d4148637f2"),
+  ],
+};
+
+const img_pdp_06: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-06-tarahi-site-amoozeshi-education-site-versions.webp", "اینفوگرافیک چهار نسخه طراحی سایت آموزشی: آموزشگاه حضوری، مدرس مستقل، آکادمی چندمدرسه و آموزش سازمانی با نیاز اصلی و ماژول‌های کلیدی", 1400, 507, "الوند مارکتینگ", "435a1c8ee776b259"),
+  related: [
+    asset("images/pdp/pdp-06-tarahi-site-amoozeshi-secure-course-video.webp", "اینفوگرافیک پخش امن ویدیو در سایت آموزشی: پخش رمزنگاری‌شده، واترمارک پویا با شماره دانشجو، محدودیت تعداد دستگاه، میزبانی جداگانه ویدیو و فایل‌های تکمیلی", 1400, 463, "الوند مارکتینگ", "b0372e11f5a87bdb"),
+    asset("images/pdp/pdp-06-tarahi-site-amoozeshi-education-site-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت آموزشی از جلسه شناخت و ساختار دوره تا بارگذاری دوره نمونه، تست خرید و آموزش پنل", 1400, 771, "الوند مارکتینگ", "26be3fad14b9c6d8"),
+  ],
+};
+
+const img_pdp_07: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-07-tarahi-site-sanati-industrial-site-versions.webp", "اینفوگرافیک نیاز هر نوع سایت صنعتی: کارخانه، تولیدی، تأمین‌کننده تجهیزات و قطعات و صادرکننده با ماژول‌های کلیدی هرکدام", 1400, 537, "الوند مارکتینگ", "933ddba9ce808f35"),
+  related: [
+    asset("images/pdp/pdp-07-tarahi-site-sanati-industrial-online-catalog.webp", "اینفوگرافیک امکانات کاتالوگ صنعتی آنلاین: جدول مشخصات فنی، فیلتر با پارامتر فنی، دانلود دیتاشیت و کاتالوگ PDF، محصولات مرتبط و مدیریت کاتالوگ از پنل", 1400, 492, "الوند مارکتینگ", "32048c12e3bdf1cf"),
+    asset("images/pdp/pdp-07-tarahi-site-sanati-industrial-site-comparison.webp", "جدول مقایسه سایت صنعتی با کاتالوگ و استعلام، فروشگاه اینترنتی و سایت شرکتی ساده از نظر مشخصات فنی، مسیر خرید و کاربرد", 1400, 482, "الوند مارکتینگ", "370708d3ce4986fe"),
+  ],
+};
+
+const img_pdp_08: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-08-tarahi-site-dandanpezeshki-dental-appointment-by-treatment.webp", "اینفوگرافیک نوبت‌دهی سایت دندانپزشکی بر اساس نوع درمان: معاینه و جرم‌گیری، ترمیم و درمان ریشه، مشاوره ایمپلنت، ارتودنسی و مسیر اورژانسی دندان‌درد", 1400, 622, "الوند مارکتینگ", "7b53192230d608fa"),
+  related: [
+    asset("images/pdp/pdp-08-tarahi-site-dandanpezeshki-dental-site-compliance.webp", "اینفوگرافیک ضوابط سایت دندانپزشکی: نبود گالری قبل و بعد، شرایط تصویر بیمار، عدم استفاده از عنوان زیبایی، نبود برند ایمپلنت، نام و عنوان مطابق پروانه و کد QR مجوز", 1400, 522, "الوند مارکتینگ", "c18a3fa243f19a9b"),
+    asset("images/pdp/pdp-08-tarahi-site-dandanpezeshki-dental-site-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت دندانپزشکی از جلسه شناخت و بررسی ضوابط تا تست نوبت‌گیری برای چند نوع درمان و آموزش پنل", 1400, 646, "الوند مارکتینگ", "184264c1cc7c35d4"),
+  ],
+};
+
+const img_pdp_09: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-09-tarahi-site-clinic-zibayi-beauty-clinic-site-versions.webp", "اینفوگرافیک تفاوت سایت کلینیک زیبایی دارای پروانه، کلینیک پوست و مو، مطب پزشک و سالن زیبایی غیرپزشکی از نظر خدمات قابل معرفی و ماژول‌ها", 1400, 537, "الوند مارکتینگ", "48b0c0182ec23466"),
+  related: [
+    asset("images/pdp/pdp-09-tarahi-site-clinic-zibayi-beauty-clinic-advertising-rules.webp", "اینفوگرافیک ضوابط تبلیغات پزشکی در سایت کلینیک زیبایی: گالری قبل و بعد، تصویر مراجع، عنوان کلینیک و مرکز، عنوان زیبایی، برند دستگاه، چهره افراد مشهور و وعده نتیجه", 1400, 765, "الوند مارکتینگ", "9ef5da5b28814460"),
+    asset("images/pdp/pdp-09-tarahi-site-clinic-zibayi-beauty-clinic-site-comparison.webp", "جدول مقایسه سایت تخصصی کلینیک زیبایی با سایت پزشکی عمومی و صفحه اینستاگرام از نظر درمان چندجلسه‌ای، رزرو مشاوره، ضوابط و مالکیت داده مراجعان", 1400, 540, "الوند مارکتینگ", "e275ac42295630ab"),
+  ],
+};
+
+const img_pdp_10: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-10-seo-pezeshki-medical-content-credibility-checklist.webp", "چک‌لیست محتوای سلامت در سئو پزشکی: صفحه هر خدمت و بیماری، نام نویسنده یا بازبین پزشکی و تاریخ بازبینی، منابع علمی، تأیید نهایی پزشک و هماهنگی با ضوابط تبلیغات", 1400, 574, "الوند مارکتینگ", "74e141f032d6671e"),
+  related: [
+    asset("images/pdp/pdp-10-seo-pezeshki-gsc-doctor-name-queries.webp", "نمای بازسازی‌شده گزارش عملکرد سرچ کنسول با فیلتر جست‌وجوهای نام پزشک نمونه؛ عبارت‌های نام پزشک همراه با نوبت، آدرس و تخصص", 1440, 1090, "الوند مارکتینگ", "d6a40023a8e43cef"),
+    asset("images/pdp/pdp-10-seo-pezeshki-dental-equipment-health-tourism-seo.webp", "اینفوگرافیک تمرکز سئو در سه حوزه: سئو سایت دندان‌پزشکی، سئو سایت تجهیزات پزشکی و گردشگری سلامت", 1400, 463, "الوند مارکتینگ", "155570d70eb220d2"),
+    asset("images/pdp/pdp-10-seo-pezeshki-medical-seo-process.webp", "اینفوگرافیک هفت گام اجرای سئو پزشکی از بررسی وضعیت و سئو محلی تا محتوای سلامت و گزارش ماهانه", 1400, 855, "الوند مارکتینگ", "325cccdcba470c25"),
+  ],
+};
+
+const img_pdp_11: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-11-tarahi-application-foroushgahi-shop-app-features.webp", "اینفوگرافیک امکانات اپلیکیشن فروشگاهی در دو بخش خرید و پرداخت و بازگرداندن مشتری: ورود با کد یک‌بارمصرف، سبد خرید ماندگار، اعلان، علاقه‌مندی‌ها و سفارش دوباره", 1400, 594, "الوند مارکتینگ", "49da51e3d06f215b"),
+  related: [
+    asset("images/pdp/pdp-11-tarahi-application-foroushgahi-native-crossplatform-pwa-comparison.webp", "جدول مقایسه اپ نیتیو، اپ کراس‌پلتفرم و وب‌اپلیکیشن فروشگاهی PWA از نظر روش ساخت، کارایی، انتشار در مارکت و کاربرد", 1400, 568, "الوند مارکتینگ", "9739b619eda6589b"),
+    asset("images/pdp/pdp-11-tarahi-application-foroushgahi-shop-app-build-steps.webp", "اینفوگرافیک هفت مرحله ساخت اپلیکیشن فروشگاهی از تعریف نسخه اول و اتصال API به فروشگاه تا انتشار در مارکت‌ها و تحویل کد منبع کامل", 1400, 645, "الوند مارکتینگ", "033f1d8ab3f5125b"),
+  ],
+};
+
+const img_pdp_12: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-12-tarahi-site-khadamati-service-business-types.webp", "اینفوگرافیک کسب‌وکارهای مناسب سایت خدماتی: تعمیرات و تأسیسات، نظافت و سم‌پاشی، باربری و اسباب‌کشی، نصب تجهیزات و دوربین، خدمات خودرو در محل و خدمات مراقبتی در منزل", 1400, 547, "الوند مارکتینگ", "66bef00dc5fc37d9"),
+  related: [
+    asset("images/pdp/pdp-12-tarahi-site-khadamati-service-request-panel-flow.webp", "اینفوگرافیک پنل مدیریت درخواست در سایت خدماتی: وضعیت درخواست‌ها، ارجاع به کارشناس با پیامک، ثبت هزینه نهایی و پرداخت آنلاین و گزارش به تفکیک خدمت و منطقه", 1400, 437, "الوند مارکتینگ", "e7ffe544db167c2a"),
+    asset("images/pdp/pdp-12-tarahi-site-khadamati-service-vs-corporate-vs-landing.webp", "جدول مقایسه سایت خدماتی، سایت شرکتی و لندینگ پیج از نظر هدف اصلی، صفحات، امکانات ویژه و کاربرد", 1400, 540, "الوند مارکتینگ", "901e1a404dfec759"),
+  ],
+};
+
+const img_pdp_13: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-13-tarahi-site-gardeshgari-tourism-site-versions.webp", "اینفوگرافیک نسخه‌های طراحی سایت گردشگری: آژانس گردشگری، برگزارکننده تور طبیعت‌گردی، هتل و هتل‌آپارتمان و اقامتگاه بوم‌گردی با ماژول‌های کلیدی", 1400, 706, "الوند مارکتینگ", "a76bc3c59c211285"),
+  related: [
+    asset("images/pdp/pdp-13-tarahi-site-gardeshgari-hotel-booking-features.webp", "اینفوگرافیک امکانات سایت رزرو هتل: انواع اتاق، تقویم نرخ و موجودی، رزرو مستقیم و بیعانه، مدیریت رزروها در پنل پذیرش و هماهنگی موجودی با سامانه‌های رزرو", 1400, 492, "الوند مارکتینگ", "ca992cf7f0ae2822"),
+    asset("images/pdp/pdp-13-tarahi-site-gardeshgari-tourism-site-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت گردشگری از تعریف ساختار تور یا اتاق و قواعد لغو تا پیاده‌سازی موتور رزرو و تست رزرو واقعی", 1600, 467, "الوند مارکتینگ", "94fa385921f643e3"),
+  ],
+};
+
+const img_pdp_14: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-14-tolid-mohtava-video-video-content-types.webp", "اینفوگرافیک انواع تولید محتوای ویدیویی: معرفی برند، معرفی محصول، ویدیوی آموزشی، ریلز و استوری اینستاگرام، ویدیوی تبلیغاتی و ویدیوی هوش مصنوعی با کاربرد هرکدام", 1400, 768, "الوند مارکتینگ", "b5d9b9392c7f3fd3"),
+  related: [
+    asset("images/pdp/pdp-14-tolid-mohtava-video-video-project-deliverables.webp", "اینفوگرافیک تحویلی‌های پروژه تولید ویدیو: سناریو و استوری‌بورد، تصویربرداری، تدوین و صداگذاری، زیرنویس، خروجی هر کانال، فایل‌های خام و دو مرحله اصلاح", 1400, 645, "الوند مارکتینگ", "045389ca9276a7cf"),
+    asset("images/pdp/pdp-14-tolid-mohtava-video-video-production-methods-comparison.webp", "جدول مقایسه تصویربرداری حرفه‌ای حضوری، ضبط توسط تیم شما با راهنما و ویدیوی هوش مصنوعی از نظر کیفیت تصویر، حس واقعی بودن برند و کاربرد", 1400, 540, "الوند مارکتینگ", "2ce9a7df9d4c3839"),
+  ],
+};
+
+const img_pdp_15: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-15-mohajerat-site-be-wordpress-wordpress-tools-import.webp", "تصویر واقعی صفحه درون‌ریزی وردپرس فارسی با درون‌ریز WordPress و RSS؛ مسیر انتقال نوشته‌ها، برگه‌ها و رسانه از سایت قبلی", 1440, 900, "الوند مارکتینگ", "95806f0df9d6031a"),
+  related: [
+    asset("images/pdp/pdp-15-mohajerat-site-be-wordpress-migration-seo-preservation.webp", "اینفوگرافیک حفظ سئو در مهاجرت سایت به وردپرس: فهرست آدرس‌های فعلی، نقشه ریدایرکت ۳۰۱، اصلاح لینک‌های داخلی، حفظ هدینگ و متن صفحات پررتبه و پایش خطاهای ۴۰۴", 1400, 466, "الوند مارکتینگ", "b99335e77d8c0ef9"),
+    asset("images/pdp/pdp-15-mohajerat-site-be-wordpress-wordpress-permalink-structure.webp", "تصویر واقعی تنظیمات پیوند یکتای وردپرس با ساختار سفارشی؛ هم‌شکل کردن آدرس‌های تازه با آدرس‌های قدیمی برای کاهش ریدایرکت", 1440, 900, "الوند مارکتینگ", "df15ca7a64dae358"),
+    asset("images/pdp/pdp-15-mohajerat-site-be-wordpress-migration-vs-upgrade-vs-redesign.webp", "جدول مقایسه مهاجرت به وردپرس، ارتقای نسخه سیستم فعلی و بازطراحی کامل از نظر ظاهر، محتوا و آدرس‌ها، ریسک سئو و مدیریت محتوا", 1400, 597, "الوند مارکتینگ", "8a41ac00a0767f4f"),
+  ],
+};
+
+const img_pdp_16: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-16-paksazi-site-hack-shode-hacked-site-signs-first-actions.webp", "اینفوگرافیک نشانه‌های سایت هک‌شده همراه با اقدام فوری و کاری که نباید انجام شود: ریدایرکت مشکوک، صفحات اسپم در گوگل، کاربر مدیر ناشناس، هشدار هاستینگ و ایمیل اسپم", 1400, 650, "الوند مارکتینگ", "0e4856a5b39dca14"),
+  related: [
+    asset("images/pdp/pdp-16-paksazi-site-hack-shode-wordpress-plugins-audit.webp", "تصویر واقعی فهرست افزونه‌های وردپرس با افزونه غیرفعال و نسخه هر افزونه؛ بررسی افزونه‌ها برای پیدا کردن و بستن مسیر نفوذ", 1440, 900, "الوند مارکتینگ", "e3119fbd56647305"),
+    asset("images/pdp/pdp-16-paksazi-site-hack-shode-gsc-security-issues.webp", "نمای بازسازی‌شده گزارش Security issues در سرچ کنسول با داده نمونه؛ نوع آلودگی، نمونه آدرس‌ها و درخواست بازبینی پس از پاکسازی", 1440, 820, "الوند مارکتینگ", "9743dd68dd1d20e9"),
+    asset("images/pdp/pdp-16-paksazi-site-hack-shode-wordpress-profile-password-sessions.webp", "تصویر واقعی بخش مدیریت حساب در پروفایل کاربر وردپرس با ایجاد رمز تازه و خروج از همه نشست‌های دیگر؛ امن‌سازی دسترسی‌ها پس از پاکسازی هک", 1440, 900, "الوند مارکتینگ", "259e1c383c176256"),
+  ],
+};
+
+const img_pdp_17: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-17-tarahi-site-chandzabane-bilingual-or-multilingual-decision.webp", "اینفوگرافیک انتخاب سایت دوزبانه یا چندزبانه بر اساس وضعیت کسب‌وکار: مشتری خارجی محدود، صادرات به بازار عربی‌زبان، مخاطب اصلی خارجی و کاتالوگ بزرگ", 1400, 538, "الوند مارکتینگ", "ccfbf4512f3dfcf6"),
+  related: [
+    asset("images/pdp/pdp-17-tarahi-site-chandzabane-language-url-structures.webp", "جدول مقایسه ساختار آدرس سایت چندزبانه: زیرپوشه، زیردامنه و دامنه جدا با نمونه آدرس، مزیت، محدودیت و کاربرد", 1400, 568, "الوند مارکتینگ", "5082973a3fe06462"),
+    asset("images/pdp/pdp-17-tarahi-site-chandzabane-rtl-ltr-layout-checks.webp", "اینفوگرافیک الزامات چیدمان راست‌چین و چپ‌چین: پشتیبانی کامل RTL و LTR، فونت هر خط، اعداد و تاریخ مطابق عرف هر زبان و تست موبایل هر زبان", 1400, 432, "الوند مارکتینگ", "f09299f167fc332b"),
+  ],
+};
+
+const img_pdp_18: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-18-tarahi-site-nobat-dehi-booking-unit-by-business.webp", "اینفوگرافیک واحد نوبت و نکته کلیدی سامانه نوبت‌دهی برای سالن زیبایی، مشاوره و روانشناسی، باشگاه و کلاس، کارواش و خدمات خودرو و مطب و کلینیک", 1400, 546, "الوند مارکتینگ", "beb16f92eb6c573a"),
+  related: [
+    asset("images/pdp/pdp-18-tarahi-site-nobat-dehi-booking-panels-and-reports.webp", "اینفوگرافیک پنل‌های سامانه نوبت‌دهی: پنل مدیر با همه تقویم‌ها، پنل پرسنل، پنل مشتری و گزارش نوبت‌های بی‌حضور", 1400, 409, "الوند مارکتینگ", "0cdaf71fb277aa12"),
+    asset("images/pdp/pdp-18-tarahi-site-nobat-dehi-booking-system-comparison.webp", "جدول مقایسه سامانه نوبت اختصاصی، اپلیکیشن‌های عمومی نوبت‌دهی و نوبت دستی از نظر هزینه هر نوبت، نمایش کنار رقبا، انعطاف قواعد، داده مشتری و یادآوری", 1400, 540, "الوند مارکتینگ", "322cb7f7202af5c7"),
+  ],
+};
+
+const img_pdp_19: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-19-tarahi-site-khabari-news-site-versions.webp", "اینفوگرافیک نسخه‌های طراحی سایت خبری: خبرگزاری، خبری تحلیلی، نشریه تخصصی و صنفی و روابط عمومی سازمان با نیاز اصلی و ماژول‌های کلیدی", 1400, 507, "الوند مارکتینگ", "651e8489e1af23d6"),
+  related: [
+    asset("images/pdp/pdp-19-tarahi-site-khabari-wordpress-editorial-post-status.webp", "تصویر واقعی فهرست نوشته‌های وردپرس با وضعیت‌های پیش‌نویس، در انتظار بررسی و زمان‌بندی‌شده؛ گردش کار خبرنگار و سردبیر در سایت خبری", 1440, 900, "الوند مارکتینگ", "dd74eb6b398e0f21"),
+    asset("images/pdp/pdp-19-tarahi-site-khabari-wordpress-user-roles.webp", "تصویر واقعی فرم افزودن کاربر وردپرس با انتخاب نقش نویسنده، ویرایشگر یا مدیر؛ حساب و سطح دسترسی جداگانه برای هر عضو تحریریه", 1440, 900, "الوند مارکتینگ", "24c4e204b594bcd1"),
+    asset("images/pdp/pdp-19-tarahi-site-khabari-news-site-comparison.webp", "جدول مقایسه سایت خبری اختصاصی، قالب خبری آماده و کانال پیام‌رسان از نظر گردش کار تحریریه، سرعت زیر بار، دیده شدن در گوگل، بایگانی و درآمد تبلیغاتی", 1400, 594, "الوند مارکتینگ", "213ff30060ebd11a"),
+  ],
+};
+
+const img_pdp_20: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-20-seo-beynolmelali-international-market-research.webp", "اینفوگرافیک تحقیق بازار در سئو بین‌المللی: تقاضا، رقابت، توان فروش و هزینه محتوا با پرسش و منبع داده هرکدام", 1400, 612, "الوند مارکتینگ", "44582cff7291a508"),
+  related: [
+    asset("images/pdp/pdp-20-seo-beynolmelali-gsc-performance-countries.webp", "نمای بازسازی‌شده گزارش عملکرد سرچ کنسول در زبانه کشورها با داده نمونه؛ کلیک، نمایش و جایگاه سایت در هر کشور بازار هدف", 1440, 1090, "الوند مارکتینگ", "01c599cc6a1ddc08"),
+    asset("images/pdp/pdp-20-seo-beynolmelali-multilingual-technical-seo.webp", "اینفوگرافیک سئو تکنیکال سایت چندزبانه: ساختار آدرس زبان‌ها، پیاده‌سازی و بررسی hreflang، سرعت برای کاربر خارجی و نقشه سایت چندزبانه", 1400, 433, "الوند مارکتینگ", "570fec14f6f6b845"),
+    asset("images/pdp/pdp-20-seo-beynolmelali-international-seo-process.webp", "اینفوگرافیک شش گام اجرای سئو بین‌المللی از تحقیق بازار و کلمات هر کشور تا گزارش ورودی هر نسخه زبانی", 1600, 466, "الوند مارکتینگ", "c1871d41acfe72b1"),
+  ],
+};
+
+const img_pdp_21: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-21-poshtibani-site-foroushgahi-safe-woocommerce-update-flow.webp", "اینفوگرافیک روند به‌روزرسانی امن ووکامرس: تست روی نسخه آزمایشی، بررسی سازگاری درگاه و افزونه‌ها، اجرا در ساعات کم‌فروش و استفاده از قالب و افزونه اورجینال", 1400, 436, "الوند مارکتینگ", "afdad8512427067a"),
+  related: [
+    asset("images/pdp/pdp-21-poshtibani-site-foroushgahi-woocommerce-system-status.webp", "تصویر واقعی صفحه وضعیت سیستم ووکامرس با نسخه ووکامرس و وردپرس و زبانه گزارش‌ها؛ بررسی خطاها و پرداخت‌های ناموفق در پشتیبانی فروشگاه", 1440, 900, "الوند مارکتینگ", "b7613344950ea038"),
+    asset("images/pdp/pdp-21-poshtibani-site-foroushgahi-store-campaign-readiness-checklist.webp", "چک‌لیست آمادگی فروشگاه اینترنتی پیش از کمپین: ظرفیت هاست و کش، تست کد تخفیف، پایش روزهای اوج، نسخه پشتیبان، تست خرید و بازگشت از درگاه و کنترل موجودی", 1400, 457, "الوند مارکتینگ", "bd2e32e840bf1fd6"),
+    asset("images/pdp/pdp-21-poshtibani-site-foroushgahi-store-support-comparison.webp", "جدول مقایسه قرارداد پشتیبانی سایت فروشگاهی، پشتیبانی موردی هنگام خرابی و نگهداری توسط تیم داخلی از نظر پیشگیری، به‌روزرسانی، زمان پاسخ و نسخه پشتیبان", 1400, 597, "الوند مارکتینگ", "4314212b8d1f985e"),
+  ],
+};
+
+const img_pdp_22: ServiceImageSet = {
+  featured: asset("images/pdp/pdp-22-tarahi-site-hoghooghi-law-site-versions.webp", "اینفوگرافیک نسخه‌های طراحی سایت حقوقی: وکیل مستقل، دفتر وکالت مشترک و مؤسسه حقوقی با نیاز اصلی و ماژول‌های کلیدی", 1400, 507, "الوند مارکتینگ", "f520161024a79395"),
+  related: [
+    asset("images/pdp/pdp-22-tarahi-site-hoghooghi-law-site-professional-rules.webp", "اینفوگرافیک ملاحظات شئون وکالت در سایت حقوقی: نبود وعده نتیجه، عناوین مطابق پروانه، لحن رسمی، نبود ادعای ارتباط با مراجع قضایی و محرمانگی اطلاعات موکلان", 1400, 614, "الوند مارکتینگ", "2093ef62a2380128"),
+    asset("images/pdp/pdp-22-tarahi-site-hoghooghi-law-site-steps.webp", "اینفوگرافیک هفت مرحله طراحی سایت حقوقی از تعریف صفحات حوزه‌های کاری تا پیاده‌سازی رزرو و پرداخت مشاوره و بازبینی متن نهایی با شما", 1600, 465, "الوند مارکتینگ", "64597e8ad333bb20"),
+  ],
+};
+
 export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
   "آنالیتیکس": img_plp_10,
   "آنالیتیکس/تگ-منیجر": img_plp_44,
@@ -701,28 +731,28 @@ export const serviceImagesBySlug: Record<string, ServiceImageSet> = {
   "پشتیبانی-سایت/رفع-ارور": img_plp_41,
   "پشتیبانی-سایت/مانیتورینگ": img_plp_39,
   "پشتیبانی-سایت/نصب-قالب-و-افزونه": img_plp_40,
-  "طراحی-سایت/پزشکی": img_medical_website,
-  "طراحی-سایت/لندینگ-پیج": img_landing_page,
-  "طراحی-سایت/رستوران": img_restaurant_website,
-  "طراحی-سایت/املاک": img_real_estate_website,
-  "طراحی-سایت/آموزشی": img_education_website,
-  "طراحی-سایت/صنعتی": img_industrial_website,
-  "طراحی-سایت/دندانپزشکی": img_dental_website,
-  "طراحی-سایت/کلینیک-زیبایی": img_beauty_clinic_website,
-  "طراحی-سایت/خدماتی": img_services_website,
-  "طراحی-سایت/گردشگری": img_tourism_website,
-  "طراحی-سایت/وردپرس/مهاجرت": img_wordpress_migration,
-  "طراحی-سایت/چندزبانه": img_multilingual_website,
-  "طراحی-سایت/نوبت-دهی": img_booking_website,
-  "طراحی-سایت/خبری": img_news_website,
-  "طراحی-سایت/حقوقی": img_legal_website,
-  "سئو/فروشگاهی": img_ecommerce_seo,
-  "سئو/پزشکی": img_medical_seo,
-  "سئو/بین-المللی": img_international_seo,
-  "تولید-محتوا/ویدیویی": img_video_content,
-  "پشتیبانی-سایت/امنیت/پاکسازی-هک": img_malware_cleanup,
-  "پشتیبانی-سایت/فروشگاهی": img_ecommerce_support,
-  "اپلیکیشن-و-وب-اپ/فروشگاهی": img_ecommerce_app,
+  "اپلیکیشن-و-وب-اپ/فروشگاهی": img_pdp_11,
+  "تولید-محتوا/ویدیویی": img_pdp_14,
+  "سئو/بین-المللی": img_pdp_20,
+  "سئو/فروشگاهی": img_pdp_03,
+  "سئو/پزشکی": img_pdp_10,
+  "طراحی-سایت/آموزشی": img_pdp_06,
+  "طراحی-سایت/املاک": img_pdp_05,
+  "طراحی-سایت/حقوقی": img_pdp_22,
+  "طراحی-سایت/خبری": img_pdp_19,
+  "طراحی-سایت/خدماتی": img_pdp_12,
+  "طراحی-سایت/دندانپزشکی": img_pdp_08,
+  "طراحی-سایت/رستوران": img_pdp_04,
+  "طراحی-سایت/صنعتی": img_pdp_07,
+  "طراحی-سایت/لندینگ-پیج": img_pdp_02,
+  "طراحی-سایت/نوبت-دهی": img_pdp_18,
+  "طراحی-سایت/وردپرس/مهاجرت": img_pdp_15,
+  "طراحی-سایت/پزشکی": img_pdp_01,
+  "طراحی-سایت/چندزبانه": img_pdp_17,
+  "طراحی-سایت/کلینیک-زیبایی": img_pdp_09,
+  "طراحی-سایت/گردشگری": img_pdp_13,
+  "پشتیبانی-سایت/امنیت/پاکسازی-هک": img_pdp_16,
+  "پشتیبانی-سایت/فروشگاهی": img_pdp_21,
 };
 
 export function getServiceImages(slug: string): ServiceImageSet | undefined {

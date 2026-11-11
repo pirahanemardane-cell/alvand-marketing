@@ -12,14 +12,15 @@ export function ServiceFeaturedImage({
   priority?: boolean;
   className?: string;
 }) {
-  const isPlpPackage = image.path.includes("images/plp/");
+  const isPackageInfographic =
+    image.path.includes("images/plp/") || image.path.includes("images/pdp/");
   return (
     <figure
       className={`mx-auto flex w-full flex-col items-center ${className ?? ""}`}
     >
       <div
         className={
-          isPlpPackage
+          isPackageInfographic
             ? "relative w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-muted"
             : "relative aspect-[16/9] w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-muted"
         }
@@ -32,7 +33,7 @@ export function ServiceFeaturedImage({
           height={image.height}
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px"
           className={
-            isPlpPackage
+            isPackageInfographic
               ? "mx-auto h-auto w-full object-contain"
               : "h-full w-full object-cover"
           }
@@ -55,7 +56,8 @@ export function ServiceInlineImage({
   image: ServiceImageAsset;
   className?: string;
 }) {
-  const isPlpPackage = image.path.includes("images/plp/");
+  const isPackageInfographic =
+    image.path.includes("images/plp/") || image.path.includes("images/pdp/");
   return (
     <figure
       className={
@@ -65,7 +67,7 @@ export function ServiceInlineImage({
     >
       <div
         className={
-          isPlpPackage
+          isPackageInfographic
             ? "relative w-full overflow-hidden rounded-xl border border-border bg-muted"
             : "relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-muted"
         }
@@ -78,7 +80,7 @@ export function ServiceInlineImage({
           height={image.height}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 900px"
           className={
-            isPlpPackage
+            isPackageInfographic
               ? "mx-auto h-auto w-full object-contain"
               : "h-full w-full object-cover"
           }
