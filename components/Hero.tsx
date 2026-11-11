@@ -1,38 +1,33 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { mediaUrl } from "@/lib/media";
-import { useTheme } from "./ThemeProvider";
-
-const images = {
-  night: mediaUrl("images/hero-night.webp"),
-  morning: mediaUrl("images/hero-morning.webp"),
-} as const;
+import { motion } from "framer-motion";
+import InkRidges from "@/components/ui/ink-ridges";
 
 export default function Hero() {
-  const { mode } = useTheme();
-
   return (
-    <section className="relative isolate flex min-h-[100svh] w-full max-w-[100vw] flex-col overflow-hidden bg-background text-foreground transition-colors duration-600">
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={mode}
-            initial={{ opacity: 0, scale: 1.08 }}
-            animate={{ opacity: 1, scale: 1.05 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 animate-ambient-drift"
-            style={{
-              backgroundImage: `var(--hero-overlay), url(${images[mode]})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        </AnimatePresence>
-      </div>
-
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 pt-24 pb-16 text-center w-full">
+    <InkRidges
+      className="min-h-[100svh] w-full max-w-[100vw] bg-background text-foreground transition-colors duration-600"
+      label="نقاشی جوهر رشته‌کوه الوند"
+      seed={11}
+      layers={4}
+      mist={0.55}
+      horizon={0.58}
+      drift={0.04}
+      parallax={0.025}
+      paintIn={2200}
+      sun
+      sunColor="#c8372d"
+      sunSize={0.065}
+      sunPosition={[0.78, 0.72]}
+      moon="auto"
+      scrollDepth={0.3}
+      grain={0.28}
+      clouds={0.3}
+      glow={0.4}
+      birds={4}
+      birdsEvery={16}
+    >
+      <div className="flex h-full min-h-[100svh] flex-col items-center justify-center px-5 sm:px-8 md:px-12 lg:px-16 xl:px-24 pt-24 pb-16 text-center w-full">
         {/* Static above-the-fold copy avoids motion-driven LCP render delay. */}
         <p className="mb-4 text-sm sm:text-base font-thin tracking-wide text-accent text-center text-no-justify">
           الوند مارکتینگ
@@ -68,6 +63,6 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
-    </section>
+    </InkRidges>
   );
 }
