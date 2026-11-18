@@ -1,5 +1,15 @@
 import { mediaUrl } from "@/lib/media";
+import featuredCovers from "@/lib/content/featured-covers.json";
 import type { ServiceImageAsset, ServiceImageSet } from "@/lib/service-images";
+
+type FeaturedCover = {
+  path: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+const blogCovers = featuredCovers.blog as Record<string, FeaturedCover>;
 
 function asset(
   path: string, alt: string, width: number, height: number, photographer: string, unsplashId: string
@@ -516,5 +526,13 @@ export const blogImagesBySlug: Record<string, ServiceImageSet> = {
 
 export function getBlogImages(slug: string): ServiceImageSet | undefined {
   const decoded = (() => { try { return decodeURIComponent(slug); } catch { return slug; } })();
-  return blogImagesBySlug[slug] || blogImagesBySlug[decoded];
+  const base = blogImagesBySlug[slug] || blogImagesBySlug[decoded];
+  const cover = blogCovers[slug] || blogCovers[decoded];
+  if (!base && !cover) return undefined;
+  const featured: ServiceImageAsset = cover
+    ? asset(cover.path, cover.alt, cover.width, cover.height, "الوند مارکتینگ", "featured-cover")
+    : base!.featured;
+  // Package covers replace stock heroes. Related stock is not injected;
+  // in-article figures come from the post body.
+  return { featured, related: [] };
 }

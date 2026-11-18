@@ -36,7 +36,10 @@ export function ServiceFeaturedImage({
   className?: string;
 }) {
   const isPackageInfographic =
-    image.path.includes("images/plp/") || image.path.includes("images/pdp/");
+    image.path.includes("images/plp/") ||
+    image.path.includes("images/pdp/") ||
+    image.path.includes("images/featured/") ||
+    image.path.includes("images/blog/");
   const landscape = isLandscape(image);
   return (
     <figure
@@ -78,7 +81,10 @@ export function ServiceInlineImage({
   className?: string;
 }) {
   const isPackageInfographic =
-    image.path.includes("images/plp/") || image.path.includes("images/pdp/");
+    image.path.includes("images/plp/") ||
+    image.path.includes("images/pdp/") ||
+    image.path.includes("images/featured/") ||
+    image.path.includes("images/blog/");
   const landscape = isLandscape(image);
   return (
     <figure
@@ -129,7 +135,11 @@ export function ServiceCardImage({ image }: { image: ServiceImageAsset }) {
         width={image.width}
         height={image.height}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        className={
+          image.path.includes("images/featured/")
+            ? "h-full w-full object-contain"
+            : "h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        }
         loading="lazy"
       />
     </div>
