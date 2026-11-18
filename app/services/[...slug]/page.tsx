@@ -75,8 +75,20 @@ export async function generateMetadata({
     fallbackTitle: service?.seoTitle,
     fallbackDescription: service?.seoDescription,
   });
-  if (service?.seoTitle) {
-    meta.title = { absolute: service.seoTitle };
+  const titleStr =
+    (typeof meta.title === "string" && meta.title) || service?.seoTitle || "";
+  if (titleStr) meta.title = { absolute: titleStr };
+  if (!meta.description && service?.seoDescription) {
+    meta.description = service.seoDescription;
+  }
+  if (meta.openGraph && typeof meta.openGraph === "object") {
+    meta.openGraph = {
+      ...meta.openGraph,
+      title: titleStr,
+      description:
+        (typeof meta.description === "string" && meta.description) ||
+        service?.seoDescription,
+    };
   }
   if (imgs) {
     const og = serviceImageSrc(imgs.featured);

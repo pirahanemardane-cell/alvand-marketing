@@ -2,10 +2,26 @@
 /**
  * Upsert all 50 package blog posts into existing blog_posts / blog_categories.
  * Env: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (never logged).
- * Atomic publish: every post is written as published in one run.
+ * Scoped refresh of the 50 package slugs only.
+ * Dry-run unless APPLY=1. Writes a backup JSON before any update.
+ * Already-published rows keep their id and published_at.
  */
 import { promises as fs } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
+
+function publishAssetUrl(assetPath) {
+  if (!assetPath) return null;
+  const base = (process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL || "").replace(/\/$/, "");
+  if (base && assetPath.startsWith("/")) return `${base}/media${assetPath}`;
+  return assetPath;
+}
+
+function publishBody(body) {
+  return (body || "").replace(
+    /\]\((\/(?:images|diagrams)\/[^)\s]+)\)/g,
+    (_, assetPath) => `](${publishAssetUrl(assetPath)})`
+  );
+}
 
 function requireEnv(name) {
   const v = process.env[name];
@@ -21,8 +37,14 @@ async function main() {
   const key = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
   const sb = createClient(url, key, { auth: { persistSession: false } });
 
-  const raw = await fs.readFile("/tmp/content-package-blog-seed.json", "utf8");
+  const seedPath = new URL(
+    "../lib/content/package-blog-posts.json",
+    import.meta.url
+  );
+  const raw = await fs.readFile(seedPath, "utf8");
   const { categories, posts } = JSON.parse(raw);
+  const apply = process.env.APPLY === "1";
+  console.log(apply ? "Mode: APPLY" : "Mode: DRY_RUN (set APPLY=1 to write)");
 
   /** @type {Record<string, string>} */
   const catIds = {};
@@ -42,16 +64,19 @@ async function main() {
     };
     if (existing?.id) {
       catIds[slug] = existing.id;
-      const { error } = await sb
-        .from("blog_categories")
-        .update(payload)
-        .eq("id", existing.id);
-      if (error) {
-        console.error("category update", slug, error.message);
-        process.exit(1);
+      if (apply) {
+        const { error } = await sb
+          .from("blog_categories")
+          .update(payload)
+          .eq("id", existing.id);
+        if (error) {
+          console.error("category update", slug, error.message);
+          process.exit(1);
+        }
       }
       continue;
     }
+    if (!apply) continue;
     const { data, error } = await sb
       .from("blog_categories")
       .insert({
@@ -67,7 +92,25 @@ async function main() {
     }
     catIds[slug] = data.id;
   }
-  console.log(`categories upserted=${categories.length}`);
+  console.log(`categories prepared=${categories.length}`);
+
+  if (!apply) {
+    console.log(`Would upsert posts=${posts.length}`);
+    return;
+  }
+
+  const backup = [];
+  for (const post of posts) {
+    const { data } = await sb
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", post.slug)
+      .maybeSingle();
+    if (data) backup.push(data);
+  }
+  const backupPath = "/tmp/alvand-blog-backup.json";
+  await fs.writeFile(backupPath, JSON.stringify(backup));
+  console.log(`backup posts=${backup.length} file=${backupPath}`);
 
   let upserted = 0;
   for (let i = 0; i < posts.length; i++) {
@@ -76,7 +119,7 @@ async function main() {
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt,
-      body: post.body,
+      body: publishBody(post.body),
       category_id: catIds[post.category_slug] || null,
       status: "published",
       meta_title: post.seo_title,
@@ -86,23 +129,22 @@ async function main() {
       robots_index: true,
       robots_follow: true,
       canonical_url: post.canonical_url,
+      cover_url: publishAssetUrl(post.og_image),
+      og_image_url: publishAssetUrl(post.og_image),
       updated_at: new Date().toISOString(),
     };
 
     const { data: existing } = await sb
       .from("blog_posts")
-      .select("id, published_at, cover_url, og_image_url")
+      .select("id, published_at")
       .eq("slug", post.slug)
       .maybeSingle();
 
     if (existing?.id) {
-      // Keep existing cover/og image (images deferred in package)
       const { error } = await sb
         .from("blog_posts")
         .update({
           ...row,
-          cover_url: existing.cover_url,
-          og_image_url: existing.og_image_url,
           published_at: existing.published_at || new Date().toISOString(),
         })
         .eq("id", existing.id);

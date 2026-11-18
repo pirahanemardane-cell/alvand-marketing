@@ -13,13 +13,16 @@ type InlineBlock =
   | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "table"; headers: string[]; rows: string[][] };
 
-/** Package PLP/PDP assets live on R2 under media/; bodies keep /images/{plp|pdp}/… paths. */
+/** Package assets live on R2 under media/; markdown keeps root-relative paths. */
 function resolveBodyImageSrc(src: string): string {
-  if (src.startsWith("/images/plp/") || src.startsWith("/images/pdp/")) {
-    return mediaUrl(src.replace(/^\//, ""));
-  }
-  if (src.startsWith("images/plp/") || src.startsWith("images/pdp/")) {
-    return mediaUrl(src);
+  const rel = src.replace(/^\//, "");
+  if (
+    rel.startsWith("images/plp/") ||
+    rel.startsWith("images/pdp/") ||
+    rel.startsWith("images/blog/") ||
+    rel.startsWith("images/featured/")
+  ) {
+    return mediaUrl(rel);
   }
   return src;
 }

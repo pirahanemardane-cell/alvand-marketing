@@ -126,41 +126,56 @@ const STATIC = {
 };
 
 function parseServices() {
-  const src = fs.readFileSync(path.join(root, "lib/services.ts"), "utf8");
-  const services = [];
-  const re =
-    /slug:\s*"([^"]+)"[\s\S]*?title:\s*"([^"]*)"[\s\S]*?seoTitle:\s*"([^"]*)"[\s\S]*?seoDescription:\s*"([^"]*)"/g;
-  let m;
-  while ((m = re.exec(src))) {
-    services.push({
-      slug: m[1],
-      title: m[2],
-      meta_title: m[3],
-      meta_description: m[4],
-    });
-  }
-  const ov = src.match(
-    /export const servicesOverview[\s\S]*?title:\s*"([^"]*)"[\s\S]*?seoTitle:\s*"([^"]*)"[\s\S]*?seoDescription:\s*"([^"]*)"/
+  const services = JSON.parse(
+    fs.readFileSync(path.join(root, "lib/content/package-services.json"), "utf8")
+  ).map((s) => ({
+    slug: s.slug,
+    title: s.title,
+    meta_title: s.seoTitle,
+    meta_description: s.seoDescription,
+    canonical_url: s.canonicalUrl || null,
+  }));
+  const ov = JSON.parse(
+    fs.readFileSync(path.join(root, "lib/content/package-overview.json"), "utf8")
   );
-  if (ov) {
-    STATIC.services.title = ov[1];
-    STATIC.services.meta_title = ov[2];
-    STATIC.services.meta_description = ov[3];
-  }
+  STATIC.services.title = ov.title;
+  STATIC.services.meta_title = ov.seoTitle;
+  STATIC.services.meta_description = ov.seoDescription;
+  STATIC.services.canonical_url = ov.canonicalUrl || "https://alvandmarketing.ir/services";
   return services;
 }
 
+function loadCovers() {
+  try {
+    return JSON.parse(
+      fs.readFileSync(path.join(root, "lib/content/featured-covers.json"), "utf8")
+    );
+  } catch {
+    return { hub: null, services: {} };
+  }
+}
+
 function intendedRows(services) {
+  const covers = loadCovers();
   const rows = [];
   for (const [page_key, v] of Object.entries(STATIC)) {
-    rows.push({ page_key, ...v });
+    rows.push({
+      page_key,
+      ...v,
+      og_image_url: page_key === "services" && covers.hub?.path
+        ? `/${covers.hub.path}`
+        : null,
+    });
   }
   for (const s of services) {
+    const cover = covers.services?.[s.slug];
     rows.push({
       page_key: `service:${s.slug}`,
       title: s.title,
       meta_title: s.meta_title,
       meta_description: s.meta_description,
+      canonical_url: s.canonical_url || null,
+      og_image_url: cover?.path ? `/${cover.path}` : null,
     });
   }
   return rows;
@@ -278,12 +293,12 @@ async function main() {
       meta_title: row.meta_title,
       meta_description: row.meta_description,
       focus_keyphrases: prev?.focus_keyphrases ?? [],
-      og_title: prev?.og_title || null,
-      og_description: prev?.og_description || null,
-      og_image_url: prev?.og_image_url || null,
+      og_title: row.meta_title,
+      og_description: row.meta_description,
+      og_image_url: row.og_image_url || prev?.og_image_url || null,
       robots_index: prev?.robots_index !== false,
       robots_follow: prev?.robots_follow !== false,
-      canonical_url: prev?.canonical_url || null,
+      canonical_url: row.canonical_url || prev?.canonical_url || null,
       updated_at: now,
     };
   });
@@ -300,12 +315,16 @@ async function main() {
     console.log(`Upserted ${i + chunk.length}/${payload.length}`);
   }
 
-  for (const key of orphans) {
-    await supabaseFetch(`seo_pages?page_key=eq.${encodeURIComponent(key)}`, {
-      method: "DELETE",
-      prefer: "return=minimal",
-    });
-    console.log(`Deleted orphan ${key}`);
+  if (process.env.DELETE_ORPHANS === "1") {
+    for (const key of orphans) {
+      await supabaseFetch(`seo_pages?page_key=eq.${encodeURIComponent(key)}`, {
+        method: "DELETE",
+        prefer: "return=minimal",
+      });
+      console.log(`Deleted orphan ${key}`);
+    }
+  } else if (orphans.length) {
+    console.log("Orphans left untouched (set DELETE_ORPHANS=1 to remove).");
   }
 
   const after = await supabaseFetch("seo_pages?select=page_key,meta_title,meta_description&order=page_key.asc");

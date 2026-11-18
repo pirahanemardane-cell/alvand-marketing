@@ -90,7 +90,10 @@ function replaceMermaid(md, fullPath, mappingByPath) {
     if (!block) {
       return ""; // drop unmatched fence rather than leave raw mermaid
     }
-    const file = path.basename(block.svg);
+    const file = path
+      .basename(block.png || block.svg || "diagram.png")
+      .replace(/\.png$/i, ".webp")
+      .replace(/\.svg$/i, ".webp");
     const alt = block.alt_fa || "نمودار";
     return `\n![${alt}](/diagrams/${file})\n`;
   });
@@ -192,12 +195,135 @@ function overviewFromHub(hub, mappingByPath) {
   };
 }
 
+/**
+ * Twelve in-article panels. Inserted under the heading that matches the
+ * article's actual step — captions carry the explanation, not dense type
+ * inside the image. Filenames are unique site-wide.
+ */
+const BLOG_PANELS = {
+  "/blog/طراحی-سایت/تفاوت-طراحی-سایت-وردپرس-با-کدنویسی": [
+    {
+      heading: "مقایسه وردپرس و کدنویسی اختصاصی",
+      file: "blog-12-tafavot-wordpress-kodnevisi-panel-1.webp",
+      alt: "اسکرین‌شات واقعی ویرایشگر بلوک وردپرس روی سایت آزمایشی با عنوان نمونه",
+      caption:
+        "ویرایشگر بلوک (گوتنبرگ) در وردپرس آزمایشی: عنوان صفحه «example» و بوم دیداری. این همان ویرایش بصری است و محتوای مشتری واقعی در تصویر نیست.",
+    },
+    {
+      heading: "نکات تخصصی برای این انتخاب",
+      file: "blog-12-tafavot-wordpress-kodnevisi-panel-2.webp",
+      alt: "اسکرین‌شات واقعی ویرایشگر پرونده پوسته وردپرس روی همان سایت آزمایشی",
+      caption:
+        "ویرایشگر پرونده پوسته در همان سایت آزمایشی: تغییر در سطح فایل کد، در برابر ویرایش بصری بلوک. فایل بازشده نمونه است و رمز یا کلید واقعی ندارد.",
+    },
+  ],
+  "/blog/پشتیبانی-سایت/افزونه-افزایش-سرعت-سایت-وردپرس": [
+    {
+      heading: "اول تشخیص: سایت شما چرا کند است",
+      file: "blog-46-afzoneh-afzayesh-sorat-wordpress-panel-2.webp",
+      alt: "اسکرین‌شات واقعی صفحه سلامت سایت وردپرس روی سایت آزمایشی",
+      caption:
+        "ابزار سلامت سایت در وردپرس آزمایشی، پیش از انتخاب افزونه. اول وضعیت عملکرد و خطا دیده می‌شود تا افزونه سرعت بی‌دلیل نصب نشود.",
+    },
+    {
+      heading: "دسته‌های افزونه افزایش سرعت",
+      file: "blog-46-afzoneh-afzayesh-sorat-wordpress-panel-1.webp",
+      alt: "اسکرین‌شات واقعی صفحه افزودن افزونه وردپرس با جعبه جست‌وجو",
+      caption:
+        "صفحه افزودن افزونه در وردپرس آزمایشی: جعبه جست‌وجو و فهرست نتایج عمومی. تصویر یک افزونه را به‌عنوان بهترین معرفی نمی‌کند.",
+    },
+  ],
+  "/blog/آنالیتیکس/گوگل-آنالیتیکس-چیست": [
+    {
+      heading: "گزارش‌هایی که صاحب کسب‌وکار باید ببیند",
+      file: "blog-47-google-analytics-chist-panel-1.webp",
+      alt: "نمونه بازسازی‌شده گزارش جذب ترافیک GA4 با داده فرضی",
+      caption:
+        "نمونه بازسازی‌شده گزارش Traffic acquisition در GA4 برای example-shop.ir. اعداد فرضی‌اند. این همان گزارش اول فهرست است: هر کانال چند کاربر و چند رویداد کلیدی آورده است.",
+    },
+    {
+      heading: "تنظیمات اولیه ضروری",
+      file: "blog-47-google-analytics-chist-panel-2.webp",
+      alt: "نمونه بازسازی‌شده فهرست رویدادها و جریان داده وب در GA4",
+      caption:
+        "نمونه بازسازی‌شده Admin و رویدادهای GA4 با شناسه فرضی. اینجا رویدادهای کلیدی (فرم، تماس، خرید) علامت می‌خورند؛ بدون آن‌ها گزارش فقط شمارنده بازدید است.",
+    },
+  ],
+  "/blog/آنالیتیکس/گوگل-تگ-منیجر-چیست": [
+    {
+      heading: "سه مفهوم اصلی: تگ، تریگر، متغیر",
+      file: "blog-48-google-tag-manager-chist-panel-1.webp",
+      alt: "نمونه بازسازی‌شده فهرست تگ‌های گوگل تگ منیجر با داده فرضی",
+      caption:
+        "نمونه بازسازی‌شده فهرست Tags در یک ظرف آزمایشی. تگ‌ها نمونه‌اند (رویداد GA4) و به حساب مشتری وصل نیستند.",
+    },
+    {
+      heading: "مراحل راه‌اندازی",
+      file: "blog-48-google-tag-manager-chist-panel-2.webp",
+      alt: "نمونه بازسازی‌شده پیش‌نمایش Tag Assistant و یک تگ اجراشده",
+      caption:
+        "نمونه بازسازی‌شده آزمون پیش‌نمایش روی example-shop.ir. این تصویر همان مورد «تست در حالت پیش‌نمایش» در فهرست راه‌اندازی است، نه گام جداگانه‌ای بیرون از فهرست.",
+    },
+  ],
+  "/blog/آنالیتیکس/گوگل-تگ-چیست": [
+    {
+      heading: "گوگل تگ چیست و کجای سایت قرار می‌گیرد",
+      file: "blog-49-google-tag-chist-panel-1.webp",
+      alt: "نمونه بازسازی‌شده قطعه نصب گوگل تگ gtag با شناسه فرضی",
+      caption:
+        "نمونه بازسازی‌شده دستور نصب گوگل تگ (gtag.js) در جریان وب GA4. شناسه G-SAMPLE فرضی است و نباید در سایت واقعی کپی شود.",
+    },
+    {
+      heading: "تفاوت گوگل تگ و گوگل تگ منیجر",
+      file: "blog-49-google-tag-chist-panel-2.webp",
+      alt: "نمونه بازسازی‌شده دو قطعه نصب گوگل تگ منیجر در head و body",
+      caption:
+        "نمونه بازسازی‌شده نصب تگ منیجر: یک قطعه در head و یک قطعه noscript بلافاصله پس از body. شناسه ظرف فرضی است و با قطعه تکی gtag فرق دارد.",
+    },
+  ],
+  "/blog/آنالیتیکس/گوگل-سرچ-کنسول-چیست": [
+    {
+      heading: "گزارش‌های کلیدی سرچ کنسول",
+      file: "blog-50-google-search-console-chist-panel-1.webp",
+      alt: "نمونه بازسازی‌شده گزارش عملکرد سرچ کنسول با داده فرضی",
+      caption:
+        "نمونه بازسازی‌شده گزارش Performance برای example-shop.ir. کلیک، نمایش و جایگاه فرضی‌اند. این همان ردیف Performance در جدول گزارش‌های کلیدی است.",
+    },
+    {
+      heading: "اتصال سایت به سرچ کنسول",
+      file: "blog-50-google-search-console-chist-panel-2.webp",
+      alt: "نمونه بازسازی‌شده بخش نقشه‌های سایت سرچ کنسول با داده فرضی",
+      caption:
+        "نمونه بازسازی‌شده بخش Sitemaps. وضعیت «موفق» و تعداد صفحات فرضی است. این تصویر گام ۳ همان بخش اتصال است: ثبت نقشه سایت، نه یک شماره ساختگی جدا.",
+    },
+  ],
+};
+
+function insertBlogPanels(md, fullPath) {
+  const panels = BLOG_PANELS[fullPath];
+  if (!panels) return md;
+  let out = md;
+  for (const panel of panels) {
+    const marker = `## ${panel.heading}`;
+    const block = `\n![${panel.alt}](/images/blog/${panel.file})\n*${panel.caption}*\n`;
+    if (!out.includes(marker)) {
+      throw new Error(`Blog panel heading missing: ${fullPath} :: ${panel.heading}`);
+    }
+    if (out.includes(panel.file)) continue;
+    out = out.replace(marker, `${marker}\n${block}`);
+  }
+  return out;
+}
+
 function blogFromPage(page, mappingByPath) {
   const slug = page.full_path.replace(/^\/blog\//, "");
-  const body = replaceMermaid(
-    stripFaqHeading(page.content_md),
-    page.full_path,
-    mappingByPath
+  const body = insertBlogPanels(
+    replaceMermaid(
+      stripFaqHeading(page.content_md),
+      page.full_path,
+      mappingByPath
+    ),
+    page.full_path
   );
   // Append FAQ as markdown if present
   const faqs = (page.faqs || [])
@@ -224,6 +350,7 @@ function blogFromPage(page, mappingByPath) {
     author_name: "امیر شادکام نژاد",
     og_title: page.og_title || page.seo_title,
     og_description: page.og_description || page.meta_description,
+    og_image: page.og_image || null,
   };
 }
 
@@ -302,13 +429,18 @@ async function main() {
     JSON.stringify(raw.blog_categories || [], null, 2),
     "utf8"
   );
+  const blogSeed = {
+    categories: raw.blog_categories || [],
+    posts: blogPosts,
+  };
+  await fs.writeFile(
+    path.join(OUT_DIR, "package-blog-posts.json"),
+    JSON.stringify(blogSeed),
+    "utf8"
+  );
   await fs.writeFile(
     "/tmp/content-package-blog-seed.json",
-    JSON.stringify(
-      { categories: raw.blog_categories || [], posts: blogPosts },
-      null,
-      0
-    ),
+    JSON.stringify(blogSeed),
     "utf8"
   );
 

@@ -37,8 +37,22 @@ export async function generateMetadata(): Promise<Metadata> {
     fallbackTitle: servicesOverview.seoTitle,
     fallbackDescription: servicesOverview.seoDescription,
   });
-  if (servicesOverview.seoTitle) {
-    meta.title = { absolute: servicesOverview.seoTitle };
+  const titleStr =
+    (typeof meta.title === "string" && meta.title) ||
+    servicesOverview.seoTitle ||
+    "";
+  if (titleStr) meta.title = { absolute: titleStr };
+  if (!meta.description && servicesOverview.seoDescription) {
+    meta.description = servicesOverview.seoDescription;
+  }
+  if (meta.openGraph && typeof meta.openGraph === "object") {
+    meta.openGraph = {
+      ...meta.openGraph,
+      title: titleStr,
+      description:
+        (typeof meta.description === "string" && meta.description) ||
+        servicesOverview.seoDescription,
+    };
   }
   const hub = getHubImages();
   const og = serviceImageSrc(hub.featured);

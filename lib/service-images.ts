@@ -1,4 +1,26 @@
 import { mediaUrl } from "@/lib/media";
+import featuredCovers from "@/lib/content/featured-covers.json";
+
+type FeaturedCover = {
+  path: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+const serviceCovers = featuredCovers.services as Record<string, FeaturedCover>;
+const hubCover = featuredCovers.hub as FeaturedCover;
+
+function coverAsset(cover: FeaturedCover): ServiceImageAsset {
+  return asset(
+    cover.path,
+    cover.alt,
+    cover.width,
+    cover.height,
+    "الوند مارکتینگ",
+    "featured-cover"
+  );
+}
 
 export type ServiceImageAsset = {
   /** Path under media/ for mediaUrl() */
@@ -759,9 +781,14 @@ export function getServiceImages(slug: string): ServiceImageSet | undefined {
   const decoded = (() => {
     try { return decodeURIComponent(slug); } catch { return slug; }
   })();
-  return serviceImagesBySlug[slug] || serviceImagesBySlug[decoded];
+  const base = serviceImagesBySlug[slug] || serviceImagesBySlug[decoded];
+  if (!base) return undefined;
+  const cover = serviceCovers[slug] || serviceCovers[decoded];
+  if (!cover) return base;
+  return { ...base, featured: coverAsset(cover) };
 }
 
 export function getHubImages(): ServiceImageSet {
-  return hubServiceImages;
+  if (!hubCover?.path) return hubServiceImages;
+  return { ...hubServiceImages, featured: coverAsset(hubCover) };
 }
