@@ -56,7 +56,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="relative space-y-4">
       {/* Honeypot — hidden from users, filled by simple bots */}
-      <div className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden" aria-hidden="true">
+      <div className="hp-field" aria-hidden="true">
         <label htmlFor="website">وب‌سایت</label>
         <input
           id="website"

@@ -331,7 +331,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 right-0 left-0 z-40 w-full max-w-[100vw] min-w-0 transition-all duration-500 ${
+        className={`fixed top-0 right-0 left-0 z-40 w-full max-w-full min-w-0 transition-all duration-500 ${
           scrolled || menuOpen
             ? "bg-background/90 backdrop-blur-xl border-b border-border"
             : "bg-transparent border-b border-transparent"
@@ -426,11 +426,11 @@ export default function Navbar() {
                       <AnimatePresence>
                         {megaOpen && (
                           <motion.div
-                            initial={{ opacity: 0, y: 8, x: "-50%" }}
-                            animate={{ opacity: 1, y: 0, x: "-50%" }}
-                            exit={{ opacity: 0, y: 8, x: "-50%" }}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 8 }}
                             transition={{ duration: 0.15 }}
-                            className="fixed left-1/2 top-[3.75rem] z-[70] w-[min(72rem,calc(100vw-2rem))] pt-2"
+                            className="fixed inset-x-4 top-[3.75rem] z-[70] mx-auto w-auto max-w-6xl pt-2"
                             role="menu"
                             aria-label="منوی خدمات"
                           >
@@ -658,7 +658,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
-              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-[100vw] bg-background border-l border-border shadow-2xl xl:hidden flex flex-col overflow-hidden"
+              className="fixed top-0 right-0 bottom-0 z-[60] w-[min(100%,320px)] max-w-full bg-background border-l border-border shadow-2xl xl:hidden flex flex-col overflow-hidden"
             >
               <div
                 ref={mobileDrawerRef}

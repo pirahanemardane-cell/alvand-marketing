@@ -29,16 +29,25 @@ where p.id = u.id
   and lower(u.email) = lower('alvandmarketing.com@gmail.com')
   and p.role is distinct from 'admin';
 
--- Block authenticated clients from elevating themselves; service_role JWT may change role.
+-- Block clients from choosing a role. The designated email is always admin;
+-- every other account is always a regular user, including service-role writes.
 create or replace function public.profiles_preserve_role()
 returns trigger
 language plpgsql
+security definer
+set search_path = ''
 as $$
+declare
+  user_email text;
 begin
-  if tg_op = 'UPDATE'
-     and new.role is distinct from old.role
-     and coalesce(auth.jwt() ->> 'role', '') is distinct from 'service_role' then
-    new.role := old.role;
+  select lower(u.email) into user_email
+  from auth.users u
+  where u.id = new.id;
+
+  if user_email = 'alvandmarketing.com@gmail.com' then
+    new.role := 'admin';
+  else
+    new.role := 'user';
   end if;
   return new;
 end;
@@ -46,19 +55,20 @@ $$;
 
 drop trigger if exists profiles_preserve_role on public.profiles;
 create trigger profiles_preserve_role
-  before update on public.profiles
+  before insert or update on public.profiles
   for each row execute procedure public.profiles_preserve_role();
 
--- Signup trigger: auto-admin for allowlisted emails
+-- Signup trigger: admin only for the designated email. Never keep a stale admin role.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
-security definer set search_path = public
+security definer
+set search_path = public
 as $$
 declare
   initial_role text := 'user';
 begin
-  if lower(coalesce(new.email, '')) = lower('alvandmarketing.com@gmail.com') then
+  if lower(coalesce(new.email, '')) = 'alvandmarketing.com@gmail.com' then
     initial_role := 'admin';
   end if;
   insert into public.profiles (id, full_name, role)
@@ -68,11 +78,11 @@ begin
     initial_role
   )
   on conflict (id) do update
-    set role = case
-      when public.profiles.role = 'admin' then 'admin'
-      when excluded.role = 'admin' then 'admin'
-      else public.profiles.role
-    end;
+    set full_name = coalesce(excluded.full_name, public.profiles.full_name),
+        role = case
+          when lower(coalesce(new.email, '')) = 'alvandmarketing.com@gmail.com' then 'admin'
+          else 'user'
+        end;
   return new;
 end;
 $$;

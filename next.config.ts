@@ -81,6 +81,7 @@ const nextConfig: NextConfig = {
     workerThreads: false,
     staticGenerationMaxConcurrency: 1,
     staticGenerationMinPagesPerWorker: 20,
+    optimizePackageImports: ["lucide-react"],
   },
   // Avoid noisy webpack PackFileCacheStrategy warnings on large assets during CI/prod builds.
   webpack: (config, { dev }) => {
@@ -151,6 +152,27 @@ const nextConfig: NextConfig = {
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "DENY" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "object-src 'none'",
+              "img-src 'self' https://cdn.alvandmarketing.ir data: blob:",
+              "font-src 'self'",
+              "style-src 'self' 'unsafe-inline'",
+              "script-src 'self' 'unsafe-inline'",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://cdn.alvandmarketing.ir https://*.sentry.io https://*.ingest.sentry.io",
+              "upgrade-insecure-requests",
+            ].join("; "),
+          },
         ],
       },
     ];

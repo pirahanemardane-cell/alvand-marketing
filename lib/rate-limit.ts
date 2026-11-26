@@ -62,3 +62,11 @@ export function rateLimit(
 
 export const CONTACT_LIMIT = { limit: 5, windowMs: 15 * 60 * 1000 } as const;
 export const COMMENT_LIMIT = { limit: 8, windowMs: 15 * 60 * 1000 } as const;
+
+/** Reject declared bodies larger than the public form limit. */
+export function payloadTooLarge(request: Request, maxBytes: number): boolean {
+  const raw = request.headers.get("content-length");
+  if (!raw) return false;
+  const size = Number(raw);
+  return Number.isFinite(size) && size > maxBytes;
+}

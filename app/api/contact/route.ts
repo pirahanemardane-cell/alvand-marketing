@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import {
   CONTACT_LIMIT,
   clientIp,
+  payloadTooLarge,
   rateLimit,
 } from "@/lib/rate-limit";
 import { captureException } from "@/lib/observability";
@@ -28,6 +29,10 @@ export async function POST(request: Request) {
           headers: { "Retry-After": String(limited.retryAfterSec) },
         }
       );
+    }
+
+    if (payloadTooLarge(request, 16_000)) {
+      return NextResponse.json({ error: "پیام خیلی طولانی است." }, { status: 413 });
     }
 
     if (
@@ -86,13 +91,9 @@ export async function POST(request: Request) {
     });
 
     if (error) {
+      void captureException(error, { route: "/api/contact" });
       return NextResponse.json(
-        {
-          error:
-            error.message.includes("contact_leads")
-              ? "جدول تماس هنوز در سوپابیس ساخته نشده؛ supabase/leads.sql را اجرا کنید."
-              : error.message,
-        },
+        { error: "ارسال انجام نشد. دوباره تلاش کنید یا از واتساپ پیام بدهید." },
         { status: 500 }
       );
     }

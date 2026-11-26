@@ -15,8 +15,8 @@ export default function Hero() {
       // previous theme and inverted sun/moon relative to the صبح/شب toggle.
       className={
         isMorning
-          ? "min-h-[100svh] w-full max-w-[100vw] bg-[#fafafa] text-[#18181b]"
-          : "min-h-[100svh] w-full max-w-[100vw] bg-[#0a0a0b] text-[#f4f4f5]"
+          ? "min-h-[100svh] w-full max-w-full bg-[#fafafa] text-[#18181b]"
+          : "min-h-[100svh] w-full max-w-full bg-[#0a0a0b] text-[#f4f4f5]"
       }
       label="نقاشی جوهر رشته‌کوه الوند"
       seed={11}
