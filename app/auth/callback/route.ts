@@ -6,6 +6,22 @@ function safeNext(raw: string | null): string {
   if (!raw || !raw.startsWith("/") || raw.startsWith("//")) {
     return "/dashboard";
   }
+  if (raw.includes("\\") || raw.includes("://") || raw.includes("\n") || raw.includes("\r")) {
+    return "/dashboard";
+  }
+  try {
+    const decoded = decodeURIComponent(raw);
+    if (
+      !decoded.startsWith("/") ||
+      decoded.startsWith("//") ||
+      decoded.includes("\\") ||
+      decoded.includes("://")
+    ) {
+      return "/dashboard";
+    }
+  } catch {
+    return "/dashboard";
+  }
   return raw;
 }
 

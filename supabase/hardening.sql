@@ -25,19 +25,30 @@ create policy "Users update own profile"
   using (auth.uid() = id)
   with check (auth.uid() = id);
 
--- Make signup trigger idempotent
+-- Signup profile. Role is forced again by profiles_preserve_role.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  initial_role text := 'user';
 begin
-  insert into public.profiles (id, full_name)
+  if lower(coalesce(new.email, '')) = 'alvandmarketing.com@gmail.com' then
+    initial_role := 'admin';
+  end if;
+  insert into public.profiles (id, full_name, role)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1))
+    coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+    initial_role
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update
+    set full_name = coalesce(excluded.full_name, public.profiles.full_name),
+        role = case
+          when lower(coalesce(new.email, '')) = 'alvandmarketing.com@gmail.com' then 'admin'
+          else 'user'
+        end;
   return new;
 end;
 $$;

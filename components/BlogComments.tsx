@@ -191,7 +191,7 @@ export default function BlogComments({ postSlug }: { postSlug: string }) {
         </div>
       ) : (
         <form onSubmit={onSubmit} className="space-y-4 mb-10 relative">
-          <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+          <div className="hp-field" aria-hidden="true">
             <label htmlFor="c-website">وب‌سایت</label>
             <input id="c-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
           </div>

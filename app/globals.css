@@ -83,7 +83,7 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -97,7 +97,8 @@ body {
   line-height: 1.5; /* MD default; فارسی کمی بازتر در .leading-persian */
   letter-spacing: 0.015em;
   word-spacing: 0.02em;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-wrap: break-word;
   /* no theme color transition on navigation */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -380,17 +381,37 @@ h1, h2, h3, h4, h5, h6,
 
 
 
+/* Honeypot: clip in place. A large negative offset widens the scrollport in RTL,
+   and native inputs can paint outside an overflow-hidden parent. */
+.hp-field,
+.hp-field input,
+.hp-field label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* ─── Prevent horizontal overflow (mobile / tablet / desktop) ─── */
 html,
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
 main {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 img,
@@ -398,6 +419,21 @@ video,
 iframe {
   max-width: 100%;
   height: auto;
+}
+
+pre,
+code {
+  max-width: 100%;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+.service-table-frame,
+.service-table-scroll {
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* reduce ambient drift overflow risk */

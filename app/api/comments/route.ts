@@ -4,6 +4,7 @@ import { containsLink, sanitizeCommentBody } from "@/lib/comments";
 import {
   COMMENT_LIMIT,
   clientIp,
+  payloadTooLarge,
   rateLimit,
 } from "@/lib/rate-limit";
 import { captureException } from "@/lib/observability";
@@ -25,7 +26,10 @@ export async function GET(request: Request) {
       .order("created_at", { ascending: false });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { error: "خواندن نظرات ممکن نشد." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ comments: data ?? [] });
@@ -49,6 +53,13 @@ export async function POST(request: Request) {
           status: 429,
           headers: { "Retry-After": String(limited.retryAfterSec) },
         }
+      );
+    }
+
+    if (payloadTooLarge(request, 16_000)) {
+      return NextResponse.json(
+        { error: "نظر خیلی طولانی است." },
+        { status: 413 }
       );
     }
 
@@ -143,7 +154,10 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json(
+        { error: "ثبت نظر ممکن نشد. کمی بعد دوباره تلاش کنید." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
