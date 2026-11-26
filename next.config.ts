@@ -90,6 +90,10 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
+    // Serve the CDN object directly. The default optimizer would make the
+    // browser read `/_next/image` from the Vercel origin. Cloudflare Image
+    // Resizing (`/cdn-cgi/image`) is not enabled on this zone.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
     deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920],

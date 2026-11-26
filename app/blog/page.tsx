@@ -8,6 +8,7 @@ import PageBreadcrumb from "@/components/Breadcrumb";
 import { listPublishedPosts, blogHref } from "@/lib/blog";
 import { getBlogCategoryIcon } from "@/lib/category-icons";
 import { getBlogImages, blogImageSrc } from "@/lib/blog-images";
+import { resolveRenderedImageSrc } from "@/lib/media";
 import { metadataForPageKey } from "@/lib/seo/pages";
 import Image from "next/image";
 
@@ -52,9 +53,12 @@ export default async function BlogPage({ searchParams }: Props) {
               {posts.map((post) => {
                 const CatIcon = getBlogCategoryIcon(post.category);
                 const imgs = getBlogImages(post.slug);
-                const cover =
+                const rawCover =
                   post.og_image_url ||
-                  (imgs ? blogImageSrc(imgs.featured) : undefined);
+                  (imgs ? blogImageSrc(imgs.featured) : "");
+                const cover = rawCover
+                  ? resolveRenderedImageSrc(rawCover)
+                  : undefined;
                 return (
                   <Link
                     key={post.slug}

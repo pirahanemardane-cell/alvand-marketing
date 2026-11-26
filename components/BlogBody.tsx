@@ -3,7 +3,7 @@ import { ServiceTableView } from "@/components/ServiceContentBlocks";
 import ContentBodyFigure from "@/components/ContentBodyFigure";
 import { richTextNodes } from "@/components/RichText";
 import type { ServiceImageSet } from "@/lib/service-images";
-import { mediaUrl } from "@/lib/media";
+import { resolveRenderedImageSrc } from "@/lib/media";
 
 type InlineBlock =
   | { type: "h3"; text: string; id: string }
@@ -12,20 +12,6 @@ type InlineBlock =
   | { type: "checklist"; items: { checked: boolean; text: string }[] }
   | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "table"; headers: string[]; rows: string[][] };
-
-/** Package assets live on R2 under media/; markdown keeps root-relative paths. */
-function resolveBodyImageSrc(src: string): string {
-  const rel = src.replace(/^\//, "");
-  if (
-    rel.startsWith("images/plp/") ||
-    rel.startsWith("images/pdp/") ||
-    rel.startsWith("images/blog/") ||
-    rel.startsWith("images/featured/")
-  ) {
-    return mediaUrl(rel);
-  }
-  return src;
-}
 
 type Section = {
   heading?: string;
@@ -253,7 +239,7 @@ function renderInlineBlocks(blocks: InlineBlock[]) {
       return (
         <ContentBodyFigure
           key={`img-${idx}`}
-          src={resolveBodyImageSrc(block.src)}
+          src={resolveRenderedImageSrc(block.src)}
           alt={block.alt}
           caption={caption}
         />

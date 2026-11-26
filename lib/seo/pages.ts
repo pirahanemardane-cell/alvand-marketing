@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { resolveRenderedImageSrc } from "@/lib/media";
 import { createAnonClient } from "@/lib/supabase/public";
 import { publicRobots } from "@/lib/seo/site";
 
@@ -109,7 +110,9 @@ export async function metadataForPageKey(
   meta.openGraph = {
     title: ogTitle,
     description: ogDesc,
-    ...(row?.og_image_url ? { images: [{ url: row.og_image_url }] } : {}),
+    ...(row?.og_image_url
+      ? { images: [{ url: resolveRenderedImageSrc(row.og_image_url) }] }
+      : {}),
   };
 
   if (row?.canonical_url) {
