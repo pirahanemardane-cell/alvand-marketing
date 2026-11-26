@@ -104,29 +104,22 @@ export default function AuthButton({
       );
     }
 
+    const desktopAuthClass =
+      "inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-border px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors 2xl:gap-1.5 2xl:px-3 2xl:py-1.5 2xl:text-sm";
+
     return (
-      <div className="flex items-center gap-2">
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <LayoutDashboard className="h-4 w-4" />
+      <div className="flex flex-nowrap items-center gap-1 2xl:gap-2">
+        <Link href="/dashboard" className={desktopAuthClass}>
+          <LayoutDashboard className="h-3.5 w-3.5 shrink-0 2xl:h-4 2xl:w-4" />
           پنل
         </Link>
         {isAdmin && (
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/admin" className={desktopAuthClass}>
             ادمین
           </Link>
         )}
-        <button
-          type="button"
-          onClick={signOut}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <LogOut className="h-4 w-4 shrink-0" />
+        <button type="button" onClick={signOut} className={desktopAuthClass}>
+          <LogOut className="h-3.5 w-3.5 shrink-0 2xl:h-4 2xl:w-4" />
           خروج
         </button>
       </div>

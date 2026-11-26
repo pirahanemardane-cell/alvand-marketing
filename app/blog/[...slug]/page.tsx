@@ -21,6 +21,7 @@ import {
 } from "@/lib/blog";
 import { getBlogCategoryIcon } from "@/lib/category-icons";
 import { getBlogImages, blogImageSrc } from "@/lib/blog-images";
+import { resolveRenderedImageSrc } from "@/lib/media";
 import { requireAdminUser } from "@/lib/supabase/admin";
 import { publicRobots } from "@/lib/seo/site";
 import { blogArticleJsonLd } from "@/lib/seo/jsonld";
@@ -84,7 +85,9 @@ export async function generateMetadata({
   const title = post.meta_title || `${post.title} | بلاگ الوند مارکتینگ`;
   const description = post.meta_description || post.excerpt;
   const imgs = getBlogImages(post.slug);
-  const ogImage = post.og_image_url || (imgs ? blogImageSrc(imgs.featured) : undefined);
+  const rawOg =
+    post.og_image_url || (imgs ? blogImageSrc(imgs.featured) : "");
+  const ogImage = rawOg ? resolveRenderedImageSrc(rawOg) : undefined;
   return {
     title: isPreview ? `[پیش‌نمایش] ${title}` : title,
     description,
@@ -143,7 +146,11 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
           data={blogArticleJsonLd(
             post,
             crumbs,
-            images ? blogImageSrc(images.featured) : post.og_image_url || undefined
+            images
+              ? blogImageSrc(images.featured)
+              : post.og_image_url
+                ? resolveRenderedImageSrc(post.og_image_url)
+                : undefined
           )}
         />
       )}

@@ -33,7 +33,7 @@ import {
 } from "@/lib/mega-menu";
 
 const desktopLinkBase =
-  "inline-flex items-center gap-1.5 text-sm transition-colors duration-200 whitespace-nowrap px-2 py-1.5 rounded-md";
+  "inline-flex items-center gap-1.5 text-sm transition-colors duration-200 whitespace-nowrap px-1.5 2xl:px-2 py-1.5 rounded-md";
 const desktopLinkIdle =
   "text-muted-foreground hover:text-foreground hover:bg-accent/5";
 const desktopLinkActive =
@@ -378,7 +378,7 @@ export default function Navbar() {
 
           {/* منوی مرکزی — فقط دسکتاپ، بدون هم‌پوشانی */}
           <div className="hidden xl:flex items-center justify-center min-w-0">
-            <ul className="flex flex-wrap items-center justify-center gap-x-0.5 gap-y-1 list-none min-w-0">
+            <ul className="flex flex-nowrap shrink-0 items-center justify-center gap-x-0.5 list-none">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isNavItemActive(item.href, pathname, hash);
@@ -584,10 +584,10 @@ export default function Navbar() {
           </div>
 
           {/* چپ: جستجو + تم + CTA */}
-          <div className="flex items-center justify-end gap-1.5 sm:gap-2 shrink-0 min-w-0">
+          <div className="flex flex-nowrap items-center justify-end gap-1.5 sm:gap-2 shrink-0 min-w-0">
             <form
               onSubmit={onSearchSubmit}
-              className="hidden xl:block relative w-[120px] xl:w-[140px] shrink-0"
+              className="hidden xl:block relative w-[120px] 2xl:w-[140px] shrink-0"
             >
               <Search className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
               <input
