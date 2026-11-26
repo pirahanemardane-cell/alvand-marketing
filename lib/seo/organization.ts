@@ -1,4 +1,4 @@
-import { absoluteUrl } from "@/lib/seo/site";
+import { mediaUrl } from "@/lib/media";
 
 /**
  * Organization / contact facts — ONLY from project source (contact page, footer).
@@ -8,7 +8,7 @@ export const SITE_ORG = {
   name: "الوند مارکتینگ",
   alternateName: "Alvand Marketing",
   url: "https://alvandmarketing.ir/",
-  /** Logo used in header/footer via public icon fallback for schema */
+  /** Same file as the favicon, served from the Cloudflare CDN. */
   logoPath: "/icon.png",
   email: "info@alvandmarketing.ir",
   telephones: ["+982186095954", "+989921863063"] as const,
@@ -27,7 +27,7 @@ export function organizationNode() {
     name: SITE_ORG.name,
     alternateName: SITE_ORG.alternateName,
     url: SITE_ORG.url,
-    logo: absoluteUrl(SITE_ORG.logoPath),
+    logo: mediaUrl(SITE_ORG.logoPath),
     email: SITE_ORG.email,
     telephone: [...SITE_ORG.telephones],
     sameAs: [...SITE_ORG.sameAs],

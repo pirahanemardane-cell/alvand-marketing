@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SentryInit from "@/components/SentryInit";
-import { mediaPublicHostname } from "@/lib/media";
+import { mediaPublicHostname, mediaUrl } from "@/lib/media";
 import { publicRobots, siteUrl } from "@/lib/seo/site";
 import "./globals.css";
 
@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   description:
     "الوند مارکتینگ — مثل کوه پشتتیم. آژانس دیجیتال مارکتینگ با استراتژی‌های پایدار و نتایج واقعی.",
   icons: {
-    // Prefer compact PNGs — the legacy icon0.svg embeds a ~200KB raster and hurts PSI.
+    // Compact PNGs on the Cloudflare CDN. icon0.svg stays unlinked: it embeds a large raster.
     icon: [
-      { url: "/favicon.png", sizes: "48x48", type: "image/png" },
-      { url: "/icon1.png", sizes: "32x32", type: "image/png" },
+      { url: mediaUrl("favicon.png"), sizes: "48x48", type: "image/png" },
+      { url: mediaUrl("icon1.png"), sizes: "32x32", type: "image/png" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: mediaUrl("apple-icon.png"), sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.json",
   robots: publicRobots,

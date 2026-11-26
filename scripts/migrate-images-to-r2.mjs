@@ -20,7 +20,7 @@ const OUT_DIR = path.join(ROOT, ".r2-staging");
 
 const WEBP_QUALITY = 82;
 
-/** Favicon / PWA icons stay local. */
+/** Favicon / PWA icons are stored as original files on R2 (not WebP). Skip them here. */
 const KEEP_LOCAL = new Set([
   "favicon.png",
   "icon.png",
